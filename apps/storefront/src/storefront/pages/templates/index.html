@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Mock stores</h1>
+  <ul class="grid">
+    {% for s in stores %}
+      <li>
+        <a href="/stores/{{ s.slug }}">{{ s.name }}</a>
+        <div class="muted">{{ s.blurb }}</div>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

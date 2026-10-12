@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Mock stores{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; color: #1c1c1c; background: #fafafa; }
+    .banner { background: #fff3cd; border-bottom: 1px solid #e6d28a; padding: 6px 16px; font-size: 14px; }
+    header, main { max-width: 960px; margin: 0 auto; padding: 16px; }
+    header a { color: inherit; text-decoration: none; }
+    h1 { margin: 0 0 4px; font-size: 26px; }
+    h2 { margin: 28px 0 8px; font-size: 18px; text-transform: capitalize; }
+    .muted { color: #666; }
+    form { display: flex; gap: 8px; margin: 12px 0; }
+    input[type=search] { flex: 1; padding: 8px; font-size: 16px; }
+    button { padding: 8px 14px; font-size: 16px; }
+    ul.grid { list-style: none; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+    ul.grid li { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 10px; }
+    .price { font-weight: 600; }
+    .out { color: #a12727; }
+    dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; }
+    dt { color: #666; }
+    dd { margin: 0; }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="banner">Demo prices. These are mock stores for a hackathon project; nothing here is for sale.</div>
+  <header>
+    <a href="/">All stores</a>
+    {% if store %}
+      <h1><a href="/stores/{{ store.slug }}">{{ store.name }}</a></h1>
+      <p class="muted">{{ store.blurb }}</p>
+      <form action="/stores/{{ store.slug }}/search" method="get" role="search">
+        <label for="q" hidden>Search {{ store.name }}</label>
+        <input id="q" type="search" name="q" value="{{ q or '' }}" placeholder="Search {{ store.name }}">
+        <button type="submit">Search</button>
+      </form>
+    {% endif %}
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+</body>
+</html>

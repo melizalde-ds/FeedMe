@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "name": "allergen_extras",
+    "note": "Rows this app adds on top of allergen_reference.json, in the same shape. Each term is an ingredient name from the recipe data that the reference file did not recognize, and only adds a block. The negatives remove one false match: canned corn written kernel-first, which the reference file already clears when written corn-first. Not checked against an outside source: review before relying on them elsewhere."
+  },
+  "terms": [
+    {"phrase": "cool whip", "group": "milk", "tier": "contains", "verification": "unverified", "note": "Whipped topping made with skim milk and sodium caseinate."},
+    {"phrase": "velveeta", "group": "milk", "tier": "contains", "verification": "definitional"},
+    {"phrase": "gorgonzola", "group": "milk", "tier": "contains", "verification": "definitional"},
+    {"phrase": "fontina", "group": "milk", "tier": "contains", "verification": "definitional"},
+    {"phrase": "colby", "group": "milk", "tier": "contains", "verification": "definitional"},
+    {"phrase": "parmigiano", "group": "milk", "tier": "contains", "verification": "definitional"},
+    {"phrase": "bocconcini", "group": "milk", "tier": "contains", "verification": "definitional"},
+    {"phrase": "panir", "group": "milk", "tier": "contains", "verification": "definitional", "note": "Spelling of paneer."},
+    {"phrase": "oleo", "group": "milk", "tier": "check_label", "verification": "definitional", "note": "Old name for margarine."},
+    {"phrase": "oleo", "group": "soy", "tier": "check_label", "verification": "definitional", "note": "Old name for margarine."},
+    {"phrase": "soymilk", "group": "soy", "tier": "contains", "verification": "definitional"},
+    {"phrase": "ketjap manis", "group": "soy", "tier": "contains", "verification": "definitional", "note": "Sweet soy sauce."},
+    {"phrase": "ketjap manis", "group": "gluten_cereals", "tier": "likely", "subgroup": "wheat", "verification": "definitional"},
+    {"phrase": "kecap manis", "group": "soy", "tier": "contains", "verification": "definitional", "note": "Sweet soy sauce."},
+    {"phrase": "kecap manis", "group": "gluten_cereals", "tier": "likely", "subgroup": "wheat", "verification": "definitional"},
+    {"phrase": "miracle whip", "group": "egg", "tier": "contains", "verification": "unverified", "note": "Dressing made with eggs."},
+    {"phrase": "ladyfinger", "group": "egg", "tier": "likely", "verification": "definitional", "note": "Sponge biscuit."},
+    {"phrase": "ladyfinger", "group": "gluten_cereals", "tier": "contains", "subgroup": "wheat", "verification": "definitional"},
+    {"phrase": "bisquick", "group": "gluten_cereals", "tier": "contains", "subgroup": "wheat", "verification": "unverified", "note": "Wheat-flour baking mix."},
+    {"phrase": "radiatore", "group": "gluten_cereals", "tier": "contains", "subgroup": "wheat", "verification": "definitional", "note": "Pasta shape."},
+    {"phrase": "weetabix", "group": "gluten_cereals", "tier": "contains", "subgroup": "wheat", "verification": "unverified"},
+    {"phrase": "vegemite", "group": "gluten_cereals", "tier": "contains", "verification": "unverified", "note": "Yeast extract from barley and wheat."},
+    {"phrase": "lumpia skin", "group": "gluten_cereals", "tier": "contains", "subgroup": "wheat", "verification": "definitional"},
+    {"phrase": "lumpia wrapper", "group": "gluten_cereals", "tier": "contains", "subgroup": "wheat", "verification": "definitional"},
+    {"phrase": "catsup", "group": "gluten_cereals", "tier": "check_label", "verification": "definitional", "note": "Same as ketchup."},
+    {"phrase": "catsup", "group": "mustard", "tier": "check_label", "verification": "definitional", "note": "Same as ketchup."},
+    {"phrase": "catsup", "group": "sulphites", "tier": "check_label", "verification": "definitional", "note": "Same as ketchup."},
+    {"phrase": "crabmeat", "group": "crustaceans", "tier": "contains", "verification": "definitional"},
+    {"phrase": "pignolis", "group": "tree_nuts", "tier": "contains", "verification": "definitional", "note": "Pine nuts."},
+    {"phrase": "ahi", "group": "fish", "tier": "contains", "verification": "definitional", "note": "Yellowfin or bigeye tuna."}
+  ],
+  "negatives": [
+    {"phrase": "kernel corn", "not_groups": ["peanut"]},
+    {"phrase": "whole kernel corn", "not_groups": ["peanut"]}
+  ]
+}

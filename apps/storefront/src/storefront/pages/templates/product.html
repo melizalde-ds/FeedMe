@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ item.name }} · {{ store.name }}{% endblock %}
+{% block head %}
+  <script type="application/ld+json">
+{{ json_ld|safe }}
+  </script>
+{% endblock %}
+{% block content %}
+  <h1>{{ item.name }}</h1>
+  <p class="price">{{ item.price_cents|money }}</p>
+  {% if not item.in_stock %}<p class="out">Out of stock</p>{% endif %}
+  <dl>
+    <dt>Brand</dt><dd>{{ item.brand }}{% if item.store_brand %} (store brand){% endif %}</dd>
+    <dt>Size</dt><dd>{{ item.size|size }}</dd>
+    <dt>Category</dt><dd>{{ item.category }}</dd>
+    <dt>UPC</dt><dd>{{ item.upc }}</dd>
+  </dl>
+{% endblock %}

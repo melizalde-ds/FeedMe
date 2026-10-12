@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="FeedMe plans a week of breakfasts, lunches and dinners your whole household can eat, inside your allergies, diet and budget."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Great+Vibes&family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet"
+    />
+    <title>FeedMe</title>
+    <script>
+      // Apply the saved theme before first paint so a forced light/dark choice
+      // does not flash the system theme on load.
+      try {
+        var t = localStorage.getItem('feedme.theme')
+        if (t === '"light"' || t === '"dark"') {
+          document.documentElement.setAttribute('data-theme', JSON.parse(t))
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+# Node
+node_modules
+dist
+*.local
+
+# Python
+.venv
+__pycache__
+*.py[cod]
+*.egg-info
+.pytest_cache
+.ruff_cache
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
+# Data
+data/
+!.claude/skills/impeccable/scripts/data/

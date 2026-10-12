@@ -1,0 +1,10 @@
+<ul class="grid">
+  {% for item in items %}
+    <li>
+      <a href="{{ item.url }}">{{ item.name }}</a>
+      <div class="muted">{{ item.brand }} · {{ item.size|size }}</div>
+      <div class="price">{{ item.price_cents|money }}</div>
+      {% if not item.in_stock %}<div class="out">Out of stock</div>{% endif %}
+    </li>
+  {% endfor %}
+</ul>

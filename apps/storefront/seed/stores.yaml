@@ -1,0 +1,44 @@
+# Mock stores served by apps/storefront. Money is in whole cents.
+# free_delivery_threshold_cents: null means the delivery fee always applies.
+
+- slug: walmart
+  name: Walmart
+  blurb: Everyday low prices on staples.
+  delivery_fee_cents: 0
+  free_delivery_threshold_cents: null
+  order_minimum_cents: 0
+
+- slug: target
+  name: Target
+  blurb: Mid-range prices, plus Corner & Co. store-brand items.
+  delivery_fee_cents: 0
+  free_delivery_threshold_cents: null
+  order_minimum_cents: 0
+
+- slug: bulkbarn-club
+  name: BulkBarn Club
+  blurb: Big packs only. Lowest price per unit, $50 order minimum.
+  delivery_fee_cents: 0
+  free_delivery_threshold_cents: null
+  order_minimum_cents: 5000
+
+- slug: pennywise-grocer
+  name: PennyWise Grocer
+  blurb: Cheap, with a small selection that sells out.
+  delivery_fee_cents: 0
+  free_delivery_threshold_cents: null
+  order_minimum_cents: 0
+
+- slug: greenleaf-organics
+  name: Greenleaf Organics
+  blurb: Premium groceries and organic options.
+  delivery_fee_cents: 0
+  free_delivery_threshold_cents: null
+  order_minimum_cents: 0
+
+- slug: quickcart
+  name: QuickCart
+  blurb: Fast delivery at about a 15% markup, $5.99 delivery fee.
+  delivery_fee_cents: 599
+  free_delivery_threshold_cents: null
+  order_minimum_cents: 0

@@ -1,0 +1,55 @@
+/* Tailwind CSS v4, without its preflight reset, so the existing screens in
+   index.css keep looking exactly as they do. New UI is written with
+   utilities only; index.css gets no new rules.
+
+   Utilities sit in a cascade layer, so an unlayered rule in index.css still
+   wins where both style the same element. */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* `dark:` follows the same switch as the tokens: data-theme="dark" on <html>,
+   or the system setting unless data-theme="light". */
+@custom-variant dark {
+  &:where([data-theme='dark'], [data-theme='dark'] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme='light']), :root:not([data-theme='light']) *) {
+      @slot;
+    }
+  }
+}
+
+/* The tokens at the top of index.css, exposed to Tailwind. `inline` makes
+   each utility point at the CSS variable itself (bg-panel ->
+   background-color: var(--panel)), so it follows light and dark with no
+   dark: variant needed. `reference` stops Tailwind from also declaring these
+   names on :root, where --font-ui would shadow the app's own variable. */
+@theme inline reference {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-mute: var(--mute);
+  --color-line: var(--line);
+  --color-green: var(--green);
+  --color-green-ink: var(--green-ink);
+  --color-orange: var(--orange);
+  --color-orange-ink: var(--orange-ink);
+  --color-bad: var(--bad);
+  --color-ok: var(--ok);
+  --color-cell: var(--cell);
+  --color-cell-alt: var(--cell-alt);
+  --color-tint: var(--tint);
+  --color-tint-green: var(--tint-green);
+  --color-risk-bg: var(--risk-bg);
+  --color-risk-line: var(--risk-line);
+
+  --shadow-card: var(--shadow);
+
+  --font-ui: var(--font-ui);
+  --font-display: var(--font-display);
+  --font-prose: var(--font-prose);
+  --font-script: var(--font-script);
+}

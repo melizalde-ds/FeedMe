@@ -1,0 +1,100 @@
+{
+  "meta": {
+    "name": "diet_reference",
+    "version": "1.0",
+    "note": "Same shape as allergens/allergen_reference.json and read by the same matcher. Covers what diets avoid that isn't an allergen. Written for this app from the ingredient names in the recipe data, not from an outside source. Phrases are normalized when loaded."
+  },
+  "groups": {
+    "red_meat": {"label": "Red meat and game"},
+    "pork": {"label": "Pork"},
+    "poultry": {"label": "Poultry"},
+    "animal_product": {"label": "Gelatin, animal fat and meat stock"},
+    "honey": {"label": "Honey"},
+    "alcohol": {"label": "Alcohol"}
+  },
+  "terms": {
+    "red_meat": {
+      "contains": [
+        "beef", "veal", "lamb", "mutton", "venison", "bison", "rabbit", "elk", "moose", "alligator",
+        "crocodile", "brisket", "sirloin", "ribeye", "rib eye", "oxtail", "tripe", "sweetbread",
+        "pastrami", "short rib", "rump roast", "chuck roast", "pot roast", "round roast", "tip roast",
+        "tri tip", "round steak", "flank steak", "rump steak", "london broil", "stew meat",
+        "goat meat", "ground round", "ground chuck", "demi glace"
+      ],
+      "likely": ["steak", "meat", "hamburger", "meatball", "meatloaf", "liver", "tenderloin", "burger patty"]
+    },
+    "pork": {
+      "contains": [
+        "pork", "bacon", "ham", "prosciutto", "pancetta", "salami", "pepperoni", "kielbasa",
+        "bratwurst", "andouille", "frankfurter", "wiener", "bologna", "lard", "lardon",
+        "guanciale", "mortadella", "spam", "braunschweiger", "weisswurst", "capicola", "tasso"
+      ],
+      "likely": ["sausage", "chorizo", "hot dog"]
+    },
+    "poultry": {
+      "contains": [
+        "chicken", "turkey", "duck", "duckling", "goose", "hen", "quail", "pheasant", "partridge",
+        "poultry", "giblet", "foie gras"
+      ]
+    },
+    "animal_product": {
+      "contains": ["gelatin", "suet", "tallow", "bone broth", "schmaltz"],
+      "likely": ["jello", "jell o", "marshmallow", "drippings"],
+      "check_label": ["broth", "stock", "bouillon", "consomme", "gravy"]
+    },
+    "honey": {
+      "contains": ["honey"]
+    },
+    "alcohol": {
+      "contains": [
+        "wine", "beer", "rum", "vodka", "brandy", "bourbon", "whiskey", "whisky", "sherry", "liqueur",
+        "liquor", "cognac", "tequila", "gin", "vermouth", "champagne", "prosecco", "sake", "mirin",
+        "marsala", "madeira", "kahlua", "schnapps", "amaretto", "grand marnier", "cointreau",
+        "triple sec", "baileys", "irish cream", "ale", "stout", "lager", "hard cider", "kirsch",
+        "ouzo", "grappa", "curacao", "frangelico", "chambord", "creme de cacao", "creme de menthe",
+        "creme de cassis", "burgundy", "riesling", "zinfandel", "chardonnay", "merlot", "cabernet",
+        "chianti", "scotch", "armagnac", "calvados", "sambuca"
+      ],
+      "likely": ["port"]
+    }
+  },
+  "negatives": {
+    "red_meat": [
+      "salmon steak", "tuna steak", "swordfish steak", "halibut steak", "cod steak", "grouper steak",
+      "fish steak", "cauliflower steak", "crab meat", "lobster meat", "crawfish tail meat",
+      "catfish meat", "coconut meat", "walnut meat", "chestnut meat", "nut meat",
+      "chicken liver", "chicken tenderloin", "turkey tenderloin", "turkey meatball", "chicken meat",
+      "turkey meat", "duck meat", "hamburger bun", "steak sauce", "steak seasoning",
+      "meat tenderizer"
+    ],
+    "pork": [
+      "turkey bacon", "turkey ham", "turkey sausage", "turkey kielbasa", "turkey pepperoni",
+      "chicken sausage", "beef sausage", "beef bacon", "beef kielbasa", "beef hot dog",
+      "beef wiener", "hot dog bun"
+    ],
+    "poultry": ["duck sauce", "poultry seasoning"],
+    "animal_product": ["vegetable suet"],
+    "alcohol": [
+      "wine vinegar", "red wine vinegar", "white wine vinegar", "rice wine vinegar",
+      "sherry vinegar", "sherry wine vinegar", "champagne vinegar", "beer vinegar", "ginger ale",
+      "ginger beer", "root beer", "scotch bonnet", "champagne grape", "champagne yeast",
+      "white wine substitute"
+    ]
+  },
+  "downgrade_words": {
+    "vegan": ["red_meat", "pork", "poultry", "animal_product", "honey"],
+    "vegetarian": ["red_meat", "pork", "poultry", "animal_product"],
+    "plant based": ["red_meat", "pork", "poultry", "animal_product"],
+    "meatless": ["red_meat", "pork", "poultry", "animal_product"],
+    "veggie": ["red_meat", "pork", "poultry", "animal_product"],
+    "imitation": ["red_meat", "pork", "poultry"],
+    "mock": ["red_meat", "pork", "poultry"],
+    "tofu": ["red_meat", "pork", "poultry"],
+    "tempeh": ["red_meat", "pork", "poultry"]
+  },
+  "free_from_terms": {
+    "meat": ["red_meat", "pork", "poultry"],
+    "alcohol": ["alcohol"],
+    "alcoholic": ["alcohol"]
+  }
+}

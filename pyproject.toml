@@ -1,0 +1,4 @@
+# uv workspace root. apps/* also holds non-Python apps, so members are listed
+# explicitly (uv errors on a glob match without a pyproject.toml).
+[tool.uv.workspace]
+members = ["apps/api", "apps/storefront"]

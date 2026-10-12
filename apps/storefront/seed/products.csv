@@ -1,0 +1,99 @@
+upc,name,brand,category,size_value,size_unit,equivalence_group,store_brand
+410010000011,Asparagus,Sunny Acre,produce,1,lb,asparagus,
+410010000028,Avocados,Sunny Acre,produce,4,count,avocados,
+410010000035,Baby Potatoes,Sunny Acre,produce,1.5,lb,baby-potatoes,
+410010000042,Bananas,Sunny Acre,produce,6,count,bananas,
+410010000059,Bell Peppers,Sunny Acre,produce,3,count,bell-peppers,
+410010000066,Broccoli Crowns,Sunny Acre,produce,1,lb,broccoli,
+410010000073,Cauliflower,Sunny Acre,produce,1,count,cauliflower,
+410010000080,Cherry Tomatoes,Sunny Acre,produce,10,oz,cherry-tomatoes,
+410010000097,Cucumbers,Sunny Acre,produce,2,count,cucumbers,
+410010000103,Garlic,Sunny Acre,produce,3,count,garlic,
+410010000110,Lemons,Sunny Acre,produce,4,count,lemons,
+410010000127,Limes,Sunny Acre,produce,6,count,limes,
+410010000134,Fresh Parsley,Sunny Acre,produce,1,count,parsley,
+410010000141,Red Onions,Sunny Acre,produce,2,lb,red-onions,
+410010000158,Romaine Lettuce Hearts,Sunny Acre,produce,3,count,romaine,
+410010000165,Scallions (Green Onions),Sunny Acre,produce,1,count,scallions,
+410010000172,Shredded Carrots,Sunny Acre,produce,10,oz,shredded-carrots,
+410010000189,Baby Spinach,Sunny Acre,produce,10,oz,spinach,
+410010000196,Sweet Potatoes,Sunny Acre,produce,3,lb,sweet-potatoes,
+410010000202,Yellow Onions,Sunny Acre,produce,3,lb,yellow-onions,
+410010000219,Zucchini,Sunny Acre,produce,2,count,zucchini,
+410020000223,Large Eggs,Meadowbrook,dairy,12,count,eggs-large,
+410020000230,Plain Greek Yogurt,Meadowbrook,dairy,32,oz,greek-yogurt-plain,
+410020000247,Grated Parmesan Cheese,Meadowbrook,dairy,8,oz,parmesan-grated,
+410030000251,Oat Milk,Oatfield,dairy,64,fl oz,oat-milk,
+410020000261,Classic Hummus,Meadowbrook,dairy,10,oz,hummus,
+410020000278,Whole Milk,Meadowbrook,dairy,128,fl oz,milk-whole,
+410020000285,Salted Butter,Meadowbrook,dairy,16,oz,butter-salted,
+410020000292,Shredded Cheddar Cheese,Meadowbrook,dairy,8,oz,cheddar-shredded,
+410040000302,Boneless Skinless Chicken Thighs,Harbor & Field,meat,1.5,lb,chicken-thighs,
+410040000319,Ground Beef 85% Lean,Harbor & Field,meat,1,lb,ground-beef,
+410040000326,Salmon Fillets,Harbor & Field,meat,1,lb,salmon-fillets,
+410040000333,Sliced Turkey Breast,Harbor & Field,meat,9,oz,turkey-breast-sliced,
+410040000340,Boneless Skinless Chicken Breast,Harbor & Field,meat,1.5,lb,chicken-breast,
+410050000354,Whole Wheat Bread,Golden Crust,bakery,20,oz,bread-whole-wheat,
+410050000361,Whole Wheat Tortillas,Golden Crust,bakery,8,count,tortillas-whole-wheat,
+410060000375,Black Beans,Pantry Path,pantry,15,oz,black-beans,
+410060000382,Chickpeas,Pantry Path,pantry,15,oz,chickpeas,
+410060000399,Kidney Beans,Pantry Path,pantry,15,oz,kidney-beans,
+410060000405,Crushed Tomatoes,Pantry Path,pantry,28,oz,crushed-tomatoes,
+410060000412,Canned Tuna in Water,Pantry Path,pantry,5,oz,tuna-canned,
+410060000429,Coconut Milk,Pantry Path,pantry,13.5,fl oz,coconut-milk,
+410060000436,Vegetable Broth,Pantry Path,pantry,32,fl oz,vegetable-broth,
+410060000443,Basmati Rice,Pantry Path,pantry,2,lb,rice-basmati,
+410060000450,Brown Rice,Pantry Path,pantry,2,lb,rice-brown,
+410060000467,Long Grain White Rice,Pantry Path,pantry,5,lb,rice-white,
+410060000474,Penne Pasta,Pantry Path,pantry,16,oz,penne,
+410060000481,Quinoa,Pantry Path,pantry,16,oz,quinoa,
+410060000498,Red Lentils,Pantry Path,pantry,16,oz,red-lentils,
+410060000504,Old Fashioned Rolled Oats,Pantry Path,pantry,42,oz,rolled-oats,
+410060000511,Extra Virgin Olive Oil,Pantry Path,pantry,16.9,fl oz,olive-oil-ev,
+410060000528,Soy Sauce,Pantry Path,pantry,15,fl oz,soy-sauce,
+410060000535,Honey,Pantry Path,pantry,12,oz,honey,
+410060000542,Pure Maple Syrup,Pantry Path,pantry,12,fl oz,maple-syrup,
+410060000559,Roasted Pumpkin Seeds,Pantry Path,pantry,8,oz,pumpkin-seeds,
+410070000563,Chili Powder,Spice Lane,pantry,2.5,oz,chili-powder,
+410070000570,Ground Cinnamon,Spice Lane,pantry,2.4,oz,cinnamon-ground,
+410070000587,Ground Cumin,Spice Lane,pantry,2,oz,cumin-ground,
+410070000594,Curry Powder,Spice Lane,pantry,2,oz,curry-powder,
+410070000600,Paprika,Spice Lane,pantry,2.1,oz,paprika,
+410080000614,Shelled Edamame,Frostline,frozen,12,oz,edamame-shelled,
+410080000621,Mixed Berries,Frostline,frozen,16,oz,mixed-berries,
+410080000638,Broccoli Florets,Frostline,frozen,12,oz,broccoli-florets-frozen,
+410090000642,Paper Towels,Brightside Home,household,6,count,paper-towels,
+410090000659,Dish Soap,Brightside Home,household,19,fl oz,dish-soap,
+410090000666,Tall Kitchen Trash Bags,Brightside Home,household,40,count,trash-bags,
+420010000676,Large Eggs,Corner & Co.,dairy,12,count,eggs-large,target
+420010000683,Plain Greek Yogurt,Corner & Co.,dairy,32,oz,greek-yogurt-plain,target
+420010000690,Black Beans,Corner & Co.,pantry,15,oz,black-beans,target
+420010000706,Chickpeas,Corner & Co.,pantry,15,oz,chickpeas,target
+420010000713,Penne Pasta,Corner & Co.,pantry,16,oz,penne,target
+420010000720,Extra Virgin Olive Oil,Corner & Co.,pantry,16.9,fl oz,olive-oil-ev,target
+420010000737,Old Fashioned Rolled Oats,Corner & Co.,pantry,42,oz,rolled-oats,target
+420010000744,Whole Wheat Bread,Corner & Co.,bakery,20,oz,bread-whole-wheat,target
+420010000751,Baby Spinach,Corner & Co.,produce,10,oz,spinach,target
+420010000768,Vegetable Broth,Corner & Co.,pantry,32,fl oz,vegetable-broth,target
+420010000775,Paper Towels,Corner & Co.,household,6,count,paper-towels,target
+420020000789,Organic Large Eggs,Greenleaf Organic,dairy,12,count,eggs-large-organic,greenleaf-organics
+420020000796,Organic Baby Spinach,Greenleaf Organic,produce,10,oz,spinach-organic,greenleaf-organics
+420020000802,Organic Bananas,Greenleaf Organic,produce,6,count,bananas-organic,greenleaf-organics
+420020000819,Organic Plain Greek Yogurt,Greenleaf Organic,dairy,32,oz,greek-yogurt-plain-organic,greenleaf-organics
+420020000826,Organic Boneless Skinless Chicken Thighs,Greenleaf Organic,meat,1.5,lb,chicken-thighs-organic,greenleaf-organics
+420020000833,Organic Quinoa,Greenleaf Organic,pantry,16,oz,quinoa-organic,greenleaf-organics
+420020000840,Organic Oat Milk,Greenleaf Organic,dairy,64,fl oz,oat-milk-organic,greenleaf-organics
+420020000857,Organic Extra Virgin Olive Oil,Greenleaf Organic,pantry,16.9,fl oz,olive-oil-ev-organic,greenleaf-organics
+410020000865,Large Eggs Club Pack,Meadowbrook,dairy,36,count,eggs-large,
+410060000870,Extra Virgin Olive Oil Club Pack,Pantry Path,pantry,50.7,fl oz,olive-oil-ev,
+410060000887,Long Grain White Rice Club Pack,Pantry Path,pantry,20,lb,rice-white,
+410060000894,Old Fashioned Rolled Oats Club Pack,Pantry Path,pantry,168,oz,rolled-oats,
+410060000900,Black Beans Club Pack,Pantry Path,pantry,120,oz,black-beans,
+410040000913,Boneless Skinless Chicken Thighs Club Pack,Harbor & Field,meat,6,lb,chicken-thighs,
+410040000920,Ground Beef 85% Lean Club Pack,Harbor & Field,meat,4,lb,ground-beef,
+410090000932,Paper Towels Club Pack,Brightside Home,household,12,count,paper-towels,
+410060000948,Quinoa Club Pack,Pantry Path,pantry,64,oz,quinoa,
+410020000957,Plain Greek Yogurt Club Pack,Meadowbrook,dairy,64,oz,greek-yogurt-plain,
+410060000962,Crushed Tomatoes Club Pack,Pantry Path,pantry,168,oz,crushed-tomatoes,
+410060000979,Penne Pasta Club Pack,Pantry Path,pantry,96,oz,penne,
+410090000987,Tall Kitchen Trash Bags Club Pack,Brightside Home,household,120,count,trash-bags,

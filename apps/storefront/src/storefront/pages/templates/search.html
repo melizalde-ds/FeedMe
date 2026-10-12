@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Search · {{ store.name }}{% endblock %}
+{% block content %}
+  {% if not q.strip() %}
+    <p>Type something to search {{ store.name }}.</p>
+  {% elif not results %}
+    <p>No products at {{ store.name }} match "{{ q }}".</p>
+  {% else %}
+    <p class="muted">{{ results|length }} result{{ "" if results|length == 1 else "s" }} for "{{ q }}"</p>
+    {% with items = results %}{% include "_items.html" %}{% endwith %}
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+[
+  {"name": "Rolled oats", "quantity": 2, "unit": "cup"},
+  {"name": "Banana", "quantity": 4, "unit": "whole"},
+  {"name": "Oat milk", "quantity": 4, "unit": "cup"},
+  {"name": "Eggs", "quantity": 8, "unit": "whole"},
+  {"name": "Spinach", "quantity": 4, "unit": "cup"},
+  {"name": "Whole wheat bread", "quantity": 8, "unit": "slice"},
+  {"name": "Olive oil", "quantity": 6, "unit": "tbsp"},
+  {"name": "Chicken thighs", "quantity": 24, "unit": "oz"},
+  {"name": "Cooked brown rice", "quantity": 4, "unit": "cup"},
+  {"name": "Black beans", "quantity": 2, "unit": "can"},
+  {"name": "Salmon fillet", "quantity": 16, "unit": "oz"},
+  {"name": "Penne pasta", "quantity": 12, "unit": "oz"},
+  {"name": "Garlic", "quantity": 6, "unit": "clove"},
+  {"name": "Dragon fruit", "quantity": 1, "unit": "whole"}
+]

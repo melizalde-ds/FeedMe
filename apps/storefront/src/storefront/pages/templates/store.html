@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ store.name }}{% endblock %}
+{% block content %}
+  <p class="muted">
+    Delivery fee: {{ store.delivery_fee_cents|money }}{% if store.free_delivery_threshold_cents is not none %}, free over {{ store.free_delivery_threshold_cents|money }}{% endif %}.
+    Order minimum: {{ store.order_minimum_cents|money }}.
+    <a href="/stores/{{ store.slug }}/feed.json">Product feed</a>
+  </p>
+  {% for category, items in by_category.items() %}
+    <h2>{{ category }}</h2>
+    {% include "_items.html" %}
+  {% endfor %}
+{% endblock %}

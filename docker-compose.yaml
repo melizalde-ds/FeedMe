@@ -1,0 +1,217 @@
+# Local dev stack: Supabase (Postgres, Auth, REST, Studio) plus Qdrant.
+# Throwaway credentials - do not deploy this.
+#
+#   Supabase API   http://localhost:54321   (supabase-js / supabase-py URL)
+#   Postgres       postgresql://postgres:postgres@localhost:54322/postgres
+#   Studio         http://localhost:54323
+#   Qdrant         http://localhost:6333    (dashboard at /dashboard)
+#
+# These four ports are published on every network interface, and Studio has no
+# login, so only run this on a network you trust.
+#
+# Start with `docker compose up -d --wait`. The one-shot db-schema service then
+# applies supabase/schema.sql. Recipe embeddings are not served here: they come
+# from Bedrock (scripts/ingest_recipes.py) and are stored in Qdrant.
+# Full guide: docs/backend.md
+
+name: meal-planner
+
+# Each dev's own secret and API keys, read from .env (not committed).
+x-keys:
+  jwt_secret: &jwt_secret ${SUPABASE_JWT_SECRET:?missing - run python3 scripts/gen-env.py}
+  anon_key: &anon_key ${SUPABASE_ANON_KEY:?missing - run python3 scripts/gen-env.py}
+  service_role_key: &service_role_key ${SUPABASE_SERVICE_ROLE_KEY:?missing - run python3 scripts/gen-env.py}
+
+services:
+  db:
+    image: supabase/postgres:17.6.1.136
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "54322:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - db_config:/etc/postgresql-custom
+    configs:
+      - source: db_roles
+        target: /docker-entrypoint-initdb.d/init-scripts/99-roles.sql
+    healthcheck:
+      test: pg_isready -U postgres -h localhost
+      interval: 5s
+      retries: 10
+
+  auth:
+    image: supabase/gotrue:v2.196.0
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: http://localhost:54321/auth/v1
+      GOTRUE_SITE_URL: http://localhost:5173
+      GOTRUE_URI_ALLOW_LIST: http://localhost:5173/**
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:postgres@db:5432/postgres
+      GOTRUE_JWT_SECRET: *jwt_secret
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_MAILER_AUTOCONFIRM: "true"
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:9999/health
+      interval: 5s
+      retries: 20
+
+  rest:
+    image: postgrest/postgrest:v14.17
+    depends_on:
+      db:
+        condition: service_healthy
+      # Starts once the schema is up to date, so its first read of the tables is
+      # complete. It also tells `docker compose up --wait` that db-schema exiting
+      # is expected, not a failure.
+      db-schema:
+        condition: service_completed_successfully
+    environment:
+      PGRST_DB_URI: postgres://authenticator:postgres@db:5432/postgres
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_JWT_SECRET: *jwt_secret
+
+  # API gateway: one URL for the Supabase clients, routing /auth/v1 and /rest/v1.
+  kong:
+    image: kong/kong:3.9.3
+    depends_on:
+      - auth
+      - rest
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong.yml
+    ports:
+      - "54321:8000"
+    configs:
+      - source: kong
+        target: /kong.yml
+
+  meta:
+    image: supabase/postgres-meta:v0.99.0
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PG_META_DB_HOST: db
+      PG_META_DB_PASSWORD: postgres
+
+  studio:
+    image: supabase/studio:2026.09.07-sha-7996410
+    depends_on:
+      - meta
+      - kong
+    environment:
+      HOSTNAME: 0.0.0.0
+      STUDIO_PG_META_URL: http://meta:8080
+      POSTGRES_PASSWORD: postgres
+      SUPABASE_URL: http://kong:8000
+      SUPABASE_PUBLIC_URL: http://localhost:54321
+      SUPABASE_ANON_KEY: *anon_key
+      SUPABASE_SERVICE_KEY: *service_role_key
+      AUTH_JWT_SECRET: *jwt_secret
+    ports:
+      - "54323:3000"
+
+  # One-shot: brings the database schema up to date once auth has created
+  # auth.users, then tells PostgREST to reload. It runs on every `docker compose up`
+  # and exits when done, so "Exited (0)" is the normal state.
+  #   1. Baseline: supabase/schema.sql, only if public.profiles doesn't exist yet.
+  #   2. Migrations: each supabase/migrations/*.sql not yet listed in the
+  #      migrations.applied table, in file-name order, each in one transaction.
+  # To change the schema, add a new numbered file in supabase/migrations. Don't
+  # edit schema.sql or a migration that has been pushed: databases that already
+  # ran them won't pick the edit up.
+  # To start over (deletes users and app data, keeps the Qdrant recipes):
+  #   docker compose rm -s -f db auth rest kong meta studio db-schema
+  #   docker volume rm meal-planner_db_data meal-planner_db_config
+  #   docker compose up -d --wait
+  # `docker compose down -v` also works but deletes the Qdrant recipes too.
+  db-schema:
+    image: postgres:17-alpine
+    depends_on:
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
+    environment:
+      PGHOST: db
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      # Hides the "already exists, skipping" notices on repeat runs.
+      PGOPTIONS: --client-min-messages=warning
+    volumes:
+      - ./supabase:/supabase:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -e
+        if [ "$$(psql -tAc "select to_regclass('public.profiles') is not null")" = "t" ]; then
+          echo "baseline already applied, skipping schema.sql"
+        else
+          psql -q -v ON_ERROR_STOP=1 --single-transaction -f /supabase/schema.sql
+          echo "baseline applied: schema.sql"
+        fi
+        # Not in the public schema, so PostgREST doesn't expose it.
+        psql -q -v ON_ERROR_STOP=1 \
+          -c "create schema if not exists migrations" \
+          -c "create table if not exists migrations.applied (name text primary key, applied_at timestamptz not null default now())"
+        for file in /supabase/migrations/*.sql; do
+          [ -e "$$file" ] || continue
+          name="$$(basename "$$file")"
+          if [ "$$(psql -tAc "select exists (select 1 from migrations.applied where name = '$$name')")" = "t" ]; then
+            continue
+          fi
+          # The migration and its record commit together, or not at all.
+          psql -q -v ON_ERROR_STOP=1 --single-transaction -f "$$file" \
+            -c "insert into migrations.applied (name) values ('$$name')"
+          echo "migration applied: $$name"
+        done
+        echo "schema is up to date"
+        psql -c "notify pgrst, 'reload schema'"
+    restart: "no"
+
+  qdrant:
+    image: qdrant/qdrant:v1.19.2
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+configs:
+  # The image creates these roles without passwords; auth and rest log in as them.
+  db_roles:
+    content: |
+      ALTER USER authenticator WITH PASSWORD 'postgres';
+      ALTER USER supabase_auth_admin WITH PASSWORD 'postgres';
+
+  kong:
+    content: |
+      _format_version: "3.0"
+      services:
+        - name: auth
+          url: http://auth:9999/
+          routes:
+            - name: auth
+              paths: [/auth/v1/]
+        - name: rest
+          url: http://rest:3000/
+          routes:
+            - name: rest
+              paths: [/rest/v1/]
+      plugins:
+        - name: cors
+
+volumes:
+  db_data:
+  db_config:
+  qdrant_data:

@@ -1,0 +1,13 @@
+{
+  "name": "meal-planner",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "pnpm run \"/^dev:.*/\"",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "uv run --package api fastapi dev apps/api/src/api/main.py",
+    "dev:storefront": "uv run --package storefront fastapi dev apps/storefront/src/storefront/main.py --port 8100",
+    "build": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint"
+  }
+}
