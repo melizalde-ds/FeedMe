@@ -1,0 +1,317 @@
+{
+ "orderId": "fixture-order-1",
+ "listId": "fixture-list-1",
+ "cart": {
+  "items": [
+   {
+    "store": "pennywise-grocer",
+    "upc": "410020000278",
+    "name": "Whole Milk",
+    "brand": "Meadowbrook",
+    "size": "128 fl oz",
+    "for_ingredient": "milk",
+    "quantity": 1,
+    "unit_price_cents": 334,
+    "status": "in_cart",
+    "hold_reasons": []
+   },
+   {
+    "store": "pennywise-grocer",
+    "upc": "410020000285",
+    "name": "Salted Butter",
+    "brand": "Meadowbrook",
+    "size": "16 oz",
+    "for_ingredient": "butter",
+    "quantity": 1,
+    "unit_price_cents": 412,
+    "status": "in_cart",
+    "hold_reasons": []
+   },
+   {
+    "store": "pennywise-grocer",
+    "upc": "410010000202",
+    "name": "Yellow Onions",
+    "brand": "Sunny Acre",
+    "size": "3 lb",
+    "for_ingredient": "onion",
+    "quantity": 1,
+    "unit_price_cents": 268,
+    "status": "in_cart",
+    "hold_reasons": []
+   },
+   {
+    "store": "pennywise-grocer",
+    "upc": "410040000319",
+    "name": "Ground Beef 85% Lean",
+    "brand": "Harbor & Field",
+    "size": "1 lb",
+    "for_ingredient": "ground beef",
+    "quantity": 1,
+    "unit_price_cents": 575,
+    "status": "in_cart",
+    "hold_reasons": []
+   },
+   {
+    "store": "staplemart",
+    "upc": "410020000247",
+    "name": "Grated Parmesan Cheese",
+    "brand": "Meadowbrook",
+    "size": "8 oz",
+    "for_ingredient": "parmesan cheese",
+    "quantity": 1,
+    "unit_price_cents": 399,
+    "status": "in_cart",
+    "hold_reasons": []
+   },
+   {
+    "store": "staplemart",
+    "upc": "410010000134",
+    "name": "Fresh Parsley",
+    "brand": "Sunny Acre",
+    "size": "1 count",
+    "for_ingredient": "parsley",
+    "quantity": 1,
+    "unit_price_cents": 129,
+    "status": "in_cart",
+    "hold_reasons": []
+   },
+   {
+    "store": "redwood-market",
+    "upc": "420010000676",
+    "name": "Large Eggs",
+    "brand": "Corner & Co.",
+    "size": "12 count",
+    "for_ingredient": "egg",
+    "quantity": 1,
+    "unit_price_cents": 269,
+    "status": "proposed",
+    "hold_reasons": [
+     "store_brand"
+    ]
+   },
+   {
+    "store": "redwood-market",
+    "upc": "410010000011",
+    "name": "Asparagus",
+    "brand": "Sunny Acre",
+    "size": "1 lb",
+    "for_ingredient": "asparagus",
+    "quantity": 1,
+    "unit_price_cents": 431,
+    "status": "proposed",
+    "hold_reasons": [
+     "unsure_match",
+     "unknown_quantity"
+    ]
+   }
+  ],
+  "in_cart": {
+   "stores": [
+    {
+     "store": "pennywise-grocer",
+     "subtotal_cents": 1589,
+     "delivery_fee_cents": 0,
+     "total_cents": 1589
+    },
+    {
+     "store": "staplemart",
+     "subtotal_cents": 528,
+     "delivery_fee_cents": 0,
+     "total_cents": 528
+    }
+   ],
+   "total_cents": 2117
+  },
+  "if_all_approved": {
+   "stores": [
+    {
+     "store": "pennywise-grocer",
+     "subtotal_cents": 1589,
+     "delivery_fee_cents": 0,
+     "total_cents": 1589
+    },
+    {
+     "store": "redwood-market",
+     "subtotal_cents": 700,
+     "delivery_fee_cents": 0,
+     "total_cents": 700
+    },
+    {
+     "store": "staplemart",
+     "subtotal_cents": 528,
+     "delivery_fee_cents": 0,
+     "total_cents": 528
+    }
+   ],
+   "total_cents": 2817
+  }
+ },
+ "cartAfter": {
+  "items": [
+   {
+    "store": "redwood-market",
+    "upc": "420010000676",
+    "name": "Large Eggs",
+    "brand": "Corner & Co.",
+    "size": "12 count",
+    "for_ingredient": "egg",
+    "quantity": 1,
+    "unit_price_cents": 269,
+    "status": "proposed",
+    "hold_reasons": [
+     "store_brand"
+    ]
+   },
+   {
+    "store": "redwood-market",
+    "upc": "410010000011",
+    "name": "Asparagus",
+    "brand": "Sunny Acre",
+    "size": "1 lb",
+    "for_ingredient": "asparagus",
+    "quantity": 1,
+    "unit_price_cents": 431,
+    "status": "proposed",
+    "hold_reasons": [
+     "unsure_match",
+     "unknown_quantity"
+    ]
+   }
+  ],
+  "in_cart": {
+   "stores": [],
+   "total_cents": 0
+  },
+  "if_all_approved": {
+   "stores": [
+    {
+     "store": "redwood-market",
+     "subtotal_cents": 700,
+     "delivery_fee_cents": 0,
+     "total_cents": 700
+    }
+   ],
+   "total_cents": 700
+  }
+ },
+ "approval": {
+  "stores": [
+   "pennywise-grocer",
+   "staplemart"
+  ],
+  "total_cents": 2117
+ },
+ "summary": {
+  "orders": [
+   {
+    "order_id": "fixture-pennywise-grocer-1",
+    "store": "pennywise-grocer",
+    "payment_reference": "pi_fixture_sandbox_reference",
+    "lines": [
+     {
+      "upc": "410020000278",
+      "name": "Whole Milk",
+      "quantity": 1,
+      "line_total_cents": 334
+     },
+     {
+      "upc": "410020000285",
+      "name": "Salted Butter",
+      "quantity": 1,
+      "line_total_cents": 412
+     },
+     {
+      "upc": "410010000202",
+      "name": "Yellow Onions",
+      "quantity": 1,
+      "line_total_cents": 268
+     },
+     {
+      "upc": "410040000319",
+      "name": "Ground Beef 85% Lean",
+      "quantity": 1,
+      "line_total_cents": 575
+     }
+    ],
+    "delivery_fee_cents": 0,
+    "total_cents": 1589
+   },
+   {
+    "order_id": "fixture-staplemart-2",
+    "store": "staplemart",
+    "payment_reference": "pi_fixture_sandbox_reference",
+    "lines": [
+     {
+      "upc": "410020000247",
+      "name": "Grated Parmesan Cheese",
+      "quantity": 1,
+      "line_total_cents": 399
+     },
+     {
+      "upc": "410010000134",
+      "name": "Fresh Parsley",
+      "quantity": 1,
+      "line_total_cents": 129
+     }
+    ],
+    "delivery_fee_cents": 0,
+    "total_cents": 528
+   }
+  ],
+  "paid_total_cents": 2117,
+  "savings_cents": 66,
+  "best_single_store": "staplemart",
+  "best_single_store_total_cents": 2183,
+  "unmatched": [
+   "curry powder"
+  ],
+  "cart": {
+   "items": [
+    {
+     "store": "redwood-market",
+     "upc": "420010000676",
+     "name": "Large Eggs",
+     "brand": "Corner & Co.",
+     "size": "12 count",
+     "for_ingredient": "egg",
+     "quantity": 1,
+     "unit_price_cents": 269,
+     "status": "proposed",
+     "hold_reasons": [
+      "store_brand"
+     ]
+    },
+    {
+     "store": "redwood-market",
+     "upc": "410010000011",
+     "name": "Asparagus",
+     "brand": "Sunny Acre",
+     "size": "1 lb",
+     "for_ingredient": "asparagus",
+     "quantity": 1,
+     "unit_price_cents": 431,
+     "status": "proposed",
+     "hold_reasons": [
+      "unsure_match",
+      "unknown_quantity"
+     ]
+    }
+   ],
+   "in_cart": {
+    "stores": [],
+    "total_cents": 0
+   },
+   "if_all_approved": {
+    "stores": [
+     {
+      "store": "redwood-market",
+      "subtotal_cents": 700,
+      "delivery_fee_cents": 0,
+      "total_cents": 700
+     }
+    ],
+    "total_cents": 700
+   }
+  }
+ }
+}
