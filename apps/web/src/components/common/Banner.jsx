@@ -17,7 +17,7 @@ export function Banner({ variant = 'notice', title, children, onDismiss, compact
   return (
     <div
       className={cx(
-        'flex items-start gap-3 rounded-tile text-base text-ink',
+        'flex flex-wrap items-start gap-x-3 gap-y-1.5 rounded-tile text-base text-ink',
         compact ? 'px-3.5 py-2.5' : 'px-4 py-3',
         box,
         className,
@@ -25,12 +25,12 @@ export function Banner({ variant = 'notice', title, children, onDismiss, compact
       role={variant === 'error' ? 'alert' : 'status'}
     >
       <Icon className={cx('mt-1 shrink-0', icon)} />
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 basis-40">
         {title ? <strong className="font-bold">{title}. </strong> : null}
         {children}
       </div>
       {onDismiss ? (
-        <TextButton className="shrink-0" onClick={onDismiss}>
+        <TextButton className="ml-auto shrink-0" onClick={onDismiss}>
           Dismiss
         </TextButton>
       ) : null}

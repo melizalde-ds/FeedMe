@@ -1,5 +1,7 @@
 import { CUSTOM_RECIPE_SOURCE } from '../../lib/constants'
 import { isNamesOnly } from '../../lib/mealOptions'
+import { Alert } from '../ui/icons'
+import { tableClass, tdClass, tfootClass, thClass } from '../ui/table'
 
 const money = (value) => (value == null ? '—' : `$${Number(value).toFixed(2)}`)
 const round = (value) => Math.round(value * 100) / 100
@@ -19,23 +21,44 @@ const NAMES_ONLY_NOTE =
 // A figure the recipe doesn't give stays blank: nothing is filled in.
 const figure = (value, unit = '') => (value == null ? '—' : `${value}${unit}`)
 
+const headingClass = 'mt-6 mb-2 text-base font-bold'
+const fineClass = 'text-sm text-mute'
+
+function Macros({ nutrition }) {
+  const items = [
+    [figure(nutrition.calories), 'kcal'],
+    [figure(nutrition.protein, ' g'), 'protein'],
+    [figure(nutrition.carbs, ' g'), 'carbs'],
+    [figure(nutrition.fat, ' g'), 'fat'],
+  ]
+  return (
+    <ul className="flex flex-wrap gap-x-8 gap-y-2">
+      {items.map(([value, name]) => (
+        <li key={name} className={fineClass}>
+          <span className="block text-xl font-bold tracking-tight text-ink">{value}</span> {name}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function Conflict({ children }) {
+  return (
+    <p className="mt-3 flex gap-2 font-bold text-danger">
+      <Alert className="mt-1 shrink-0" />
+      <span>{children}</span>
+    </p>
+  )
+}
+
 // Requirement 6, for a planner recipe: ingredient names only, no amounts, no
 // prices and no cost.
-function NamesOnlyRecipe({ recipe, conflicts }) {
+function NamesOnlyRecipe({ recipe, conflicts, Heading }) {
   const nutrition = recipe.nutritionPerServing
 
   return (
-    <div className="recipe">
-      {recipe.imageUrl ? (
-        <img
-          src={recipe.imageUrl}
-          alt=""
-          loading="lazy"
-          className="mb-4 aspect-[4/3] w-full max-w-md rounded-lg object-cover"
-        />
-      ) : null}
-
-      <p className="recipe__meta">
+    <div>
+      <p className={fineClass}>
         Per serving · {nutrition ? `about ${figure(nutrition.calories)} kcal` : 'no calories given'}
         {nutrition ? ` · ${figure(nutrition.protein, ' g')} protein` : ''}
         {' · '}
@@ -46,67 +69,47 @@ function NamesOnlyRecipe({ recipe, conflicts }) {
       </p>
 
       {conflicts.length ? (
-        <p className="recipe__allergens is-conflict">
-          This conflicts with {conflicts.join(', ')} in your setup.
-        </p>
+        <Conflict>This conflicts with {conflicts.join(', ')} in your setup.</Conflict>
       ) : null}
 
-      <section className="recipe__section">
-        <h3 className="recipe__heading">Nutrition per serving (estimated)</h3>
-        {nutrition ? (
-          <ul className="macro-list">
-            <li>
-              <span>{figure(nutrition.calories)}</span> kcal
-            </li>
-            <li>
-              <span>{figure(nutrition.protein, 'g')}</span> protein
-            </li>
-            <li>
-              <span>{figure(nutrition.carbs, 'g')}</span> carbs
-            </li>
-            <li>
-              <span>{figure(nutrition.fat, 'g')}</span> fat
-            </li>
-          </ul>
-        ) : (
-          <p className="m-0">The recipe gives no nutrition figures.</p>
-        )}
-        <p className="recipe__source">Source: {recipe.nutritionSource}.</p>
-      </section>
+      <Heading className={headingClass}>Nutrition per serving (estimated)</Heading>
+      {nutrition ? <Macros nutrition={nutrition} /> : <p>The recipe gives no nutrition figures.</p>}
+      <p className={`mt-2 ${fineClass}`}>Source: {recipe.nutritionSource}.</p>
 
-      <section className="recipe__section">
-        <h3 className="recipe__heading">Ingredients</h3>
-        {recipe.ingredients.length ? (
-          <ul className="m-0 pl-5">
-            {recipe.ingredients.map((ingredient, index) => (
-              <li key={`${ingredient.name}-${index}`}>{ingredient.name}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className="m-0">The recipe lists no ingredients.</p>
-        )}
-        <p className="mt-2 mb-0 text-sm text-mute">
-          The recipe gives no amounts or prices, so none are shown.
-        </p>
-      </section>
+      <Heading className={headingClass}>Ingredients</Heading>
+      {recipe.ingredients.length ? (
+        <ul className="flex flex-wrap gap-1.5">
+          {recipe.ingredients.map((ingredient, index) => (
+            <li
+              key={`${ingredient.name}-${index}`}
+              className="rounded-flag border border-line bg-ground px-2.5 py-0.5 text-ui"
+            >
+              {ingredient.name}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>The recipe lists no ingredients.</p>
+      )}
+      <p className={`mt-2 ${fineClass}`}>
+        The recipe gives no amounts or prices, so none are shown.
+      </p>
 
-      <section className="recipe__section">
-        <h3 className="recipe__heading">
-          Directions
-          {recipe.cookTimeMinutes == null ? '' : ` · about ${recipe.cookTimeMinutes} min`}
-        </h3>
-        {recipe.instructions.length ? (
-          <ol className="recipe__steps">
-            {recipe.instructions.map((step, index) => (
-              <li key={`${index}-${step}`}>{step}</li>
-            ))}
-          </ol>
-        ) : (
-          <p className="m-0">The recipe gives no directions.</p>
-        )}
-      </section>
+      <Heading className={headingClass}>
+        Directions
+        {recipe.cookTimeMinutes == null ? '' : ` · about ${recipe.cookTimeMinutes} min`}
+      </Heading>
+      {recipe.instructions.length ? (
+        <ol className="max-w-[70ch] list-decimal space-y-1.5 pl-6 marker:font-bold marker:text-mute">
+          {recipe.instructions.map((step, index) => (
+            <li key={`${index}-${step}`}>{step}</li>
+          ))}
+        </ol>
+      ) : (
+        <p>The recipe gives no directions.</p>
+      )}
 
-      <p className="fine-print">
+      <p className={`mt-6 max-w-[70ch] ${fineClass}`}>
         {NAMES_ONLY_NOTE} Check the product labels yourself before cooking.
       </p>
     </div>
@@ -115,10 +118,11 @@ function NamesOnlyRecipe({ recipe, conflicts }) {
 
 // Requirement 6, for a recipe the user wrote: name, per-serving nutrition,
 // cooking time, the prices they entered, flagged allergens, ingredients and
-// directions, with the unverified caveat.
-export function RecipeDetail({ recipe, servings, conflicts = [] }) {
+// directions, with the unverified caveat. `heading` is the level its section
+// headings take, so they sit under whatever titles the recipe.
+export function RecipeDetail({ recipe, servings, conflicts = [], heading: Heading = 'h3' }) {
   if (isNamesOnly(recipe)) {
-    return <NamesOnlyRecipe recipe={recipe} conflicts={conflicts} />
+    return <NamesOnlyRecipe recipe={recipe} conflicts={conflicts} Heading={Heading} />
   }
 
   const nutrition = recipe.nutritionPerServing
@@ -128,92 +132,81 @@ export function RecipeDetail({ recipe, servings, conflicts = [] }) {
   )
 
   return (
-    <div className="recipe">
-      <p className="recipe__meta">
+    <div>
+      <p className={fineClass}>
         Per serving · about {nutrition.calories} kcal · {nutrition.protein} g
         protein · {recipe.cookTimeMinutes} min · about{' '}
         {money(perServingCost)} (estimates)
       </p>
 
       {recipe.allergens.length ? (
-        <p className={conflicts.length ? 'recipe__allergens is-conflict' : 'recipe__allergens'}>
-          Contains: {recipe.allergens.join(', ')}
-          {conflicts.length
-            ? ` — this conflicts with ${conflicts.join(', ')} in your setup.`
-            : ''}
-        </p>
+        conflicts.length ? (
+          <Conflict>
+            Contains: {recipe.allergens.join(', ')} — this conflicts with {conflicts.join(', ')} in
+            your setup.
+          </Conflict>
+        ) : (
+          <p className="mt-3 font-bold">Contains: {recipe.allergens.join(', ')}</p>
+        )
       ) : null}
 
-      <section className="recipe__section">
-        <h3 className="recipe__heading">
-          Nutrition per serving (
-          {recipe.source === CUSTOM_RECIPE_SOURCE ? 'yours' : 'estimated'})
-        </h3>
-        <ul className="macro-list">
-          <li>
-            <span>{nutrition.calories}</span> kcal
-          </li>
-          <li>
-            <span>{nutrition.protein}g</span> protein
-          </li>
-          <li>
-            <span>{nutrition.carbs}g</span> carbs
-          </li>
-          <li>
-            <span>{nutrition.fat}g</span> fat
-          </li>
-        </ul>
-        <p className="recipe__source">
-          Source: {recipe.nutritionSource ?? 'Estimated from recipe macros'}.
-        </p>
-      </section>
+      <Heading className={headingClass}>
+        Nutrition per serving (
+        {recipe.source === CUSTOM_RECIPE_SOURCE ? 'yours' : 'estimated'})
+      </Heading>
+      <Macros nutrition={nutrition} />
+      <p className={`mt-2 ${fineClass}`}>
+        Source: {recipe.nutritionSource ?? 'Estimated from recipe macros'}.
+      </p>
 
-      <section className="recipe__section">
-        <h3 className="recipe__heading">
-          Ingredients for {servings} {servings === 1 ? 'serving' : 'servings'}
-        </h3>
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th scope="col">Ingredient</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Est. cost</th>
+      <Heading className={headingClass}>
+        Ingredients for {servings} {servings === 1 ? 'serving' : 'servings'}
+      </Heading>
+      <table className={`${tableClass} max-w-xl`}>
+        <thead>
+          <tr>
+            <th scope="col" className={thClass}>
+              Ingredient
+            </th>
+            <th scope="col" className={thClass}>
+              Amount
+            </th>
+            <th scope="col" className={`${thClass} text-right`}>
+              Est. cost
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {recipe.ingredients.map((ingredient) => (
+            <tr key={`${ingredient.name}-${ingredient.unit}`}>
+              <td className={tdClass}>{ingredient.name}</td>
+              <td className={tdClass}>
+                {round(ingredient.quantity * servings)} {ingredient.unit}
+              </td>
+              <td className={`${tdClass} text-right`}>
+                {money(round((ingredient.cost ?? 0) * servings))}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {recipe.ingredients.map((ingredient) => (
-              <tr key={`${ingredient.name}-${ingredient.unit}`}>
-                <td>{ingredient.name}</td>
-                <td>
-                  {round(ingredient.quantity * servings)} {ingredient.unit}
-                </td>
-                <td>{money(round((ingredient.cost ?? 0) * servings))}</td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th scope="row" colSpan="2">
-                Meal total
-              </th>
-              <td>{money(round(perServingCost * servings))}</td>
-            </tr>
-          </tfoot>
-        </table>
-      </section>
-
-      <section className="recipe__section">
-        <h3 className="recipe__heading">
-          Directions · about {recipe.cookTimeMinutes} min
-        </h3>
-        <ol className="recipe__steps">
-          {recipe.instructions.map((step) => (
-            <li key={step}>{step}</li>
           ))}
-        </ol>
-      </section>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row" colSpan="2" className={tfootClass}>
+              Meal total
+            </th>
+            <td className={`${tfootClass} text-right`}>{money(round(perServingCost * servings))}</td>
+          </tr>
+        </tfoot>
+      </table>
 
-      <p className="fine-print">
+      <Heading className={headingClass}>Directions · about {recipe.cookTimeMinutes} min</Heading>
+      <ol className="max-w-[70ch] list-decimal space-y-1.5 pl-6 marker:font-bold marker:text-mute">
+        {recipe.instructions.map((step) => (
+          <li key={step}>{step}</li>
+        ))}
+      </ol>
+
+      <p className={`mt-6 max-w-[70ch] ${fineClass}`}>
         {SOURCE_NOTES[recipe.source] ?? UNVERIFIED_NOTE} Check the product
         labels yourself before cooking.
       </p>

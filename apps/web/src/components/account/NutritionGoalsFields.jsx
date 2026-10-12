@@ -1,12 +1,15 @@
 import { MACRO_TOLERANCE, MIN_CALORIES, macroCalories, splitMacros } from '../../lib/accountSetup'
 import { useAccountSetup } from '../../hooks/useAccountSetup'
 import { useHousehold } from '../../hooks/useHousehold'
-import { ui } from '../ui/styles'
+import { Button } from '../ui/Button'
+import { FieldError, Hint, Label, inputClass } from '../ui/Field'
 
 const FIELDS = [
   { key: 'calories', id: 'calorie-goal', label: 'Daily calories per person', unit: 'kcal', step: 50 },
   { key: 'protein', id: 'protein-goal', label: 'Daily protein per person', unit: 'g', step: 5 },
-  { key: 'carbs', id: 'carbs-goal', label: 'Daily carbs per person', unit: 'g', step: 5 },
+  // Step 1, because "Recalculate" writes whole grams: a step of 5 made the
+  // browser refuse the form whenever the result was not a multiple of 5.
+  { key: 'carbs', id: 'carbs-goal', label: 'Daily carbs per person', unit: 'g', step: 1 },
   { key: 'fat', id: 'fat-goal', label: 'Daily fat per person', unit: 'g', step: 1 },
 ]
 
@@ -30,17 +33,17 @@ export function NutritionGoalsFields() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-x-4 gap-y-5 lg:grid-cols-4">
         {FIELDS.map((field) => (
-          <div key={field.key}>
-            <label className={ui.label} htmlFor={field.id}>
+          <div key={field.key} className="flex flex-col">
+            <Label htmlFor={field.id} className="mb-1.5 grow">
               {field.label} ({field.unit})
-            </label>
+            </Label>
             <input
               id={field.id}
               type="number"
               inputMode="numeric"
-              className={ui.input}
+              className={inputClass}
               min={field.key === 'calories' ? MIN_CALORIES : 0}
               step={field.step}
               value={goals[field.key] ?? ''}
@@ -54,30 +57,27 @@ export function NutritionGoalsFields() {
               }
             />
             {problems[field.key] ? (
-              <p id={`${field.id}-error`} className={ui.error}>
-                {problems[field.key]}
-              </p>
+              <FieldError id={`${field.id}-error`}>{problems[field.key]}</FieldError>
             ) : null}
           </div>
         ))}
       </div>
 
-      <p className={ui.hint} role="status">
+      <Hint role="status" className="max-w-[70ch]">
         Protein, carbs and fat come to about {fromMacros.toLocaleString()} kcal. They need to be
         within {MACRO_TOLERANCE * 100}% of your calorie target, which is at least{' '}
         {MIN_CALORIES.toLocaleString()} kcal.
-      </p>
-      {problems.macros ? (
-        <p className={ui.error} role="alert">
-          {problems.macros}
+      </Hint>
+      {problems.macros ? <FieldError role="alert">{problems.macros}</FieldError> : null}
+      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+        <Button size="sm" onClick={recalculate}>
+          Recalculate carbs and fat
+        </Button>
+        <p className="max-w-[60ch] text-sm text-mute">
+          Fills carbs and fat from the calories left after protein, with 5 parts going to carbs for
+          every 3 to fat, by calories.
         </p>
-      ) : null}
-      <button type="button" className={`${ui.buttonSmall} mt-2`} onClick={recalculate}>
-        Recalculate carbs and fat
-      </button>
-      <p className={ui.hint}>
-        Fills carbs and fat from the calories left after protein, with 5 parts going to carbs for every 3 to fat, by calories.
-      </p>
+      </div>
     </div>
   )
 }

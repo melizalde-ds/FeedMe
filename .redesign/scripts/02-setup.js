@@ -122,7 +122,7 @@ async (page) => {
     await page.locator('#calorie-goal').fill('2400')
     const goals = page.getByRole('group', { name: 'Goals and limits' })
     const macro = await text(goals.getByRole('alert'))
-    const bar = await text(page.getByText('Fix the fields marked above before saving.'))
+    const bar = await text(page.getByText('Fix the marked fields before saving.'))
     await shot('setup-validation')
     return `${macro} | ${bar}`
   })
@@ -167,14 +167,21 @@ async (page) => {
   })
   await shot('setup-filled')
 
-  // --- the planner, live: its real answer on this machine
+  // --- the planner, live: whatever it really answers on this machine. With a
+  // working Bedrock key that is a plan; without one it is the error banner.
   await step('plan: live planner request shows the waiting state, then its real answer', async () => {
     await page.getByRole('button', { name: 'Generate meal plan' }).click()
     await page.getByText(/This takes about half a minute/).waitFor({ timeout: 5000 })
     const disabled = await page.getByRole('button', { name: 'Building your plan…' }).isDisabled()
     if (!disabled) throw new Error('submit not disabled while loading')
     const banner = page.getByRole('alert').filter({ hasText: 'We could not build that plan' })
-    await banner.waitFor({ timeout: 95000 })
+    const ready = page.getByRole('heading', { name: 'Your plan is ready' })
+    await banner.or(ready).first().waitFor({ timeout: 95000 })
+    if (await ready.count()) {
+      const note = await text(ready.locator('xpath=..').locator('p'))
+      await shot('setup-plan-live')
+      return `LIVE PLAN: ${note}`
+    }
     const t = await text(banner)
     await shot('setup-plan-error')
     await banner.getByRole('button', { name: 'Dismiss' }).click()
@@ -265,9 +272,10 @@ async (page) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(FIXTURE) })
   })
   await step('plan: generate (fixture answer) shows the waiting state then "Your plan is ready"', async () => {
-    await page.getByRole('button', { name: 'Generate meal plan' }).click()
+    await page.getByRole('button', { name: /Generate meal plan|Rebuild my plan/ }).click()
     await page.getByText(/This takes about half a minute/).waitFor({ timeout: 5000 })
     await shot('setup-plan-loading')
+    await page.getByText(/This takes about half a minute/).waitFor({ state: 'detached', timeout: 15000 })
     await page.getByRole('heading', { name: 'Your plan is ready' }).waitFor({ timeout: 15000 })
     const note = await text(page.getByRole('heading', { name: 'Your plan is ready' }).locator('xpath=..').locator('p'))
     await page.getByRole('button', { name: 'Rebuild my plan' }).waitFor()

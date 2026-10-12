@@ -8,7 +8,7 @@ export function AccountTastesFields() {
   const disliked = preferences.dislikedFoods ?? []
 
   return (
-    <>
+    <div className="grid gap-6 md:grid-cols-2">
       <TermListField
         id="liked-foods"
         label="Foods you like"
@@ -29,6 +29,6 @@ export function AccountTastesFields() {
         otherValues={liked}
         otherLabel="foods you like"
       />
-    </>
+    </div>
   )
 }

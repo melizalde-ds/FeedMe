@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { MAX_TERMS, TERM_RULES, normalizeTerm, termProblem } from '../../lib/accountSetup'
-import { ui } from '../ui/styles'
+import { Button } from '../ui/Button'
+import { Chip, FieldError, Hint, Label, inputClass } from '../ui/Field'
 
 // A list of short terms, such as liked foods, typed one at a time. Each term
 // is checked against the database's rules before it is added.
@@ -38,15 +39,13 @@ export function TermListField({
   }
 
   return (
-    <div className="mt-4">
-      <label className={ui.label} htmlFor={id}>
-        {label}
-      </label>
-      <div className="mt-1 flex gap-2">
+    <div>
+      <Label htmlFor={id}>{label}</Label>
+      <div className="mt-1.5 flex gap-2">
         <input
           id={id}
           type="text"
-          className={`${ui.input} mt-0`}
+          className={inputClass}
           placeholder={placeholder}
           value={draft}
           aria-invalid={Boolean(error)}
@@ -62,32 +61,27 @@ export function TermListField({
             }
           }}
         />
-        <button type="button" className={ui.button} onClick={add}>
-          Add
-        </button>
+        <Button onClick={add}>Add</Button>
       </div>
       {error ? (
-        <p id={`${id}-error`} className={ui.error} role="alert">
+        <FieldError id={`${id}-error`} role="alert">
           {error}
-        </p>
+        </FieldError>
       ) : null}
-      <p id={`${id}-hint`} className={ui.hint}>
+      <Hint id={`${id}-hint`}>
         {hint} One food per entry: {TERM_RULES}.
-      </p>
+      </Hint>
 
       {values.length ? (
-        <ul className="m-0 mt-2 flex list-none flex-wrap gap-2 p-0" aria-label={label}>
+        <ul className="mt-2.5 flex flex-wrap gap-2" aria-label={label}>
           {values.map((term) => (
             <li key={term}>
-              <button
-                type="button"
-                className={`${ui.chip} cursor-pointer hover:bg-panel`}
-                onClick={() => onChange(values.filter((item) => item !== term))}
+              <Chip
+                onRemove={() => onChange(values.filter((item) => item !== term))}
+                removeLabel={`Remove ${term}`}
               >
                 {term}
-                <span aria-hidden="true">×</span>
-                <span className="sr-only">Remove {term}</span>
-              </button>
+              </Chip>
             </li>
           ))}
         </ul>
