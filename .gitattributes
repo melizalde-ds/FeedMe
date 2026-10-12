@@ -1,0 +1,17 @@
+# Text files are stored with LF and checked out with LF on every OS, so a
+# Windows checkout doesn't turn the whole repo into one big line-ending diff.
+* text=auto eol=lf
+
+# Binary: never converted, never diffed as text.
+*.png     binary
+*.jpg     binary
+*.ico     binary
+*.parquet binary
+
+# Lock files are generated: collapsed in GitHub diffs and left out of the
+# language bar.
+uv.lock        linguist-generated
+pnpm-lock.yaml linguist-generated
+
+# Docs are not counted as code.
+docs/** linguist-documentation
