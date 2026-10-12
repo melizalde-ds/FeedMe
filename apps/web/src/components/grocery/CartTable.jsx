@@ -53,7 +53,7 @@ export function CartTable({ cart, onRemove, busy = false }) {
               </thead>
               <tbody>
                 {lines.map((item) => (
-                  <tr key={`${item.store}-${item.upc}`}>
+                  <tr key={`${item.store}-${item.upc}`} className="row-in">
                     <th scope="row" className={tdClass}>
                       <span className="font-semibold">{item.name}</span>
                       <span className="block text-sm text-mute">

@@ -64,8 +64,9 @@ export function RecipeShelf({ week, day, slotIndex, onClose, onEditRecipe }) {
 
   // Opening another meal moves the shelf: bring it into view and take focus.
   useEffect(() => {
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     shelf.current?.focus({ preventScroll: true })
-    shelf.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    shelf.current?.scrollIntoView({ block: 'nearest', behavior: calm ? 'auto' : 'smooth' })
   }, [day, slotIndex])
 
   const slot = plan.weeks[week][day][slotIndex]

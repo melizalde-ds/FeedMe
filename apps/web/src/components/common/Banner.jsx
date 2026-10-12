@@ -17,7 +17,7 @@ export function Banner({ variant = 'notice', title, children, onDismiss, compact
   return (
     <div
       className={cx(
-        'flex flex-wrap items-start gap-x-3 gap-y-1.5 rounded-tile text-base text-ink',
+        'notice flex flex-wrap items-start gap-x-3 gap-y-1.5 rounded-tile text-base text-ink',
         compact ? 'px-3.5 py-2.5' : 'px-4 py-3',
         box,
         className,

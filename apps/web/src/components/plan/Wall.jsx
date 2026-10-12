@@ -81,7 +81,7 @@ function Tile({ week, day, slotIndex, selected, onSelect }) {
       onClick={onSelect}
     >
       {recipe?.imageUrl ? (
-        <img className="tile__photo" src={recipe.imageUrl} alt="" loading="lazy" />
+        <img key={recipe.imageUrl} className="tile__photo" src={recipe.imageUrl} alt="" loading="lazy" />
       ) : (
         <span className="tile__photo ruled" aria-hidden="true" />
       )}

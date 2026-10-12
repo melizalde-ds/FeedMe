@@ -9,7 +9,7 @@ import { PlanBuildingState } from '../common/LoadingState'
 import { SafetyDisclaimer } from '../common/SafetyDisclaimer'
 import { RecipeFormModal } from '../recipes/RecipeFormModal'
 import { Button, TextButton } from '../ui/Button'
-import { Alert, Arrow, Plus, Undo } from '../ui/icons'
+import { Alert, Arrow, Check, Plus, Undo } from '../ui/icons'
 import { PlanSummary } from './PlanSummary'
 import { RecipeShelf } from './RecipeShelf'
 import { Wall } from './Wall'
@@ -162,7 +162,8 @@ export function PlanView({ onEditSetup, onGoToGrocery }) {
 
             <div className="mt-8 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-y border-line py-5">
               <div className="min-w-0 flex-[1_1_22rem]">
-                <h2 className="text-xl font-bold tracking-tight">
+                <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight">
+                  {confirmed ? <Check size={20} className="draw shrink-0 text-ok" /> : null}
                   {confirmed ? 'This week is confirmed' : 'Happy with this week?'}
                 </h2>
                 <p className="mt-1 text-mute">
@@ -190,7 +191,7 @@ export function PlanView({ onEditSetup, onGoToGrocery }) {
                   {confirmed ? 'Re-confirm this week' : 'Confirm this week'}
                 </Button>
                 {confirmed ? (
-                  <Button variant="primary" size="lg" onClick={onGoToGrocery}>
+                  <Button variant="primary" size="lg" className="arrive" onClick={onGoToGrocery}>
                     Go to grocery list <Arrow size={16} />
                   </Button>
                 ) : null}

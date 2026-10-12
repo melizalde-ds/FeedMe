@@ -1,4 +1,4 @@
-// One icon set for all three directions: 24px grid, 2px round strokes.
+// The app's icons: one set, drawn on a 24px grid with 2px round strokes.
 const Svg = ({ size = 16, children, ...rest }) => (
   <svg
     viewBox="0 0 24 24"
@@ -22,18 +22,11 @@ export const Alert = (props) => (
   <Svg {...props}><path d="M12 3.5 2.5 20h19L12 3.5Z" /><path d="M12 10v4.5M12 17.2v.3" /></Svg>
 )
 export const Close = (props) => <Svg {...props}><path d="M6 6l12 12M18 6 6 18" /></Svg>
-export const Clock = (props) => (
-  <Svg {...props}><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></Svg>
-)
 export const Plus = (props) => <Svg {...props}><path d="M12 5v14M5 12h14" /></Svg>
-export const Swap = (props) => (
-  <Svg {...props}><path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5" /></Svg>
-)
 export const Undo = (props) => (
   <Svg {...props}><path d="M8 5 4 9l4 4" /><path d="M4 9h10a6 6 0 0 1 0 12h-3" /></Svg>
 )
 export const Arrow = (props) => <Svg {...props}><path d="M5 12h14M13 6l6 6-6 6" /></Svg>
-export const Chevron = (props) => <Svg {...props}><path d="M6 9l6 6 6-6" /></Svg>
 export const Star = (props) => (
   <Svg {...props}><path d="m12 4 2.5 5.2 5.7.8-4.1 4 1 5.6L12 17l-5.1 2.6 1-5.6-4.1-4 5.7-.8L12 4Z" /></Svg>
 )
@@ -58,7 +51,4 @@ export const Cart = (props) => (
 )
 export const Trash = (props) => (
   <Svg {...props}><path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5" /></Svg>
-)
-export const Pencil = (props) => (
-  <Svg {...props}><path d="m4 20 1-4.5L16.5 4l3.5 3.5L8.5 19 4 20Z" /><path d="m14 6.5 3.5 3.5" /></Svg>
 )

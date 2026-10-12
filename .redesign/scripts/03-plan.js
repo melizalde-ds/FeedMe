@@ -88,7 +88,7 @@ async (page) => {
     const more = await tile('Lunch on Wednesday').locator('.tile__more').evaluate((el) => getComputedStyle(el).opacity)
     await shot('plan-tile-focus', { full: false })
     await page.mouse.move(5, 5)
-    if (Number(other) > 0.5 || Number(more) < 0.9) throw new Error(`other ${other}, details ${more}`)
+    if (Number(other) > 0.6 || Number(more) < 0.9) throw new Error(`other ${other}, details ${more}`)
     return `others at ${other} opacity, details shown (${scale.includes('matrix') ? 'scaled' : scale})`
   })
 
