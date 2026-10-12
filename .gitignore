@@ -25,3 +25,6 @@ __pycache__
 # Data
 data/
 !.claude/skills/impeccable/scripts/data/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
+.claude/settings.local.json

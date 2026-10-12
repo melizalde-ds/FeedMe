@@ -2,11 +2,9 @@
 
 <!-- impeccable:product-schema 1 -->
 
-> Written without an interview, as the owner asked. Every fact comes from
-> `requirements.md` (sections 1 and 4), `mood-board.png`, `docs/backend.md` or
-> the brief for the `foundation/auth-and-planner` branch. Lines marked
-> *(inferred)* are my reading of those sources, not something the owner
-> confirmed.
+> Facts come from `requirements.md` (sections 1 and 4), `mood-board.png` and
+> `docs/backend.md`. The owner confirmed the primary user, the operating
+> context and the voice on 2026-10-12.
 
 ## Platform
 
@@ -24,7 +22,10 @@ web
   recipes stay in that user's browser storage.
 - The person using it is usually the one who cooks and shops for the household,
   sitting down once a week to plan, then coming back during the week to check a
-  recipe or the grocery list. *(inferred)*
+  recipe or the grocery list.
+- **People evaluating the project.** The repository is public as a portfolio
+  piece, so recruiters and other developers also open the app and read the
+  code.
 
 ## Product Purpose
 
@@ -59,8 +60,10 @@ checked again in the browser before it is shown.
   happening.
 - If the planner is unavailable, the app says so and asks the user to try
   again. There is no sample plan and no made-up data anywhere.
-- It is used in a current desktop browser for the hackathon demo. Mobile is
-  later scope, but the layout must still work at phone width. *(inferred)*
+- FeedMe was built at the Ensign Build 2026 hackathon. The hackathon is over,
+  and the app is now shown publicly as finished work.
+- It is used in a current desktop browser. Mobile is later scope, but the
+  layout must still work at phone width.
 
 ## Capabilities and Constraints
 
@@ -102,7 +105,7 @@ checked again in the browser before it is shown.
 - Mood board notes: "Plan for just you or a whole family", "Custom to your
   diet and preferences", "Gives weekly plans and recipes", "Clean simple".
 - Voice: plain, warm and direct, with no jargon. Errors tell the user what
-  happened and what to do next. *(inferred from the existing copy)*
+  happened and what to do next.
 
 ## Evidence on Hand
 
