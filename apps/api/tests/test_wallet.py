@@ -25,9 +25,9 @@ pytestmark = pytest.mark.anyio
 
 SAMPLE = json.loads((Path(__file__).parent / "sample_list.json").read_text())
 URL = "http://storefront/api/checkout"
-EGGS = "410020000223"  # $2.89 at Walmart
+EGGS = "410020000223"  # $2.89 at StapleMart
 CLUB_EGGS = "410020000865"  # $6.50 at BulkBarn Club, which has a $50 minimum
-BODY = StorefrontClient.checkout_body({"walmart": [(EGGS, 2)]})
+BODY = StorefrontClient.checkout_body({"staplemart": [(EGGS, 2)]})
 CONTEXT = "x" * 100
 
 
@@ -58,7 +58,7 @@ async def test_pay_waits_for_approval_then_pays_the_store(http, stripe):
     paid = json.loads(await wallet_for(link).pay(URL, BODY, CONTEXT, asked.append))
 
     assert paid["total_cents"] == 578
-    assert [(order["store"], order["status"]) for order in paid["orders"]] == [("walmart", "paid")]
+    assert [(order["store"], order["status"]) for order in paid["orders"]] == [("staplemart", "paid")]
     assert stripe.charges == [578]
     assert asked == ["https://app.link.com/approve/lsrq_1"]
     assert link.commands() == [
@@ -127,11 +127,11 @@ async def test_replies_with_trailing_suggestion_text_are_still_read():
 def test_the_approval_note_is_long_enough_for_link():
     line = OrderLine(upc=EGGS, name="Eggs", quantity=1, unit_price_cents=50, line_total_cents=50)
     store = Quote(
-        store="walmart", lines=[line], subtotal_cents=50, delivery_fee_cents=0, total_cents=50
+        store="staplemart", lines=[line], subtotal_cents=50, delivery_fee_cents=0, total_cents=50
     )
-    note = purchase_context(["Walmart"], CheckoutQuote(stores=[store], total_cents=50))
+    note = purchase_context(["StapleMart"], CheckoutQuote(stores=[store], total_cents=50))
     assert len(note) >= 100
-    assert "Walmart" in note and "$0.50" in note
+    assert "StapleMart" in note and "$0.50" in note
 
 
 # --- the MCP connection -------------------------------------------------------
@@ -213,7 +213,7 @@ async def cart_with(http, *items):
 
 
 async def test_one_payment_covers_every_store_in_the_cart(http, stripe):
-    client, index, cart = await cart_with(http, ("walmart", EGGS, 2), ("quickcart", EGGS, 1))
+    client, index, cart = await cart_with(http, ("staplemart", EGGS, 2), ("quickcart", EGGS, 1))
     link, asked = FakeLink(http), []
 
     paid, items, left_out = await pay_cart(
@@ -228,7 +228,7 @@ async def test_one_payment_covers_every_store_in_the_cart(http, stripe):
     assert stripe.charges == [total]
     assert asked == [(total, "https://app.link.com/approve/lsrq_1")]
     assert [(order.store, order.total_cents) for order in paid.orders] == [
-        ("walmart", 578),
+        ("staplemart", 578),
         ("quickcart", 931),
     ]
     assert {order.payment_reference for order in paid.orders} == {paid.payment_reference}
@@ -237,11 +237,11 @@ async def test_one_payment_covers_every_store_in_the_cart(http, stripe):
     assert (await cart.view()).items == []
     # What the user reads when approving names both stores and the one total.
     note = link.calls[0][1]["context"]
-    assert "Walmart, QuickCart" in note and "$15.09" in note
+    assert "StapleMart, QuickCart" in note and "$15.09" in note
 
 
 async def test_a_paid_item_stuck_in_the_cart_does_not_hide_the_payment(http, stripe, monkeypatch):
-    client, index, cart = await cart_with(http, ("walmart", EGGS, 2))
+    client, index, cart = await cart_with(http, ("staplemart", EGGS, 2))
 
     async def unreachable(store, upc):
         raise ShoppingError("The cart could not be reached")
@@ -262,7 +262,7 @@ async def test_a_paid_item_stuck_in_the_cart_does_not_hide_the_payment(http, str
 
 async def test_a_store_that_cannot_sell_is_left_out_and_the_rest_is_paid_once(http, stripe):
     client, index, cart = await cart_with(
-        http, ("walmart", EGGS, 2), ("bulkbarn-club", CLUB_EGGS, 1), ("target", EGGS, 1)
+        http, ("staplemart", EGGS, 2), ("bulkbarn-club", CLUB_EGGS, 1), ("redwood-market", EGGS, 1)
     )
     link, asked = FakeLink(http), []
 
@@ -276,7 +276,7 @@ async def test_a_store_that_cannot_sell_is_left_out_and_the_rest_is_paid_once(ht
 
     assert list(left_out) == ["bulkbarn-club"]
     assert "$50.00 order minimum" in left_out["bulkbarn-club"]
-    assert [order.store for order in paid.orders] == ["walmart", "target"]
+    assert [order.store for order in paid.orders] == ["staplemart", "redwood-market"]
     assert stripe.charges == asked == [578 + 312]  # still a single request
     # The left-out store's items are still in the cart.
     assert [(item.store, item.upc) for item in (await cart.view()).items] == [
@@ -345,7 +345,7 @@ async def test_the_agent_pays_the_whole_basket_with_one_approval_in_both_modes(
 
     # One request to the user, one charge, for the whole plan.
     (asked,) = [e for e in events if e.type == "approval_needed"]
-    assert sorted(asked.stores) == ["pennywise-grocer", "target", "walmart"]
+    assert sorted(asked.stores) == ["pennywise-grocer", "redwood-market", "staplemart"]
     assert asked.total_cents == 4760
     assert asked.approval_url.startswith("https://app.link.com/approve/")
     assert stripe.charges == [4760]
@@ -412,7 +412,7 @@ async def test_nothing_is_paid_when_the_stores_ask_for_a_different_amount(http, 
 OATS = {"ingredient": "Rolled oats", "upc": "410060000504"}
 PLAN = AssistantMessage(tool_calls=[ToolCall("p", "plan_basket", {"items": [OATS]})])
 SAVE = AssistantMessage(
-    tool_calls=[ToolCall("a", "add_to_cart", {"items": [OATS | {"store": "walmart", "sure": True}]})]
+    tool_calls=[ToolCall("a", "add_to_cart", {"items": [OATS | {"store": "staplemart", "sure": True}]})]
 )
 PAY = AssistantMessage(tool_calls=[ToolCall("c", "checkout", {})])
 CLAIMS_DONE = AssistantMessage("All done! I added everything to your cart.")

@@ -14,7 +14,7 @@
 # from Bedrock (scripts/ingest_recipes.py) and are stored in Qdrant.
 # Full guide: docs/backend.md
 
-name: meal-planner
+name: feedme
 
 # Each dev's own secret and API keys, read from .env (not committed).
 x-keys:
@@ -133,7 +133,7 @@ services:
   # ran them won't pick the edit up.
   # To start over (deletes users and app data, keeps the Qdrant recipes):
   #   docker compose rm -s -f db auth rest kong meta studio db-schema
-  #   docker volume rm meal-planner_db_data meal-planner_db_config
+  #   docker volume rm feedme_db_data feedme_db_config
   #   docker compose up -d --wait
   # `docker compose down -v` also works but deletes the Qdrant recipes too.
   db-schema:

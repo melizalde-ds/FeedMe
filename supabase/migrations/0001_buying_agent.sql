@@ -29,7 +29,7 @@ create table public.cart_items (
   id               uuid primary key default gen_random_uuid(),
   list_id          uuid not null,
   user_id          uuid not null references public.profiles (id) on delete cascade,
-  store            text not null,                  -- store slug, e.g. 'walmart'
+  store            text not null,                  -- store slug, e.g. 'staplemart'
   upc              text not null,
   name             text not null,
   brand            text not null,

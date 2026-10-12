@@ -45,7 +45,7 @@ def test_a_test_token_pays_a_store_in_the_stripe_sandbox():
 
     url = "/api/checkout"
     eggs = [{"upc": "410020000223", "quantity": 2}]
-    body = {"orders": [{"store": "walmart", "lines": eggs}, {"store": "target", "lines": eggs}]}
+    body = {"orders": [{"store": "staplemart", "lines": eggs}, {"store": "redwood-market", "lines": eggs}]}
     with TestClient(create_app(settings=settings)) as client:
         probe = client.post(url, json=body)
         assert probe.status_code == 402, probe.text
@@ -58,5 +58,5 @@ def test_a_test_token_pays_a_store_in_the_stripe_sandbox():
     assert paid.status_code == 200, paid.text
     result = paid.json()
     assert result["total_cents"] == 578 + 624
-    assert [order["store"] for order in result["orders"]] == ["walmart", "target"]
+    assert [order["store"] for order in result["orders"]] == ["staplemart", "redwood-market"]
     assert result["payment_reference"].startswith("pi_")

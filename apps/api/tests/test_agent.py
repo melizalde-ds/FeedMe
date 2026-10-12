@@ -69,10 +69,10 @@ async def test_scripted_run_in_auto_mode_fills_the_cart(storefront):
     assert items["Eggs"].hold_reasons == ["store_brand"]
     assert items["Cooked brown rice"].hold_reasons == ["unsure_match"]
     assert items["Salmon fillet"].hold_reasons == ["out_of_stock_replacement"]
-    assert items["Salmon fillet"].store != "walmart"  # out of stock there
+    assert items["Salmon fillet"].store != "staplemart"  # out of stock there
     assert summary.needs_check == [i for i in summary.cart.items if i.status == "proposed"]
     # Prices are the stores' own.
-    assert (items["Oat milk"].store, items["Oat milk"].unit_price_cents) == ("walmart", 399)
+    assert (items["Oat milk"].store, items["Oat milk"].unit_price_cents) == ("staplemart", 399)
 
     assert summary.cart.in_cart.total_cents == sum(
         i.line_total_cents for i in summary.cart.items if i.status == "in_cart"
@@ -110,8 +110,8 @@ async def test_tool_errors_go_back_to_the_model(storefront):
                 ToolCall("1", "buy_everything", {}),
                 ToolCall("2", "search_products", {}),
                 ToolCall("3", "add_to_cart", {"items": [
-                    {"ingredient": "Eggs", "store": "walmart", "upc": "400000000000", "sure": True},
-                    {"ingredient": "Caviar", "store": "walmart", "upc": "410020000223", "sure": True},
+                    {"ingredient": "Eggs", "store": "staplemart", "upc": "400000000000", "sure": True},
+                    {"ingredient": "Caviar", "store": "staplemart", "upc": "410020000223", "sure": True},
                 ]}),
             ]
         )

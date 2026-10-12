@@ -1,4 +1,4 @@
-# Meal Planner Product Requirements
+# FeedMe Product Requirements
 
 ## 1. Product Overview
 

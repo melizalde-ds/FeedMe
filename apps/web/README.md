@@ -1,32 +1,44 @@
-# React + TypeScript + Vite
+# FeedMe web app
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+The React app for FeedMe. One signed-in screen in three steps:
 
-Currently, two official plugins are available:
+1. **Setup.** Allergies first, then diet, tastes, nutrition goals, budget and cooking time.
+2. **Plan.** The week grid, with alternatives for each meal, recipe details and a nutrition summary.
+3. **Grocery.** The grocery list for the plan, and the buying agent's run, cart and payment approval.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Built with React 19, Vite, Tailwind CSS 4 and React Router.
 
-## React Compiler
+## How it talks to the backend
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Sign-in** goes straight to Supabase with `supabase-js` and the public anon key.
+- **Everything else** goes to the FastAPI server under `/api`, with the user's access token. In development, Vite proxies `/api` to http://localhost:8000.
+- **A shopping run** is read as a stream with `fetch`, since it is a `POST` that needs an auth header.
 
-## Expanding the Oxlint configuration
+Every recipe is checked against the household's allergies again in the browser before it is shown (`src/lib/allergySafety.js`). The server is the main check; this one is a second line.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+Setup is saved to the account. The plan and the user's own recipes are kept in browser storage for now.
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## What is in it
+
+| Folder | What it holds |
+|---|---|
+| `src/pages/` | Home, sign-in and registration |
+| `src/components/` | The views, grouped by step: `setup`, `plan`, `grocery`, plus `account`, `recipes` and `common` |
+| `src/contexts/`, `src/hooks/` | State for auth, household, meal plan, own recipes and shopping runs |
+| `src/lib/` | API client, planner helpers, the allergy check and validation |
+
+## Run it
+
+From the repo root, with the backend running:
+
+```bash
+pnpm install
+pnpm dev:web
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+The app is at http://localhost:5173. No web-specific configuration is needed for local development: the anon key is read from the `.env` at the repo root. To override a default, see [`.env.example`](.env.example).
+
+```bash
+pnpm build    # type-check and build
+pnpm lint     # oxlint
+```

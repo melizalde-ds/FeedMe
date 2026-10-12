@@ -23,11 +23,11 @@ React web app ──/api/*──► FastAPI (apps/api) ──► Kong :54321 ─
 
 ## Quick start
 
-Prerequisites: Docker Desktop, [uv](https://docs.astral.sh/uv/), pnpm, and Python 3.14 (uv installs it if missing).
+Prerequisites: Docker, [uv](https://docs.astral.sh/uv/), pnpm, and Python 3.14 (uv installs it if missing).
 
-```powershell
+```bash
 # 1. One-time: generate your own secrets into .env (git-ignored)
-python scripts/gen-env.py
+python3 scripts/gen-env.py
 
 # 2. Start Supabase + Qdrant
 docker compose up -d --wait
@@ -170,9 +170,9 @@ Add a new numbered file to `supabase/migrations/`, such as `0002_add_something.s
 
 If a migration fails because your local database is older than the baseline in the repo, start over. This deletes users and app data but keeps the recipes in Qdrant:
 
-```powershell
+```bash
 docker compose rm -s -f db auth rest kong meta studio db-schema
-docker volume rm meal-planner_db_data meal-planner_db_config
+docker volume rm feedme_db_data feedme_db_config
 docker compose up -d --wait
 ```
 
@@ -182,7 +182,7 @@ New tables need `alter table … enable row level security` plus policies. Witho
 
 | Symptom | Cause / fix |
 |---|---|
-| `required variable SUPABASE_JWT_SECRET is missing a value` | No `.env` yet. Run `python scripts/gen-env.py`. |
+| `required variable SUPABASE_JWT_SECRET is missing a value` | No `.env` yet. Run `python3 scripts/gen-env.py`. |
 | `auth` or `rest` stuck in `Created` | The DB wasn't healthy in time. Run `docker compose up -d --wait`. |
 | FastAPI returns `401` | Missing, expired or non-user token. Sign in again in the web app. |
 | PostgREST `42501` | RLS blocked it: wrong `user_id`, a forbidden operation (such as deleting an allergy), or `ServiceDB` vs `UserDB` mixed up. |
@@ -208,7 +208,7 @@ shopping agent (apps/api) ──HTTP──► storefront (apps/storefront, :8100
 
 A separate FastAPI app that serves six stores from the seed files in `apps/storefront/seed/`. The agent only reaches it over HTTP.
 
-```powershell
+```bash
 pnpm dev:storefront     # http://localhost:8100, also started by `pnpm dev`
 ```
 
@@ -229,8 +229,8 @@ One checkout takes payment for baskets at several stores at once, with the Machi
 
 ```
 POST /api/checkout
-  {"orders": [{"store": "walmart", "lines": [{"upc": "410020000223", "quantity": 2}]},
-              {"store": "target",  "lines": [{"upc": "410020000223", "quantity": 1}]}]}
+  {"orders": [{"store": "staplemart",     "lines": [{"upc": "410020000223", "quantity": 2}]},
+              {"store": "redwood-market", "lines": [{"upc": "410020000223", "quantity": 1}]}]}
   → 402  WWW-Authenticate: Payment ... method="stripe" ...   (body has every store's quote and one total)
 POST again with the payment credential
   → 200  one order per store, all on the same payment, with a Payment-Receipt header
@@ -373,13 +373,13 @@ Whoever is logged in to Link on the machine running the API approves and pays fo
 
 Try the agent without the API or Supabase, with the storefront running. The cart is kept in memory and discarded when the command exits. Add `--no-pay` to stop at the saved cart:
 
-```powershell
+```bash
 uv run --package api python -m api.agent apps/api/tests/sample_list.json --mode auto --budget 150
 ```
 
 Tests:
 
-```powershell
+```bash
 uv run --package api pytest apps/api
 uv run --package storefront pytest apps/storefront
 ```
@@ -388,10 +388,10 @@ The API tests use stand-ins for Supabase, the stores, Stripe, Link and the model
 
 | What | Command | Real | Stand-ins |
 |---|---|---|---|
-| The routes against Supabase | `$env:RUN_SUPABASE_TESTS = "1"; uv run --package api pytest apps/api/tests/test_supabase_live.py` | Supabase | Stores' Stripe, Link, model |
-| The household routes against Supabase | `$env:RUN_SUPABASE_TESTS = "1"; uv run --package api pytest apps/api/tests/test_household_live.py` | Supabase | Nothing else is called |
-| The meal planner against Supabase | `$env:RUN_SUPABASE_TESTS = "1"; uv run --package api pytest apps/api/tests/test_meals_live.py` | Supabase | Qdrant, both models, Jev |
-| A run paid in the Stripe sandbox | `$env:RUN_STRIPE_SANDBOX_TEST = "1"; uv run --package api pytest apps/api/tests/test_sandbox_live.py -s` | Supabase, the stores' checkout, one sandbox payment of about $48 | Link (Stripe's test helper grants the token, so no phone approval), model |
+| The routes against Supabase | `RUN_SUPABASE_TESTS=1 uv run --package api pytest apps/api/tests/test_supabase_live.py` | Supabase | Stores' Stripe, Link, model |
+| The household routes against Supabase | `RUN_SUPABASE_TESTS=1 uv run --package api pytest apps/api/tests/test_household_live.py` | Supabase | Nothing else is called |
+| The meal planner against Supabase | `RUN_SUPABASE_TESTS=1 uv run --package api pytest apps/api/tests/test_meals_live.py` | Supabase | Qdrant, both models, Jev |
+| A run paid in the Stripe sandbox | `RUN_STRIPE_SANDBOX_TEST=1 uv run --package api pytest apps/api/tests/test_sandbox_live.py -s` | Supabase, the stores' checkout, one sandbox payment of about $48 | Link (Stripe's test helper grants the token, so no phone approval), model |
 
 The sandbox test needs `STRIPE_SECRET_KEY` and `STRIPE_PROFILE_ID` in `.env`. It asks Stripe for the PaymentIntent the saved order points at and checks it succeeded for the same amount. With `-s` it prints the payment reference.
 
@@ -399,7 +399,7 @@ The sandbox test needs `STRIPE_SECRET_KEY` and `STRIPE_PROFILE_ID` in `.env`. It
 
 `scripts/try_shopping_run.py` does what the web app's Grocery step does: it signs up a throwaway user, gives it a plan and a grocery list, starts a run on the running API and prints it live, then shows the saved order and deletes the user. With payments on you approve once in the Link app.
 
-```powershell
+```bash
 docker compose up -d --wait
 pnpm dev:storefront          # in one terminal
 pnpm dev:api                 # in another
@@ -426,8 +426,8 @@ What has and hasn't run for real:
 - The full flow has run for real in the Stripe sandbox (2026-10-10): the scripted agent paid for a three-store basket through Link with one approval and one $47.60 payment. Add `--pretty` to the command above for short readable output.
 - With the Stripe keys in `.env`, this makes one real sandbox payment without Link:
 
-```powershell
-$env:RUN_STRIPE_SANDBOX_TEST = "1"; uv run --package storefront pytest apps/storefront -k sandbox
+```bash
+RUN_STRIPE_SANDBOX_TEST=1 uv run --package storefront pytest apps/storefront -k sandbox
 ```
 
 ## Household: preferences, allergies and nutrition goals

@@ -1,15 +1,15 @@
 # Mock stores served by apps/storefront. Money is in whole cents.
 # free_delivery_threshold_cents: null means the delivery fee always applies.
 
-- slug: walmart
-  name: Walmart
+- slug: staplemart
+  name: StapleMart
   blurb: Everyday low prices on staples.
   delivery_fee_cents: 0
   free_delivery_threshold_cents: null
   order_minimum_cents: 0
 
-- slug: target
-  name: Target
+- slug: redwood-market
+  name: Redwood Market
   blurb: Mid-range prices, plus Corner & Co. store-brand items.
   delivery_fee_cents: 0
   free_delivery_threshold_cents: null

@@ -65,17 +65,17 @@ upc,name,brand,category,size_value,size_unit,equivalence_group,store_brand
 410090000642,Paper Towels,Brightside Home,household,6,count,paper-towels,
 410090000659,Dish Soap,Brightside Home,household,19,fl oz,dish-soap,
 410090000666,Tall Kitchen Trash Bags,Brightside Home,household,40,count,trash-bags,
-420010000676,Large Eggs,Corner & Co.,dairy,12,count,eggs-large,target
-420010000683,Plain Greek Yogurt,Corner & Co.,dairy,32,oz,greek-yogurt-plain,target
-420010000690,Black Beans,Corner & Co.,pantry,15,oz,black-beans,target
-420010000706,Chickpeas,Corner & Co.,pantry,15,oz,chickpeas,target
-420010000713,Penne Pasta,Corner & Co.,pantry,16,oz,penne,target
-420010000720,Extra Virgin Olive Oil,Corner & Co.,pantry,16.9,fl oz,olive-oil-ev,target
-420010000737,Old Fashioned Rolled Oats,Corner & Co.,pantry,42,oz,rolled-oats,target
-420010000744,Whole Wheat Bread,Corner & Co.,bakery,20,oz,bread-whole-wheat,target
-420010000751,Baby Spinach,Corner & Co.,produce,10,oz,spinach,target
-420010000768,Vegetable Broth,Corner & Co.,pantry,32,fl oz,vegetable-broth,target
-420010000775,Paper Towels,Corner & Co.,household,6,count,paper-towels,target
+420010000676,Large Eggs,Corner & Co.,dairy,12,count,eggs-large,redwood-market
+420010000683,Plain Greek Yogurt,Corner & Co.,dairy,32,oz,greek-yogurt-plain,redwood-market
+420010000690,Black Beans,Corner & Co.,pantry,15,oz,black-beans,redwood-market
+420010000706,Chickpeas,Corner & Co.,pantry,15,oz,chickpeas,redwood-market
+420010000713,Penne Pasta,Corner & Co.,pantry,16,oz,penne,redwood-market
+420010000720,Extra Virgin Olive Oil,Corner & Co.,pantry,16.9,fl oz,olive-oil-ev,redwood-market
+420010000737,Old Fashioned Rolled Oats,Corner & Co.,pantry,42,oz,rolled-oats,redwood-market
+420010000744,Whole Wheat Bread,Corner & Co.,bakery,20,oz,bread-whole-wheat,redwood-market
+420010000751,Baby Spinach,Corner & Co.,produce,10,oz,spinach,redwood-market
+420010000768,Vegetable Broth,Corner & Co.,pantry,32,fl oz,vegetable-broth,redwood-market
+420010000775,Paper Towels,Corner & Co.,household,6,count,paper-towels,redwood-market
 420020000789,Organic Large Eggs,Greenleaf Organic,dairy,12,count,eggs-large-organic,greenleaf-organics
 420020000796,Organic Baby Spinach,Greenleaf Organic,produce,10,oz,spinach-organic,greenleaf-organics
 420020000802,Organic Bananas,Greenleaf Organic,produce,6,count,bananas-organic,greenleaf-organics

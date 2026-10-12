@@ -15,14 +15,14 @@ from storefront.main import create_app
 from storefront.settings import Settings
 
 URL = "/api/checkout"
-EGGS = "410020000223"  # $2.89 at Walmart, $3.32 at QuickCart
-ASPARAGUS = "410010000011"  # $3.99 at Walmart
-SALMON = "410040000326"  # out of stock at Walmart
+EGGS = "410020000223"  # $2.89 at StapleMart, $3.32 at QuickCart
+ASPARAGUS = "410010000011"  # $3.99 at StapleMart
+SALMON = "410040000326"  # out of stock at StapleMart
 CLUB_EGGS = "410020000865"  # $6.50 at BulkBarn Club, which has a $50 minimum
 
 
 def basket(**stores):
-    """basket(walmart=[(EGGS, 2)]) -> the checkout body. Use _ for - in store slugs."""
+    """basket(staplemart=[(EGGS, 2)]) -> the checkout body. Use _ for - in store slugs."""
     return {
         "orders": [
             {
@@ -74,14 +74,14 @@ def pay(client, body, challenge, spt="spt_test_123"):
 
 
 def test_first_request_gets_402_with_one_price_for_every_store(paid):
-    body = basket(walmart=[(EGGS, 2), (ASPARAGUS, 1)], quickcart=[(EGGS, 1)])
+    body = basket(staplemart=[(EGGS, 2), (ASPARAGUS, 1)], quickcart=[(EGGS, 1)])
     response = paid.post(URL, json=body)
 
     assert response.status_code == 402
     quote = response.json()["quote"]
-    walmart, quickcart = quote["stores"]
-    assert (walmart["store"], walmart["subtotal_cents"], walmart["total_cents"]) == (
-        "walmart",
+    staplemart, quickcart = quote["stores"]
+    assert (staplemart["store"], staplemart["subtotal_cents"], staplemart["total_cents"]) == (
+        "staplemart",
         977,
         977,
     )
@@ -97,7 +97,7 @@ def test_first_request_gets_402_with_one_price_for_every_store(paid):
         "networkId": "profile_test_abc",
         "paymentMethodTypes": ["card"],
     }
-    assert challenge.description == "Grocery order from Walmart, QuickCart: 4 items"
+    assert challenge.description == "Grocery order from StapleMart, QuickCart: 4 items"
 
 
 def test_challenge_is_the_same_on_a_second_look(paid):
@@ -107,15 +107,15 @@ def test_challenge_is_the_same_on_a_second_look(paid):
         c = challenge_from(response)
         return (c.realm, c.method, c.intent, c.request, c.digest, c.description, c.opaque)
 
-    body = basket(walmart=[(EGGS, 2)], target=[(EGGS, 1)])
+    body = basket(staplemart=[(EGGS, 2)], redwood_market=[(EGGS, 1)])
     assert comparable(paid.post(URL, json=body)) == comparable(paid.post(URL, json=body))
 
 
 def test_every_store_that_cannot_sell_is_named_and_nothing_is_charged(paid, stripe):
     body = basket(
-        walmart=[(SALMON, 1)],  # out of stock
+        staplemart=[(SALMON, 1)],  # out of stock
         bulkbarn_club=[(CLUB_EGGS, 1)],  # under the $50 minimum
-        target=[(EGGS, 1)],  # fine
+        redwood_market=[(EGGS, 1)],  # fine
         quickcart=[("400000000000", 1)],  # not a product
         corner_shop=[(EGGS, 1)],  # not a store
     )
@@ -124,8 +124,8 @@ def test_every_store_that_cannot_sell_is_named_and_nothing_is_charged(paid, stri
     assert response.status_code == 409
     assert "www-authenticate" not in response.headers
     problems = {p["store"]: p["detail"] for p in response.json()["problems"]}
-    assert set(problems) == {"walmart", "bulkbarn-club", "quickcart", "corner-shop"}
-    assert "out of stock" in problems["walmart"]
+    assert set(problems) == {"staplemart", "bulkbarn-club", "quickcart", "corner-shop"}
+    assert "out of stock" in problems["staplemart"]
     assert "$50.00 order minimum" in problems["bulkbarn-club"]
     assert "does not sell" in problems["quickcart"]
     assert problems["corner-shop"] == "Unknown store"
@@ -135,8 +135,8 @@ def test_every_store_that_cannot_sell_is_named_and_nothing_is_charged(paid, stri
 @pytest.mark.parametrize(
     ("body", "message"),
     [
-        (basket(walmart=[(EGGS, 1), (EGGS, 2)]), "only once"),
-        ({"orders": [basket(walmart=[(EGGS, 1)])["orders"][0]] * 2}, "store can appear only once"),
+        (basket(staplemart=[(EGGS, 1), (EGGS, 2)]), "only once"),
+        ({"orders": [basket(staplemart=[(EGGS, 1)])["orders"][0]] * 2}, "store can appear only once"),
     ],
 )
 def test_repeated_products_or_stores_are_refused(paid, stripe, body, message):
@@ -148,14 +148,14 @@ def test_repeated_products_or_stores_are_refused(paid, stripe, body, message):
 
 @pytest.mark.parametrize(
     "body",
-    [{"orders": []}, basket(walmart=[]), basket(walmart=[(EGGS, 0)]), {"lines": []}],
+    [{"orders": []}, basket(staplemart=[]), basket(staplemart=[(EGGS, 0)]), {"lines": []}],
 )
 def test_malformed_requests_are_rejected(paid, body):
     assert paid.post(URL, json=body).status_code == 422
 
 
 def test_the_old_per_store_checkout_is_gone(paid):
-    response = paid.post("/api/stores/walmart/checkout", json=basket(walmart=[(EGGS, 1)]))
+    response = paid.post("/api/stores/staplemart/checkout", json=basket(staplemart=[(EGGS, 1)]))
     assert response.status_code == 404
 
 
@@ -188,7 +188,7 @@ def test_the_card_minimum_applies_to_the_combined_total():
 
 
 def test_one_payment_creates_an_order_for_each_store(paid, stripe):
-    body = basket(quickcart=[(EGGS, 2)], walmart=[(ASPARAGUS, 1)])
+    body = basket(quickcart=[(EGGS, 2)], staplemart=[(ASPARAGUS, 1)])
     total = (2 * 332 + 599) + 399
     challenge = challenge_from(paid.post(URL, json=body))
 
@@ -197,11 +197,11 @@ def test_one_payment_creates_an_order_for_each_store(paid, stripe):
     assert response.status_code == 200
     result = response.json()
     assert (result["total_cents"], result["payment_reference"]) == (total, "pi_test_123")
-    quickcart, walmart = result["orders"]
+    quickcart, staplemart = result["orders"]
     assert (quickcart["store"], quickcart["total_cents"]) == ("quickcart", 2 * 332 + 599)
-    assert (walmart["store"], walmart["total_cents"]) == ("walmart", 399)
+    assert (staplemart["store"], staplemart["total_cents"]) == ("staplemart", 399)
     # Separate order numbers, one shared payment.
-    assert quickcart["order_id"] != walmart["order_id"]
+    assert quickcart["order_id"] != staplemart["order_id"]
     assert all(order["order_id"].startswith("ord_") for order in result["orders"])
     assert {order["payment_reference"] for order in result["orders"]} == {"pi_test_123"}
     assert {order["status"] for order in result["orders"]} == {"paid"}
@@ -225,10 +225,10 @@ def test_one_payment_creates_an_order_for_each_store(paid, stripe):
 
 @pytest.mark.parametrize(
     "other",
-    [basket(walmart=[(EGGS, 9)]), basket(walmart=[(EGGS, 1)], target=[(EGGS, 5)])],
+    [basket(staplemart=[(EGGS, 9)]), basket(staplemart=[(EGGS, 1)], redwood_market=[(EGGS, 5)])],
 )
 def test_a_credential_cannot_pay_for_a_different_basket(paid, stripe, other):
-    challenge = challenge_from(paid.post(URL, json=basket(walmart=[(EGGS, 1)])))
+    challenge = challenge_from(paid.post(URL, json=basket(staplemart=[(EGGS, 1)])))
 
     response = pay(paid, other, challenge)
 
@@ -237,7 +237,7 @@ def test_a_credential_cannot_pay_for_a_different_basket(paid, stripe, other):
 
 
 def test_a_credential_cannot_pay_at_a_different_price(paid, stripe):
-    body = basket(walmart=[(EGGS, 1)])
+    body = basket(staplemart=[(EGGS, 1)])
     challenge = challenge_from(paid.post(URL, json=body))
     cheaper = Challenge(
         id=challenge.id,
@@ -257,7 +257,7 @@ def test_a_credential_cannot_pay_at_a_different_price(paid, stripe):
 
 
 def test_a_declined_payment_creates_no_order_and_can_be_retried(paid, stripe):
-    body = basket(walmart=[(EGGS, 1)])
+    body = basket(staplemart=[(EGGS, 1)])
     challenge = challenge_from(paid.post(URL, json=body))
     stripe.response = httpx.Response(402, json={"error": {"message": "Your card was declined."}})
 
@@ -273,10 +273,10 @@ def test_a_declined_payment_creates_no_order_and_can_be_retried(paid, stripe):
 
 
 def test_without_keys_checkout_still_validates_but_cannot_charge(client):
-    bad = client.post(URL, json=basket(walmart=[(SALMON, 1)]))
+    bad = client.post(URL, json=basket(staplemart=[(SALMON, 1)]))
     assert bad.status_code == 409
 
-    response = client.post(URL, json=basket(walmart=[(EGGS, 1)]))
+    response = client.post(URL, json=basket(staplemart=[(EGGS, 1)]))
     assert response.status_code == 503
     assert "STRIPE_SECRET_KEY" in response.json()["detail"]
 

@@ -33,7 +33,7 @@ def test_seed_data_loads():
     assert len(catalog.products) == 98
     assert len({p.equivalence_group for p in catalog.products.values()}) == 74
     # National brands keep one UPC everywhere; store brands stay in their own store.
-    assert catalog.listing("walmart", "410010000011").upc == "410010000011"
+    assert catalog.listing("staplemart", "410010000011").upc == "410010000011"
     assert catalog.listing("quickcart", "410010000011") is not None
     for product in catalog.products.values():
         if product.store_brand:
@@ -57,7 +57,7 @@ def test_bad_check_digit_stops_the_load(tmp_path):
 
 
 def test_offer_for_unknown_upc_stops_the_load(tmp_path):
-    data = _copy_data(tmp_path, "offers.csv", "walmart,410010000011,", "walmart,410010009991,")
+    data = _copy_data(tmp_path, "offers.csv", "staplemart,410010000011,", "staplemart,410010009991,")
     with pytest.raises(CatalogError, match=r"offers\.csv:2: unknown UPC"):
         load_catalog(data)
 
@@ -66,9 +66,9 @@ def test_search_ranks_the_closest_name_first():
     catalog = load_catalog(DATA_DIR)
     # Same number of words matched: the name the query covers most of comes first,
     # and the cheaper product wins a tie.
-    hits = catalog.search("walmart", "rice")
+    hits = catalog.search("staplemart", "rice")
     assert [h.name for h in hits] == ["Brown Rice", "Basmati Rice", "Long Grain White Rice"]
-    hits = catalog.search("walmart", "cherry tomatoes")
+    hits = catalog.search("staplemart", "cherry tomatoes")
     assert hits[0].name == "Cherry Tomatoes"
     assert (hits[0].match.matched, hits[0].match.of) == (2, 2)
-    assert catalog.search("walmart", "dragonfruit") == []
+    assert catalog.search("staplemart", "dragonfruit") == []

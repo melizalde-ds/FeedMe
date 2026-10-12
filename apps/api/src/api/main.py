@@ -45,7 +45,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 await asyncio.gather(*runs, return_exceptions=True)
                 await link.aclose()
 
-    app = FastAPI(title="Meal Planner API", lifespan=lifespan)
+    app = FastAPI(title="FeedMe API", lifespan=lifespan)
     # Shopping runs in progress. Held here so they aren't garbage collected.
     app.state.runs = set()
     if settings is not None:
