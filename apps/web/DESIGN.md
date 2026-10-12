@@ -29,6 +29,7 @@ colors:
   ok: "#8fe394"
   ok-light: "#17703a"
   none: "#2b283b"
+  on-photo-soft: "#e3dfee"
 typography:
   display:
     fontFamily: "'Schibsted Grotesk Variable', 'Segoe UI', system-ui, sans-serif"
@@ -235,6 +236,7 @@ A near-neutral ground with a faint aubergine cast, one lime accent, and three st
 - **Strong Hairline** (`line-strong`, `line-strong-light`): the edge of anything you type or tick into. It passes 3:1 against the field in both themes.
 - **Ink** (`ink`, `ink-light`) and **Muted Ink** (`mute`, `mute-light`): text. Muted ink is for metadata and hints and passes 4.5:1 on the ground and on Raised.
 - **No Photo** (`none`): the base of the ruled block. It stays dark in both themes, because it stands where a photograph would.
+- **Photo Text** (white, and `on-photo-soft` for a meal's details and a quiet flag): text on a photograph sits on the photo's own shade, so it is the same in both themes.
 
 ### Named Rules
 

@@ -1,10 +1,10 @@
 # Regression checklist
 
 This file defines "still works" for the redesign. Every line under
-[Flows](#flows) is an automated check in `.redesign/scripts/`, and each one
-passed against the current design on 2026-10-12 (branch `redesign`, before any
-UI change). The redesign is done when the same scripts pass again with
-`after` as the phase.
+[Flows](#flows) is an automated check in `.redesign/scripts/`. Each one passed
+against the old design on 2026-10-12 (branch `redesign`, before any UI
+change), and each one passes against the new design: see
+[After the redesign](#after-the-redesign).
 
 ## How to run it
 
@@ -20,7 +20,12 @@ playwright-cli open http://localhost:5173/
 .redesign/scripts/run.sh 04-grocery.js before
 .redesign/scripts/run.sh 05-session.js before
 .redesign/scripts/run.sh 06-states.js before
+.redesign/scripts/run.sh 07-motion.js after     # new design only
+.redesign/scripts/run.sh 08-audit.js after      # new design only
 ```
+
+The second argument names the run: `before`, `after`, or `after-dark` (run
+`playwright-cli set-color-scheme dark` first, and `clear-color-scheme` after).
 
 Screenshots go to `.redesign/<phase>/` at 1440px and 390px wide. Results go to
 `.redesign/results/<phase>-<script>.json`.
@@ -320,3 +325,70 @@ redesign neither hides nor "fixes" them by accident. Each needs a decision.
    the app is still on Plan underneath. `Home.jsx`, `Shell`.
 4. **Unrounded protein in the Check column.** A day's protein can read
    "27.200000000000003 g". `planner.js`, `dayNutrition`.
+
+## After the redesign
+
+Run on 2026-10-12 against commit `4a5373c` and later, with the owner's own
+stack (Supabase, Qdrant with the recipe collection, and a working Bedrock key).
+
+| Script | Light | Dark |
+|---|---|---|
+| `01-auth.js` | 12 of 12 | 12 of 12 |
+| `02-setup.js` | 27 of 27 | 27 of 27 |
+| `03-plan.js` | 24 of 24 | 24 of 24 |
+| `04-grocery.js` | 17 of 17 | 17 of 17 |
+| `05-session.js` | 2 of 2 | 2 of 2 |
+| `06-states.js` | 6 of 6 | 6 of 6 |
+| `07-motion.js` (new) | 13 of 13 | not run: it sets its own media |
+| `08-audit.js` (new) | 1 of 1, covering both themes | |
+
+Lint passes with no warnings. The build passes, with the same one notice as
+before about the size of the JS chunk (600 kB, was 588 kB; the CSS is 37 kB,
+was 26 kB).
+
+Console: the same request failures as the baseline, each one handled by the
+page, and no JavaScript errors. The repeated `403` from `/auth/v1/logout` is
+gone.
+
+### What was live this time
+
+- **The planner.** `02-setup.js` asks the real planner for a plan once per
+  run. With the working key it answered with a real plan in both runs, so the
+  half-minute wait and the arrival of a plan were checked for real.
+- **The buying agent was not run for real.** With a working stack a run goes
+  all the way to a payment request in the owner's Link app, so `04-grocery.js`
+  now plays back a refusal where the baseline asked the real server. Every
+  agent state is still checked from the fixture.
+
+### Where the scripts changed, and why
+
+The checks are the same 88. These are the places where the way a check
+reaches its target had to change, because the control did:
+
+| Script | Before | After |
+|---|---|---|
+| `02-setup.js` | Expected the planner to fail | Accepts the planner's real answer, a plan or the error |
+| `02-setup.js` | "Fix the fields marked above before saving." | "Fix the marked fields before saving." The actions now sit beside the form, not under it |
+| `03-plan.js` | A meal was a dropdown named "Breakfast on day 1" | A meal is a tile named "Breakfast on Monday: French Toast II". Opening it shows the dropdown ("Change this meal") and the People box |
+| `03-plan.js` | The recipe was a dialog, closed by its backdrop | The recipe is a shelf under its rail, closed by "Close recipe" or Escape |
+| `03-plan.js` | "Use this" closed the recipe | The shelf stays open on the new meal |
+| `03-plan.js` | Clearing Week 1 returned to Setup | Clearing Week 1 stays on Plan and its Undo works (defect 3, fixed) |
+| `03-plan.js` | "Fix the days marked in the Check column" | "Fix the days marked above": the Check column is now a row of day verdicts |
+| `03-plan.js` | none | New: pointing at a meal grows it and dims the rest; a swapped meal is marked "Changed" until its note is dismissed; day figures are rounded |
+| `04-grocery.js` | Asked the real server to start a run | Plays back the server's refusal |
+| `04-grocery.js` | The list row was "Ground beef, 0.75 lb, Sunday Beef Chili" | The item names its meals beneath it, so the row reads "Ground beef Sunday Beef Chili 0.75 lb" |
+
+### The defects from the baseline
+
+| Defect | Now |
+|---|---|
+| 1. "Recalculate" could make the form impossible to submit | Fixed. The carbs field takes whole grams (`NutritionGoalsFields.jsx`). `02-setup.js` reports "all fields valid" after recalculating |
+| 2. The "session ended" notice was sometimes lost | Fixed. The session is dropped before the redirect, only the first of several `401`s acts, and the message is kept in the auth provider as well as in the route (`AuthProvider.jsx`, `LoginPage.jsx`). Shown in 4 of 4 tries, in both runs |
+| 3. Clearing Week 1 stranded its Undo | Fixed. The Plan step stays reachable while a cleared week can be undone (`Home.jsx`) |
+| 4. Unrounded protein in the day totals | Rounded where it is shown (`Wall.jsx`). `planner.js` still returns the unrounded sum |
+
+### Still not exercised
+
+The same three as before: the sign-in pages with no anon key, registration
+with email confirmation on, and the first "Loading FeedMe…" screen. All three
+were rebuilt and read through in code. None has been seen in a browser.

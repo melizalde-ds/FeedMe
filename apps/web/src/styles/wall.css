@@ -105,7 +105,7 @@
     opacity: 0;
     font-size: var(--text-xs);
     line-height: 1.35;
-    color: #e3dfee;
+    color: var(--on-photo-soft);
     transition: opacity 200ms var(--ease-out);
   }
 
@@ -250,7 +250,7 @@
   }
 
   .flag[data-kind='quiet'] {
-    color: #c9c5d6;
+    color: var(--on-photo-soft);
   }
 
   /* --- rails ------------------------------------------------------------- */

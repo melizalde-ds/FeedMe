@@ -51,6 +51,7 @@
      stay dark in both themes: they are part of the picture, not the page. */
   --none: #2b283b;
   --shade: 8 7 12;
+  --on-photo-soft: #e3dfee;
 
   --pop: 0 18px 30px -12px rgb(0 0 0 / 0.8);
   --overlay: 0 24px 60px -20px rgb(0 0 0 / 0.55), 0 2px 8px rgb(0 0 0 / 0.2);

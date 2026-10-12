@@ -1,6 +1,8 @@
 # Redesign plan
 
-Status: **Direction chosen on 2026-10-12: Wall.** Phase 3 is under way.
+Status: **Built.** Wall was chosen on 2026-10-12 and all six phases are done.
+The results are in `regression-checklist.md`, the motion decisions in
+`motion.md`, and the design system in `apps/web/DESIGN.md`.
 
 ## Decisions
 
@@ -13,13 +15,16 @@ Status: **Direction chosen on 2026-10-12: Wall.** Phase 3 is under way.
 | A meal with no photo | A ruled block with the recipe's name |
 | Defects | Fix three: the "Recalculate" trap, the lost "session ended" notice, the stranded Undo. The unrounded protein figure is rounded where it is shown. |
 | Changed meals | Stay marked until the "What changed" note is dismissed |
-| Live data | The owner restarts the containers with a working Bedrock key. Until then the success paths run from fixtures. |
+| Live data | The owner restarted the stack with a working Bedrock key. The planner was checked live; the buying agent was not run for real. |
 | Recipe view | Opens as a shelf under its rail, not as a modal |
 | Screenshots | Not committed |
 
 The rest of this file is the plan as it stood at the checkpoint.
 
 ## See the three directions
+
+> The prototypes were deleted once Wall was chosen. They are in git at commit
+> `1f20908`, under `apps/web/prototypes/plan/`.
 
 ```bash
 pnpm dev:web
