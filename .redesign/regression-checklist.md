@@ -374,6 +374,16 @@ the open items. All of it is in commit history after `70bc132`:
 After it: 112 of 112 in light mode. The JS chunk is 633 kB (was 600 kB); the
 difference is Phosphor.
 
+**A bug the audit had been missing.** Since the Grocery page was rebuilt, a
+finished run made the page scroll sideways by 130px on a phone. The cart table
+is wider than a phone and scrolls inside its own box, but the visually hidden
+text inside it ("Remove Asparagus") is absolutely positioned, so it escaped
+that box and widened the page. `08-audit.js` only ever saw Grocery with no run
+on screen, so it passed. The boxes are now `relative`, which clips the hidden
+text with the table, and the audit measures Grocery with a paid run and a cart
+on screen. The earlier claim in this file of "no sideways scroll at 390px" was
+true only for the states the audit looked at.
+
 ### What was live this time
 
 - **The planner.** `02-setup.js` asks the real planner for a plan once per

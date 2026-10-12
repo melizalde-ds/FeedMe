@@ -14,7 +14,7 @@ export function GroceryList() {
     // to the height of the window and scrolls inside it: the agent never
     // leaves view. It can take focus, so the keyboard can scroll it too.
     <section
-      className="min-w-0 max-lg:order-2 lg:sticky lg:top-6 lg:max-h-[calc(100dvh-3rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-4 lg:[scrollbar-width:thin]"
+      className="relative min-w-0 max-lg:order-2 lg:sticky lg:top-6 lg:max-h-[calc(100dvh-3rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-4 lg:[scrollbar-width:thin]"
       aria-labelledby="grocery-list-title"
       tabIndex={0}
     >

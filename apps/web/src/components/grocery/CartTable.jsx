@@ -18,13 +18,16 @@ export function CartTable({ cart, onRemove, busy = false }) {
   const totals = bySlug(cart.if_all_approved)
 
   return (
-    <div className="flex flex-col gap-6">
+    // The table scrolls sideways inside its own box on a phone. That box is
+    // `relative` so the visually hidden text in the table (which is absolutely
+    // positioned) is clipped by it too, and cannot widen the page.
+    <div className="flex min-w-0 flex-col gap-6">
       {stores.map((slug) => {
         const lines = items.filter((item) => item.store === slug)
         const total = totals.get(slug)
 
         return (
-          <div key={slug} className="overflow-x-auto">
+          <div key={slug} className="relative max-w-full min-w-0 overflow-x-auto">
             <table className={`${tableClass} min-w-[34rem]`}>
               <caption className={captionClass}>{storeName(slug)}</caption>
               <thead>

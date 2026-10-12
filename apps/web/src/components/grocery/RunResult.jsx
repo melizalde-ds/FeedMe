@@ -14,14 +14,14 @@ function PaidOrders({ summary }) {
   const reference = orders[0]?.payment_reference
 
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex min-w-0 flex-col gap-6">
       <h3 className={`${headingClass}`}>
         Paid: {money(summary.paid_total_cents)} in one payment
       </h3>
 
       {orders.map((order) => (
-        <div key={order.order_id} className="overflow-x-auto">
-          <table className={`${tableClass} min-w-[24rem]`}>
+        <div key={order.order_id} className="relative max-w-full min-w-0 overflow-x-auto">
+          <table className={tableClass}>
             <caption className={captionClass}>
               {storeName(order.store)}
               <span className="font-normal text-mute">, order {order.order_id}</span>
@@ -84,7 +84,7 @@ export function RunResult() {
 
   if (run.phase === 'failed') {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex min-w-0 flex-col gap-4">
         <Banner variant="error" title="The run did not finish" compact>
           {run.error}
         </Banner>
@@ -107,7 +107,7 @@ export function RunResult() {
   const stoppedEarly = run.finishReason === 'stopped_early'
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex min-w-0 flex-col gap-5">
       {paid ? (
         <PaidOrders summary={summary} />
       ) : (
@@ -154,7 +154,7 @@ export function RunResult() {
       ) : null}
 
       {left.length ? (
-        <section className="flex flex-col gap-4 border-t border-line pt-5">
+        <section className="flex min-w-0 flex-col gap-4 border-t border-line pt-5">
           <h3 className={headingClass}>
             {paid ? 'Still in the cart, not paid for' : 'In the cart'}
           </h3>

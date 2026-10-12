@@ -114,7 +114,7 @@ export function BuyPanel() {
         in a cart, and asks for one payment at the end.
       </p>
 
-      <div className="mt-5 flex flex-col gap-5">
+      <div className="mt-5 flex min-w-0 flex-col gap-5">
         {ownRecipes.length ? (
           <Banner variant="warning" compact>
             <strong>Not shopped for:</strong> {listOf(ownRecipes)}. The agent buys
@@ -212,7 +212,7 @@ export function BuyPanel() {
         ) : null}
 
         {running ? (
-          <div className="flex flex-col gap-4 border-t border-line pt-5">
+          <div className="flex min-w-0 flex-col gap-4 border-t border-line pt-5">
             <LoadingState label={run.status ?? 'Shopping…'} className="py-0 font-semibold text-ink" />
             {run.note ? (
               <Banner variant="warning" compact>
@@ -230,7 +230,7 @@ export function BuyPanel() {
         ) : null}
 
         {finished ? (
-          <div className="border-t border-line pt-5">
+          <div className="min-w-0 border-t border-line pt-5">
             <RunResult />
           </div>
         ) : null}

@@ -1,8 +1,9 @@
 async (page) => {
   // A measured pass over every step: sideways overflow at five widths, text
   // contrast, control size, and unnamed controls, in both themes. Signed in,
-  // with a plan whose first week is confirmed.
+  // with a plan whose first week is confirmed and has been shopped for.
   const BASE = 'http://localhost:5173'
+  const SHOP = __SHOPPING__
   const findings = []
   const errors = []
   const onConsole = (m) => { if (m.type() === 'error') errors.push(m.text().slice(0, 160)) }
@@ -58,10 +59,18 @@ async (page) => {
     return out
   })
 
+  // Grocery is measured with a finished run on screen, played back from the
+  // fixture: paid orders and a cart are its widest content.
+  await page.unrouteAll()
+  const order = { id: SHOP.orderId, grocery_list_id: SHOP.listId, mode: 'manual', status: 'placed', summary: SHOP.summary, finish_reason: 'completed' }
+  const answer = (body) => ({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
+  await page.route('**/api/orders/*', (route) => route.fulfill(answer(order)))
+  await page.route('**/api/grocery-lists/*/cart', (route) => route.fulfill(answer(SHOP.cartAfter)))
+
   const steps = [
     ['Setup', async () => {}],
     ['Plan', async () => { await nav('Plan').click(); await page.getByRole('heading', { name: 'Your meal plan' }).waitFor(); await page.getByRole('button', { name: /^Dinner on Monday/ }).click(); await page.locator('section.unfold').waitFor() }],
-    ['Grocery', async () => { await nav(/Grocery/).click(); await page.getByRole('heading', { name: 'Your grocery list' }).waitFor() }],
+    ['Grocery', async () => { await nav(/Grocery/).click(); await page.getByRole('heading', { name: 'Your grocery list' }).waitFor(); await page.getByRole('heading', { name: /^Paid:/ }).waitFor({ timeout: 8000 }) }],
   ]
   for (const scheme of ['light', 'dark']) {
     await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' })
@@ -83,6 +92,7 @@ async (page) => {
       }
     }
   }
+  await page.unrouteAll()
   // the sign-in pages, signed out
   await page.evaluate(() => { for (const k of Object.keys(localStorage)) if (k.startsWith('sb-')) localStorage.removeItem(k) })
   for (const scheme of ['light', 'dark']) {

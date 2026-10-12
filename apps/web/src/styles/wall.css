@@ -246,6 +246,7 @@
     }
 
     .rail__tiles {
+      position: relative;
       display: flex;
       margin-inline: -1rem;
       padding: 6px 1rem 10px;
