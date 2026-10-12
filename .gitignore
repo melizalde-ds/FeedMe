@@ -38,3 +38,7 @@ skills-lock.json
 # Working files from the redesign: test scripts tied to one machine, their
 # results and screenshots.
 .redesign/
+
+# The launch video and the working files it was made from: captured frames,
+# audio and capture scripts tied to one machine.
+brag-output/
