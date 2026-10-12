@@ -98,10 +98,10 @@ checked again in the browser before it is shown.
 ## Brand Commitments
 
 - Name: **FeedMe**. In the app the name is set in type (see
-  `apps/web/DESIGN.md`), and the favicon is a lime "F" on the dark ground. The
-  earlier logo files are kept in `apps/web/src/assets/` (`text-logo.png`,
-  `pic-logo.png`, `text-pic-logo.png`): the README uses `text-logo.png`, and
-  the app uses none of them.
+  `apps/web/DESIGN.md`), and the favicon is a lime "F" on the dark ground. One
+  earlier logo file is kept, `apps/web/src/assets/text-logo.png`, for the
+  README. The app does not use it, and the other logo drawings are on the mood
+  board.
 - Value proposition, as written on the mood board: "For adults and families
   who are busy, FeedMe provides ease and healthy living by making weekly
   custom meal plans and buying them for you."

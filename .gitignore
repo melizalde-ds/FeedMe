@@ -24,7 +24,17 @@ __pycache__
 
 # Data
 data/
-!.claude/skills/impeccable/scripts/data/
+
+# AI agent tooling: skills, agents and their settings and caches. Each
+# developer installs their own; none of it is part of the app.
+.claude/
+.agents/
+skills-lock.json
+.impeccable/
+.playwright/
 # Playwright CLI output (may contain credentials)
 .playwright-cli/
-.claude/settings.local.json
+
+# Working files from the redesign: test scripts tied to one machine, their
+# results and screenshots.
+.redesign/

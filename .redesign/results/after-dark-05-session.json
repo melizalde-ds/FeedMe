@@ -1,1 +1,0 @@
-{"log":["PASS session: a 401 from the server signs the user out and lands on /login","INFO session-ended notice over 4 tries: notice shown, notice shown, notice shown, notice shown","PASS session: signing in again restores the account’s setup and plan"],"errors":[]}
