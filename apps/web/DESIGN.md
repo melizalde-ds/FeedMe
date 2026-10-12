@@ -292,12 +292,14 @@ Flat. Depth is a change of surface from the ground to Raised, with a hairline ar
 
 ### Shadow Vocabulary
 
-- **Pop** (`0 18px 30px -12px rgb(0 0 0 / 0.8)`): under the meal in hand, with its 3px lime ring. It lifts one tile off a wall of photographs.
-- **Overlay** (`0 24px 60px -20px rgb(0 0 0 / 0.55), 0 2px 8px rgb(0 0 0 / 0.2)`): under a dialog, over a backdrop of the photo shade at 62%.
+- **Pop** (`0 18px 30px -12px`, the ground's hue at 85%, or Ink at 45% on the light ground): under the meal in hand, with its 3px lime ring. It lifts one tile off a wall of photographs.
+- **Overlay** (`0 24px 60px -20px` at 70% with `0 2px 8px` at 30%, or 35% and 12% on the light ground): under a dialog, over a backdrop of the photo shade at 62%.
 
 ### Named Rules
 
 **The One Raised Surface Rule.** Nothing raised sits on something raised. A notice inside the shelf uses a tint, not another panel.
+
+**The Tinted Shadow Rule.** A shadow is the ground's own colour, never pure black, and about half as strong on the light ground.
 
 ## Shapes
 
@@ -316,7 +318,7 @@ Squared with 10px corners, 600 weight, 40px tall (32px small, 48px large; 44px a
 - **Quiet:** no surface until hover. For the gentle way out: "Delete" before it asks.
 - **Danger:** Tomato fill with white text, only for the confirming click: "Yes, delete".
 - **Text button:** reads as a link, with a 2px lime underline. "Edit setup", "Dismiss".
-- **Every button** presses to 97% over 160ms.
+- **Every button** presses to 97% over 160ms. So does everything else you can press: a step in the header, a week tab, a chip, and a meal on the wall (to 98%).
 
 ### Chips
 
@@ -324,7 +326,7 @@ A 28px tag with 6px corners on Raised. An unsaved term is a button with a small 
 
 ### Inputs / Fields
 
-42px tall, 10px corners, Field background, Strong Hairline edge that turns Ink on hover and Tomato when invalid. The label sits above at Control size. A hint sits below in Muted Ink, and an error replaces it in Tomato at 600. Tick boxes and radio buttons are the browser's own, tinted lime, with the whole label as the target.
+42px tall, 10px corners, Field background, Strong Hairline edge that turns Ink on hover and Tomato when invalid. The label sits above at Control size, and a placeholder is only ever an example: where a row of boxes shares column heads on a wide screen, each box gets its own label on a phone. A hint sits below in Muted Ink, and an error replaces it in Tomato at 600. Tick boxes and radio buttons are the browser's own, tinted lime, with the whole label as the target.
 
 ### Notices
 
@@ -343,6 +345,7 @@ The signature. A 4:5 button filled by the recipe's photograph, with a shade risi
 - **Flags:** at most one word about the meal, top left: "Contains Tree nuts" (Tomato, with a matching ring on the tile), "Changed" (white), "Rejected", "Leftovers", "Yours", "Accepted" (lime). A meal with nothing to say has none.
 - **No photograph:** the ruled block, diagonal hairlines on No Photo.
 - **Empty:** a Strong Hairline outline with a plus and "Choose a meal".
+- **Pressed:** gives to 98%.
 - **Touch and reduced motion:** nothing grows and the details are always showing.
 
 ### The Recipe Shelf

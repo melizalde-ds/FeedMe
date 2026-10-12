@@ -142,7 +142,7 @@ export function RecipeDetail({ recipe, servings, conflicts = [], heading: Headin
       {recipe.allergens.length ? (
         conflicts.length ? (
           <Conflict>
-            Contains: {recipe.allergens.join(', ')} — this conflicts with {conflicts.join(', ')} in
+            Contains: {recipe.allergens.join(', ')}. This conflicts with {conflicts.join(', ')} in
             your setup.
           </Conflict>
         ) : (

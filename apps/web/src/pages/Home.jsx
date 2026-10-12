@@ -35,7 +35,7 @@ function Shell() {
   const current = view === 'plan' && !hasPlan && !canUndo ? 'setup' : view
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       <AppHeader view={current} onNavigate={setView} groceryReady={groceryReady} />
 
       <main className="mx-auto max-w-[1560px] px-4 pt-6 pb-24 sm:px-8 sm:pt-8" id="main">
@@ -87,7 +87,7 @@ function AccountApp({ userId }) {
 export default function Home() {
   const { user, loading } = useAuth()
 
-  if (loading) return <LoadingState label="Loading FeedMe…" className="min-h-screen justify-center" />
+  if (loading) return <LoadingState label="Loading FeedMe…" className="min-h-dvh justify-center" />
   if (!user) return <Navigate to="/login" replace />
 
   // Keyed so signing in as someone else starts every provider afresh.

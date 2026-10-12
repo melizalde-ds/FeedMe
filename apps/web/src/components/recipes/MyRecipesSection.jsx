@@ -147,7 +147,7 @@ export function MyRecipesSection() {
       ) : (
         <p className="mt-4 max-w-[58ch] text-mute">
           Nothing here yet. A recipe needs its ingredients, their amounts and
-          prices, and the calories and protein for the whole dish — we divide
+          prices, and the calories and protein for the whole dish. We divide
           those by the servings it makes.
         </p>
       )}

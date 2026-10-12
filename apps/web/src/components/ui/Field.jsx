@@ -34,12 +34,16 @@ export function Choice({ className, children, ...input }) {
 // that removes it.
 export function Chip({ children, onRemove, removeLabel, className }) {
   const base =
-    'inline-flex min-h-7 items-center gap-1.5 rounded-flag border border-line bg-raise px-2.5 text-ui text-ink pointer-coarse:min-h-10'
+    'inline-flex min-h-7 max-w-full items-center gap-1.5 rounded-flag border border-line bg-raise px-2.5 text-ui wrap-anywhere text-ink pointer-coarse:min-h-10'
 
   if (!onRemove) return <span className={cx(base, className)}>{children}</span>
 
   return (
-    <button type="button" className={cx(base, 'transition-colors hover:border-ink', className)} onClick={onRemove}>
+    <button
+      type="button"
+      className={cx(base, 'transition-[border-color,scale] hover:border-ink active:scale-[0.97]', className)}
+      onClick={onRemove}
+    >
       {children}
       <Close size={12} />
       <span className="sr-only">{removeLabel}</span>

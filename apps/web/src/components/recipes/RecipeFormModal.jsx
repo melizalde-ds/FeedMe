@@ -35,6 +35,9 @@ function Field({ id, label, hint, error, children, className }) {
   )
 }
 
+// The label each ingredient box shows on a phone.
+const ROW_LABEL = 'mb-1 block text-xs font-semibold text-mute sm:hidden'
+
 // One part of the form: a heading and its fields, under a hairline.
 function Part({ legend, lede, children }) {
   return (
@@ -346,53 +349,67 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
             </li>
             {draft.ingredients.map((row, index) => (
               <li
-                className="grid grid-cols-[minmax(0,2.4fr)_minmax(0,0.8fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_2.25rem] items-center gap-2 max-sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_2.25rem] max-sm:border-b max-sm:border-line max-sm:pb-3"
+                className="grid grid-cols-[minmax(0,2.4fr)_minmax(0,0.8fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_2.25rem] items-end gap-2 max-sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_2.75rem] max-sm:border-b max-sm:border-line max-sm:pb-3"
                 key={index}
               >
-                <input
-                  type="text"
-                  className={`${inputClass} max-sm:col-span-4`}
-                  value={row.name}
-                  placeholder="Ground beef"
-                  aria-label={`Ingredient ${index + 1} name`}
-                  onChange={(event) =>
-                    setIngredient(index, 'name', event.target.value)
-                  }
-                />
-                <input
-                  type="number"
-                  className={inputClass}
-                  min="0"
-                  step="any"
-                  value={row.quantity}
-                  placeholder="1"
-                  aria-label={`Ingredient ${index + 1} amount`}
-                  onChange={(event) =>
-                    setIngredient(index, 'quantity', event.target.value)
-                  }
-                />
-                <input
-                  type="text"
-                  className={inputClass}
-                  value={row.unit}
-                  placeholder="lb"
-                  aria-label={`Ingredient ${index + 1} unit`}
-                  onChange={(event) =>
-                    setIngredient(index, 'unit', event.target.value)
-                  }
-                />
-                <input
-                  type="number"
-                  className={inputClass}
-                  min="0"
-                  step="0.01"
-                  value={row.cost}
-                  placeholder="0.00"
-                  aria-label={`Ingredient ${index + 1} cost in dollars`}
-                  onChange={(event) =>
-                    setIngredient(index, 'cost', event.target.value)
-                  }
-                />
+                {/* On a phone the column heads are gone, so each box carries
+                    its own. A placeholder is an example, never the label. */}
+                <label className="max-sm:col-span-4">
+                  <span className={ROW_LABEL}>Ingredient</span>
+                  <input
+                    type="text"
+                    className={inputClass}
+                    value={row.name}
+                    placeholder="Ground beef"
+                    aria-label={`Ingredient ${index + 1} name`}
+                    onChange={(event) =>
+                      setIngredient(index, 'name', event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  <span className={ROW_LABEL}>Amount</span>
+                  <input
+                    type="number"
+                    className={inputClass}
+                    min="0"
+                    step="any"
+                    value={row.quantity}
+                    placeholder="1"
+                    aria-label={`Ingredient ${index + 1} amount`}
+                    onChange={(event) =>
+                      setIngredient(index, 'quantity', event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  <span className={ROW_LABEL}>Unit</span>
+                  <input
+                    type="text"
+                    className={inputClass}
+                    value={row.unit}
+                    placeholder="lb"
+                    aria-label={`Ingredient ${index + 1} unit`}
+                    onChange={(event) =>
+                      setIngredient(index, 'unit', event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  <span className={ROW_LABEL}>Cost $</span>
+                  <input
+                    type="number"
+                    className={inputClass}
+                    min="0"
+                    step="0.01"
+                    value={row.cost}
+                    placeholder="0.00"
+                    aria-label={`Ingredient ${index + 1} cost in dollars`}
+                    onChange={(event) =>
+                      setIngredient(index, 'cost', event.target.value)
+                    }
+                  />
+                </label>
                 <IconButton
                   aria-label={`Remove ingredient ${index + 1}`}
                   title={`Remove ingredient ${index + 1}`}
@@ -507,7 +524,7 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
           <p className="mt-4 max-w-[56ch] text-sm text-mute">
             Your macros and prices are stored as you entered them and shown as
             yours and unverified. Allergy filtering still runs over the ingredient
-            names, but it is not a guarantee — read the labels before you cook.
+            names, but it is not a guarantee, so read the labels before you cook.
           </p>
         </div>
       </form>

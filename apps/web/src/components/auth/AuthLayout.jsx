@@ -12,7 +12,7 @@ const STEPS = [
 // the app says what it does; the form sits beside it.
 export function AuthLayout({ children }) {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-dvh flex-col">
       <header className="flex items-center justify-between border-b border-line px-4 py-3 sm:px-8">
         <Link to="/" aria-label="FeedMe home" className="rounded-flag">
           <Wordmark />

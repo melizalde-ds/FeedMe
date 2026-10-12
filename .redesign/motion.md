@@ -18,7 +18,7 @@ reduced motion off and on.
 | 6 | A dialog (`dialog.sheet`) | Rises 12px and fades in; the backdrop fades | A change of context | Occasional | 220ms |
 | 7 | A product the agent adds to the cart (`.row-in`) | Fades in | The cart is filling while you watch | Rare | `opacity`, 240ms |
 | 8 | Confirming the week (`.draw`, `.arrive`) | The tick draws itself and "Go to grocery list" steps forward | The one moment of completion in the app | Rare | 400ms draw after 120ms; 240ms `opacity` and `scale` |
-| 9 | Every button | Presses to 97% | Feedback | Tens a day | `scale`, 160ms |
+| 9 | Everything you can press | A button, a header step, a week tab and a chip press to 97%; a meal on the wall to 98% | Feedback | Tens a day | `scale`, 160ms |
 | 10 | Waiting (`.pulse`) | The loading dot and the waiting tiles breathe, staggered by 120ms | The half-minute wait has to look alive | Rare | background colour, 1.4s loop, `--ease-in-out` |
 
 Curves: `--ease-out` is `cubic-bezier(0.23, 1, 0.32, 1)` and `--ease-in-out`

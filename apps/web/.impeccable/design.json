@@ -222,12 +222,12 @@
     "shadows": [
       {
         "name": "pop",
-        "value": "0 18px 30px -12px rgb(0 0 0 / 0.8)",
+        "value": "0 18px 30px -12px light-dark(rgb(22 20 29 / 0.45), rgb(8 7 12 / 0.85))",
         "purpose": "Under the meal in hand, with its 3px lime ring."
       },
       {
         "name": "overlay",
-        "value": "0 24px 60px -20px rgb(0 0 0 / 0.55), 0 2px 8px rgb(0 0 0 / 0.2)",
+        "value": "0 24px 60px -20px light-dark(rgb(22 20 29 / 0.35), rgb(8 7 12 / 0.7)), 0 2px 8px light-dark(rgb(22 20 29 / 0.12), rgb(8 7 12 / 0.3))",
         "purpose": "Under a dialog."
       }
     ],
@@ -319,9 +319,9 @@
       "name": "Photo Tile",
       "kind": "custom",
       "refersTo": "tile",
-      "description": "One meal. Shown here with no photograph, as the ruled block, and flagged as one of the user’s own recipes.",
-      "html": "<button class=\"ds-tile\"><span class=\"ds-tile-ruled\"></span><span class=\"ds-tile-top\"><span class=\"ds-flag\">Yours</span></span><span class=\"ds-tile-body\"><span class=\"ds-tile-name\">Sunday Beef Chili</span><span class=\"ds-tile-more\">30 min · 550 kcal · 35 g protein</span></span></button>",
-      "css": ".ds-tile { position: relative; display: block; width: 168px; aspect-ratio: 4 / 5; padding: 0; overflow: hidden; border: 0; border-radius: 12px; background: var(--none); color: #fff; font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; text-align: left; cursor: pointer; transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile-ruled { position: absolute; inset: 0; background: repeating-linear-gradient(135deg, transparent 0 11px, rgb(255 255 255 / 0.07) 11px 12px) var(--none); } .ds-tile::after { content: ''; position: absolute; inset: 30% 0 0; background: linear-gradient(to top, rgb(8 7 12 / 0.95), rgb(8 7 12 / 0.74) 44%, rgb(8 7 12 / 0)); } .ds-tile-top { position: absolute; inset: 8px 8px auto; z-index: 1; display: flex; gap: 4px; } .ds-flag { padding: 2px 8px; border-radius: 6px; background: rgb(8 7 12 / 0.82); font-size: 0.75rem; font-weight: 700; line-height: 1.5; } .ds-tile-body { position: absolute; inset: auto 10px 10px; z-index: 1; display: flex; flex-direction: column; transform: translateY(2.25rem); transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile-name { font-size: 0.9375rem; font-weight: 700; line-height: 1.2; } .ds-tile-more { height: 2rem; margin-top: 0.25rem; opacity: 0; font-size: 0.75rem; line-height: 1.35; color: #e3dfee; transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile:hover, .ds-tile:focus-visible { outline: none; transform: scale(1.05); box-shadow: 0 0 0 3px var(--lime), 0 18px 30px -12px rgb(0 0 0 / 0.8); } .ds-tile:hover .ds-tile-body, .ds-tile:focus-visible .ds-tile-body { transform: none; } .ds-tile:hover .ds-tile-more, .ds-tile:focus-visible .ds-tile-more { opacity: 1; }"
+      "description": "One meal. Shown here with no photograph, as the ruled block, and flagged as one of the user\u2019s own recipes.",
+      "html": "<button class=\"ds-tile\"><span class=\"ds-tile-ruled\"></span><span class=\"ds-tile-top\"><span class=\"ds-flag\">Yours</span></span><span class=\"ds-tile-body\"><span class=\"ds-tile-name\">Sunday Beef Chili</span><span class=\"ds-tile-more\">30 min \u00b7 550 kcal \u00b7 35 g protein</span></span></button>",
+      "css": ".ds-tile { position: relative; display: block; width: 168px; aspect-ratio: 4 / 5; padding: 0; overflow: hidden; border: 0; border-radius: 12px; background: var(--none); color: #fff; font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; text-align: left; cursor: pointer; transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile-ruled { position: absolute; inset: 0; background: repeating-linear-gradient(135deg, transparent 0 11px, rgb(255 255 255 / 0.07) 11px 12px) var(--none); } .ds-tile::after { content: ''; position: absolute; inset: 30% 0 0; background: linear-gradient(to top, rgb(8 7 12 / 0.95), rgb(8 7 12 / 0.74) 44%, rgb(8 7 12 / 0)); } .ds-tile-top { position: absolute; inset: 8px 8px auto; z-index: 1; display: flex; gap: 4px; } .ds-flag { padding: 2px 8px; border-radius: 6px; background: rgb(8 7 12 / 0.82); font-size: 0.75rem; font-weight: 700; line-height: 1.5; } .ds-tile-body { position: absolute; inset: auto 10px 10px; z-index: 1; display: flex; flex-direction: column; transform: translateY(2.25rem); transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile-name { font-size: 0.9375rem; font-weight: 700; line-height: 1.2; } .ds-tile-more { height: 2rem; margin-top: 0.25rem; opacity: 0; font-size: 0.75rem; line-height: 1.35; color: #e3dfee; transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile:hover, .ds-tile:focus-visible { outline: none; transform: scale(1.05); box-shadow: 0 0 0 3px var(--lime), var(--pop); } .ds-tile:hover .ds-tile-body, .ds-tile:focus-visible .ds-tile-body { transform: none; } .ds-tile:hover .ds-tile-more, .ds-tile:focus-visible .ds-tile-more { opacity: 1; }"
     },
     {
       "name": "Flags",
@@ -390,6 +390,11 @@
       {
         "name": "The One Raised Surface Rule",
         "body": "Nothing raised sits on something raised. A notice inside the shelf uses a tint, not another panel.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Tinted Shadow Rule",
+        "body": "A shadow is the ground's own colour, never pure black, and about half as strong on the light ground.",
         "section": "elevation"
       },
       {

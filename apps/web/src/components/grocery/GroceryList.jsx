@@ -25,13 +25,14 @@ export function GroceryList() {
         {items.length} {items.length === 1 ? 'item' : 'items'}
       </p>
 
-      <table className={`${tableClass} mt-3`}>
+      {/* Fixed columns, so a long item name wraps inside its own cell. */}
+      <table className={`${tableClass} mt-3 table-fixed`}>
         <thead className="lg:sticky lg:top-0 lg:bg-ground">
           <tr>
             <th scope="col" className={thClass}>
               Item <span className="font-normal">and the meals it is used in</span>
             </th>
-            <th scope="col" className={`${thClass} text-right`}>
+            <th scope="col" className={`${thClass} w-24 text-right`}>
               Amount
             </th>
           </tr>

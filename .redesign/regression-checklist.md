@@ -22,6 +22,7 @@ playwright-cli open http://localhost:5173/
 .redesign/scripts/run.sh 06-states.js before
 .redesign/scripts/run.sh 07-motion.js after     # new design only
 .redesign/scripts/run.sh 08-audit.js after      # new design only
+.redesign/scripts/run.sh 09-long-content.js after   # new design only; run it after 04
 ```
 
 The second argument names the run: `before`, `after`, or `after-dark` (run
@@ -341,6 +342,7 @@ stack (Supabase, Qdrant with the recipe collection, and a working Bedrock key).
 | `06-states.js` | 6 of 6 | 6 of 6 |
 | `07-motion.js` (new) | 13 of 13 | not run: it sets its own media |
 | `08-audit.js` (new) | 1 of 1, covering both themes | |
+| `09-long-content.js` (new) | 9 of 9 | not run |
 
 Lint passes with no warnings. The build passes, with the same one notice as
 before about the size of the JS chunk (600 kB, was 588 kB; the CSS is 37 kB,
@@ -349,6 +351,12 @@ was 26 kB).
 Console: the same request failures as the baseline, each one handled by the
 page, and no JavaScript errors. The repeated `403` from `/auth/v1/logout` is
 gone.
+
+`09-long-content.js` was added in a later pass with the Taste and Emil
+Kowalski skills. It saves a recipe with an 80-character name that has no
+spaces, adds a 40-character allergen, and checks that nothing pushes the page
+sideways at 1440px or 390px. It failed on first run (the page scrolled
+sideways by up to 707px) and passes now that long words break.
 
 ### What was live this time
 

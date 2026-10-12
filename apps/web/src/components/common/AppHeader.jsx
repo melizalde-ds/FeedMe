@@ -27,7 +27,7 @@ export function AppHeader({ view, onNavigate, groceryReady }) {
           <button
             key={step.id}
             type="button"
-            className="flex items-baseline gap-2 rounded-control px-3.5 py-2 text-base font-semibold text-mute transition-colors hover:text-ink aria-[current=page]:bg-raise aria-[current=page]:text-ink aria-[current=page]:shadow-[inset_0_-3px_0_var(--mark)] pointer-coarse:min-h-11 max-md:flex-1 max-md:flex-col max-md:gap-0"
+            className="flex items-baseline gap-2 rounded-control px-3.5 py-2 text-base font-semibold text-mute transition-[color,background-color,scale] hover:text-ink active:scale-[0.97] aria-[current=page]:bg-raise aria-[current=page]:text-ink aria-[current=page]:shadow-[inset_0_-3px_0_var(--mark)] pointer-coarse:min-h-11 max-md:flex-1 max-md:flex-col max-md:gap-0"
             aria-current={view === step.id ? 'page' : undefined}
             onClick={() => onNavigate(step.id)}
           >
