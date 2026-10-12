@@ -1,0 +1,197 @@
+/* FeedMe's design system: tokens, Tailwind's theme, and the base layer.
+   Components are written with utilities. What utilities can't say (the photo
+   tile, the wall, keyframes) is in wall.css. */
+@import 'tailwindcss';
+@import './wall.css';
+
+/* `dark:` follows the same switch as the tokens: data-theme on <html>, or
+   the system setting when there is none. */
+@custom-variant dark {
+  &:where([data-theme='dark'], [data-theme='dark'] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme='light']), :root:not([data-theme='light']) *) {
+      @slot;
+    }
+  }
+}
+
+/* Each token holds its light and dark value together, so the two themes can
+   never drift apart. `color-scheme` picks the side: the system's, unless the
+   theme button has set data-theme. */
+:root {
+  color-scheme: light dark;
+
+  --ground: light-dark(#f4f4f7, #0f0e14);
+  --raise: light-dark(#ffffff, #1a1822);
+  --field: light-dark(#ffffff, #121118);
+  --line: light-dark(#d9d8e2, #2f2c3c);
+  --line-strong: light-dark(#858294, #746f88);
+  --ink: light-dark(#16141d, #f5f2ea);
+  --mute: light-dark(#5a5669, #aaa5b9);
+
+  /* The one accent: focus, the current step, the primary action. On the dark
+     ground it is lime; on the light ground lime can't carry text, so the
+     button turns ink with lime lettering. */
+  --accent: light-dark(#16141d, #c6f24a);
+  --on-accent: light-dark(#c6f24a, #151b00);
+  --mark: light-dark(#5a7600, #c6f24a);
+  --lime: #c6f24a;
+  --on-lime: #151b00;
+
+  --danger: light-dark(#b3200f, #ff7b6c);
+  --danger-fill: #c92a17;
+  --on-danger-fill: #ffffff;
+  --danger-tint: light-dark(#fde9e5, #37140f);
+  --warn-tint: light-dark(#eef4d0, #2c2912);
+  --ok: light-dark(#17703a, #8fe394);
+  --ok-tint: light-dark(#e2f3e6, #14301c);
+
+  /* A recipe with no photograph, and the shade text sits on over one. These
+     stay dark in both themes: they are part of the picture, not the page. */
+  --none: #2b283b;
+  --shade: 8 7 12;
+
+  --pop: 0 18px 30px -12px rgb(0 0 0 / 0.8);
+  --overlay: 0 24px 60px -20px rgb(0 0 0 / 0.55), 0 2px 8px rgb(0 0 0 / 0.2);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@theme inline {
+  /* Only FeedMe's colours exist as utilities. */
+  --color-*: initial;
+  --color-ground: var(--ground);
+  --color-raise: var(--raise);
+  --color-field: var(--field);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-mute: var(--mute);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-mark: var(--mark);
+  --color-lime: var(--lime);
+  --color-on-lime: var(--on-lime);
+  --color-danger: var(--danger);
+  --color-danger-fill: var(--danger-fill);
+  --color-on-danger-fill: var(--on-danger-fill);
+  --color-danger-tint: var(--danger-tint);
+  --color-warn-tint: var(--warn-tint);
+  --color-ok: var(--ok);
+  --color-ok-tint: var(--ok-tint);
+  --color-none: var(--none);
+  --color-white: #ffffff;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --font-sans: 'Schibsted Grotesk Variable', 'Segoe UI', system-ui, sans-serif;
+
+  /* A fixed scale, about 1.2 between steps. `ui` is the size of controls. */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.35;
+  --text-sm: 0.8125rem;
+  --text-sm--line-height: 1.4;
+  --text-ui: 0.875rem;
+  --text-ui--line-height: 1.4;
+  --text-base: 0.9375rem;
+  --text-base--line-height: 1.5;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.3;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.15;
+  --text-2xl: 1.625rem;
+  --text-2xl--line-height: 1.1;
+  --text-3xl: 2rem;
+  --text-3xl--line-height: 1.06;
+  --text-4xl: 2.375rem;
+  --text-4xl--line-height: 1.02;
+
+  --radius-flag: 6px;
+  --radius-control: 10px;
+  --radius-tile: 12px;
+  --radius-panel: 16px;
+
+  --shadow-pop: var(--pop);
+  --shadow-overlay: var(--overlay);
+
+  /* Motion: one easing, three lengths. */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --default-transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --default-transition-duration: 160ms;
+}
+
+@layer base {
+  html {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+
+  body {
+    min-height: 100vh;
+    font-size: var(--text-base);
+    line-height: 1.5;
+  }
+
+  /* A dialog owns the screen while it is open. */
+  :root:has(dialog[open]) {
+    overflow: hidden;
+  }
+
+  ::selection {
+    background: var(--lime);
+    color: var(--on-lime);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  input,
+  textarea {
+    caret-color: var(--mark);
+  }
+
+  ::placeholder {
+    color: var(--mute);
+    opacity: 1;
+  }
+
+  button:not(:disabled),
+  select:not(:disabled),
+  summary,
+  label:has(input[type='checkbox']:not(:disabled), input[type='radio']:not(:disabled)) {
+    cursor: pointer;
+  }
+
+  /* Dropdown lists are drawn by the browser; give them the page's surface. */
+  option,
+  optgroup {
+    background: var(--raise);
+    color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 1ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

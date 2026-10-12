@@ -35,10 +35,10 @@ function Shell() {
   const current = view === 'plan' && !hasPlan ? 'setup' : view
 
   return (
-    <div className="app">
+    <div className="min-h-screen">
       <AppHeader view={current} onNavigate={setView} groceryReady={groceryReady} />
 
-      <main className="app__main" id="main">
+      <main className="mx-auto max-w-[1560px] px-4 pt-6 pb-24 sm:px-8 sm:pt-8" id="main">
         {current === 'setup' ? (
           <SetupView onSeePlan={() => setView('plan')} />
         ) : null}

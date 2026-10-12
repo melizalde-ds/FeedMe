@@ -50,3 +50,15 @@ export const Auto = (props) => (
 
 export const ThemeIcon = ({ choice, ...props }) =>
   choice === 'light' ? <Sun {...props} /> : choice === 'dark' ? <Moon {...props} /> : <Auto {...props} />
+export const Lock = (props) => (
+  <Svg {...props}><rect x="5" y="10.5" width="14" height="9.5" rx="2" /><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" /></Svg>
+)
+export const Cart = (props) => (
+  <Svg {...props}><path d="M3 4h2.5l2.2 10.5h10.6L20.5 7H7" /><circle cx="9.5" cy="19" r="1.3" /><circle cx="17" cy="19" r="1.3" /></Svg>
+)
+export const Trash = (props) => (
+  <Svg {...props}><path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5" /></Svg>
+)
+export const Pencil = (props) => (
+  <Svg {...props}><path d="m4 20 1-4.5L16.5 4l3.5 3.5L8.5 19 4 20Z" /><path d="m14 6.5 3.5 3.5" /></Svg>
+)

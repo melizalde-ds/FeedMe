@@ -1,7 +1,23 @@
 # Redesign plan
 
-Status: **Phase 2 checkpoint, 2026-10-12. Waiting for a direction.** Nothing in
-`apps/web/src` has changed yet.
+Status: **Direction chosen on 2026-10-12: Wall.** Phase 3 is under way.
+
+## Decisions
+
+| Question | Answer |
+|---|---|
+| Direction | **Wall** |
+| Logo | "FeedMe" set in the new type. The PNG files stay in the repo, unused by the app. |
+| Styling | Keep Tailwind. The new tokens live in its theme. |
+| Font | Schibsted Grotesk, self-hosted (`@fontsource-variable/schibsted-grotesk`) |
+| A meal with no photo | A ruled block with the recipe's name |
+| Defects | Fix three: the "Recalculate" trap, the lost "session ended" notice, the stranded Undo. The unrounded protein figure is rounded where it is shown. |
+| Changed meals | Stay marked until the "What changed" note is dismissed |
+| Live data | The owner restarts the containers with a working Bedrock key. Until then the success paths run from fixtures. |
+| Recipe view | Opens as a shelf under its rail, not as a modal |
+| Screenshots | Not committed |
+
+The rest of this file is the plan as it stood at the checkpoint.
 
 ## See the three directions
 
