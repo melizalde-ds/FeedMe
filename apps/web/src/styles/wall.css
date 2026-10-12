@@ -204,7 +204,7 @@
   }
 
   /* On a phone each rail scrolls sideways through the week. */
-  @media (max-width: 900px) {
+  @media (width < 64rem) {
     .rail {
       display: block;
     }

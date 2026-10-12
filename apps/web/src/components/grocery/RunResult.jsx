@@ -1,45 +1,58 @@
 import { money, storeName } from '../../lib/shopping'
 import { useShoppingRun } from '../../hooks/useShoppingRun'
+import { Banner } from '../common/Banner'
+import { Button } from '../ui/Button'
+import { captionClass, tableClass, tdClass, tfootClass, thClass } from '../ui/table'
 import { CartTable } from './CartTable'
 
 const listOf = (items) => items.join(', ')
+
+const headingClass = 'text-xl font-bold tracking-tight'
 
 function PaidOrders({ summary }) {
   const orders = summary.orders ?? []
   const reference = orders[0]?.payment_reference
 
   return (
-    <section className="flex flex-col gap-3">
-      <h3 className="recipe__heading">
+    <section className="flex flex-col gap-6">
+      <h3 className={`${headingClass}`}>
         Paid: {money(summary.paid_total_cents)} in one payment
       </h3>
 
       {orders.map((order) => (
-        <div key={order.order_id} className="table-wrap">
-          <table className="data-table">
-            <caption className="pb-2 text-left font-semibold text-ink">
+        <div key={order.order_id} className="overflow-x-auto">
+          <table className={`${tableClass} min-w-[24rem]`}>
+            <caption className={captionClass}>
               {storeName(order.store)}
               <span className="font-normal text-mute"> · order {order.order_id}</span>
             </caption>
             <thead>
               <tr>
-                <th scope="col">Product</th>
-                <th scope="col">Packs</th>
-                <th scope="col">Price</th>
+                <th scope="col" className={thClass}>
+                  Product
+                </th>
+                <th scope="col" className={`${thClass} text-right`}>
+                  Packs
+                </th>
+                <th scope="col" className={`${thClass} text-right`}>
+                  Price
+                </th>
               </tr>
             </thead>
             <tbody>
               {order.lines.map((line) => (
                 <tr key={line.upc}>
-                  <th scope="row">{line.name}</th>
-                  <td>{line.quantity}</td>
-                  <td>{money(line.line_total_cents)}</td>
+                  <th scope="row" className={tdClass}>
+                    {line.name}
+                  </th>
+                  <td className={`${tdClass} text-right`}>{line.quantity}</td>
+                  <td className={`${tdClass} text-right`}>{money(line.line_total_cents)}</td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
               <tr>
-                <th scope="row" colSpan="2">
+                <th scope="row" colSpan="2" className={tfootClass}>
                   {storeName(order.store)} total
                   <span className="block text-sm font-normal text-mute">
                     {order.delivery_fee_cents
@@ -47,7 +60,7 @@ function PaidOrders({ summary }) {
                       : 'free delivery'}
                   </span>
                 </th>
-                <td>{money(order.total_cents)}</td>
+                <td className={`${tfootClass} text-right`}>{money(order.total_cents)}</td>
               </tr>
             </tfoot>
           </table>
@@ -55,7 +68,7 @@ function PaidOrders({ summary }) {
       ))}
 
       {reference ? (
-        <p className="fine-print">
+        <p className="text-sm text-mute">
           Stripe sandbox payment reference: {reference}. No real money moved.
         </p>
       ) : null}
@@ -71,15 +84,13 @@ export function RunResult() {
 
   if (run.phase === 'failed') {
     return (
-      <div className="flex flex-col gap-3">
-        <p className="alert" role="alert">
-          <strong>The run did not finish.</strong> {run.error}
-        </p>
+      <div className="flex flex-col gap-4">
+        <Banner variant="error" title="The run did not finish" compact>
+          {run.error}
+        </Banner>
         {cart?.items?.length ? (
           <>
-            <p className="m-0 text-ink">
-              The products it had picked so far are saved in the cart.
-            </p>
+            <p>The products it had picked so far are saved in the cart.</p>
             <CartTable cart={cart} onRemove={removeItem} busy={cartBusy} />
           </>
         ) : null}
@@ -96,40 +107,39 @@ export function RunResult() {
   const stoppedEarly = run.finishReason === 'stopped_early'
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       {paid ? (
         <PaidOrders summary={summary} />
       ) : (
-        <p className="alert alert--soft">
-          <strong>Nothing was paid.</strong>{' '}
+        <Banner variant="warning" title="Nothing was paid" compact>
           {left.length
             ? 'The products the agent picked are saved in the cart below.'
             : 'The agent did not put anything in the cart.'}
-        </p>
+        </Banner>
       )}
 
       {run.error ? (
-        <p className="alert" role="alert">
+        <Banner variant="error" compact>
           {run.error}
-        </p>
+        </Banner>
       ) : null}
 
       {outOfSteps ? (
-        <p className="alert alert--soft">
+        <Banner variant="warning" compact>
           The agent ran out of steps before it finished, so some items are
           missing. This list is longer than it could get through in one run.
-        </p>
+        </Banner>
       ) : null}
 
       {stoppedEarly ? (
-        <p className="alert alert--soft">
+        <Banner variant="warning" compact>
           The agent stopped before it finished, so some items may be missing.
           Run it again to shop for what is left.
-        </p>
+        </Banner>
       ) : null}
 
       {paid && summary.savings_cents > 0 && summary.best_single_store ? (
-        <p className="m-0 text-ink">
+        <p>
           Splitting the basket across stores saved {money(summary.savings_cents)}{' '}
           over buying it all at {storeName(summary.best_single_store)} (
           {money(summary.best_single_store_total_cents)}).
@@ -137,30 +147,25 @@ export function RunResult() {
       ) : null}
 
       {unmatched.length ? (
-        <p className="m-0 text-ink">
+        <p>
           <strong>Not found in any store:</strong> {listOf(unmatched)}. The
           stores sell a small range, so buy these yourself.
         </p>
       ) : null}
 
       {left.length ? (
-        <section className="flex flex-col gap-3">
-          <h3 className="recipe__heading">
+        <section className="flex flex-col gap-4 border-t border-line pt-5">
+          <h3 className={headingClass}>
             {paid ? 'Still in the cart, not paid for' : 'In the cart'}
           </h3>
           <CartTable cart={cart} onRemove={removeItem} busy={cartBusy} />
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             {waiting.length ? (
-              <button
-                type="button"
-                className="button"
-                disabled={cartBusy}
-                onClick={approveAll}
-              >
+              <Button disabled={cartBusy} onClick={approveAll}>
                 Keep all {waiting.length} marked &ldquo;Check this&rdquo;
-              </button>
+              </Button>
             ) : null}
-            <p className="fine-print m-0">
+            <p className="max-w-[60ch] text-sm text-mute">
               A saved cart can&rsquo;t be paid for on its own yet. Run the agent
               again and it shops for whatever has not been paid for.
             </p>

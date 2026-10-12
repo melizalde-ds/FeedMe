@@ -1,53 +1,56 @@
 import { useGroceryList } from '../../hooks/useGroceryList'
-import { useHousehold } from '../../hooks/useHousehold'
-import { BuyPanel } from './BuyPanel'
+import { tableClass, tdClass, thClass } from '../ui/table'
 
+// The list itself: what to buy, how much where the recipe says, and which
+// meals it is for. It keeps to a narrow column, so each item names its meals
+// underneath itself.
 export function GroceryList() {
-  const { items, mealCount, week } = useGroceryList()
-  const { preferences } = useHousehold()
+  const { items } = useGroceryList()
 
   const noAmounts = items.some((item) => item.quantity === null)
 
   return (
-    <>
-      <p className="panel__lede">
-        Built from the {mealCount} {mealCount === 1 ? 'meal' : 'meals'} you
-        confirmed in Week {week + 1}, for your household of{' '}
-        {preferences.householdSize}. Leftover slots buy nothing extra.
+    <section className="min-w-0 max-lg:order-2" aria-labelledby="grocery-list-title">
+      <h2 className="text-xl font-bold tracking-tight" id="grocery-list-title">
+        Everything this plan needs
+      </h2>
+      <p className="mt-1 text-sm text-mute">
+        {items.length} {items.length === 1 ? 'item' : 'items'}
       </p>
 
-      <div className="table-wrap">
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th scope="col">Item</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Used in</th>
+      <table className={`${tableClass} mt-3`}>
+        <thead>
+          <tr>
+            <th scope="col" className={thClass}>
+              Item <span className="font-normal">and the meals it is used in</span>
+            </th>
+            <th scope="col" className={`${thClass} text-right`}>
+              Amount
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item) => (
+            <tr key={item.key}>
+              <th scope="row" className={`${tdClass} py-2`}>
+                <span className="block font-semibold first-letter:uppercase">{item.name}</span>
+                <span className="block text-sm text-mute">{item.usedIn.join(', ')}</span>
+              </th>
+              <td className={`${tdClass} py-2 text-right whitespace-nowrap ${item.quantity === null ? 'text-mute' : 'font-semibold'}`}>
+                {item.quantity === null ? '—' : `${item.quantity} ${item.unit}`}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.key}>
-                <th scope="row">{item.name}</th>
-                <td>
-                  {item.quantity === null ? '—' : `${item.quantity} ${item.unit}`}
-                </td>
-                <td className="data-table__muted">{item.usedIn.join(', ')}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
 
       {noAmounts ? (
-        <p className="fine-print">
+        <p className="mt-3 text-sm text-mute">
           Items marked &ldquo;—&rdquo; come from planner recipes, which list
           their ingredients without amounts. Prices come from the stores, when
           the buying agent shops.
         </p>
       ) : null}
-
-      <BuyPanel />
-    </>
+    </section>
   )
 }

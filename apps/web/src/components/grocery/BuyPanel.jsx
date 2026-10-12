@@ -4,6 +4,9 @@ import { useShoppingRun } from '../../hooks/useShoppingRun'
 import { Banner } from '../common/Banner'
 import { LoadingState } from '../common/LoadingState'
 import { Modal } from '../common/Modal'
+import { Button, TextButton, linkClass } from '../ui/Button'
+import { Choice, Hint } from '../ui/Field'
+import { Cart } from '../ui/icons'
 import { CartTable } from './CartTable'
 import { RunResult } from './RunResult'
 
@@ -16,35 +19,29 @@ function ConfirmRun({ modeLabel, onConfirm, onCancel }) {
   const [remember, setRemember] = useState(false)
 
   return (
-    <Modal title="Shop for these groceries?" onClose={onCancel}>
-      <p className="m-0 mb-3 text-ink">
+    <Modal title="Shop for these groceries?" size="narrow" onClose={onCancel}>
+      <p>
         The buying agent will fill a cart at the stores and then ask for{' '}
         <strong>one payment for the whole cart</strong>. It is a Stripe sandbox
         payment, so no real money moves, and it only goes through once it is
         approved in the Link app.
       </p>
-      <p className="m-0 mb-4 text-mute">Shopping mode: {modeLabel}.</p>
+      <p className="mt-3 text-mute">Shopping mode: {modeLabel}.</p>
 
-      <label className="checkbox mb-5">
-        <input
-          type="checkbox"
-          checked={remember}
-          onChange={(event) => setRemember(event.target.checked)}
-        />
-        <span>Do this every time, without asking me first</span>
-      </label>
+      <Choice
+        type="checkbox"
+        className="mt-5"
+        checked={remember}
+        onChange={(event) => setRemember(event.target.checked)}
+      >
+        Do this every time, without asking me first
+      </Choice>
 
-      <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          className="button button--primary"
-          onClick={() => onConfirm(remember)}
-        >
+      <div className="mt-6 flex flex-wrap gap-2">
+        <Button variant="primary" onClick={() => onConfirm(remember)}>
           Yes, shop for them
-        </button>
-        <button type="button" className="button" onClick={onCancel}>
-          Not now
-        </button>
+        </Button>
+        <Button onClick={onCancel}>Not now</Button>
       </div>
     </Modal>
   )
@@ -54,7 +51,7 @@ function ConfirmRun({ modeLabel, onConfirm, onCancel }) {
 // machine running the server approves it.
 function ApprovalNotice({ approval }) {
   return (
-    <p className="alert alert--soft" role="status">
+    <Banner variant="warning" compact>
       <strong>
         Approve the payment of {money(approval.totalCents)} in the Link app.
       </strong>{' '}
@@ -63,13 +60,13 @@ function ApprovalNotice({ approval }) {
       {approval.url ? (
         <>
           {' '}
-          <a href={approval.url} target="_blank" rel="noreferrer">
+          <a href={approval.url} target="_blank" rel="noreferrer" className={linkClass}>
             Open the approval page
           </a>
           .
         </>
       ) : null}
-    </p>
+    </Banner>
   )
 }
 
@@ -108,41 +105,41 @@ export function BuyPanel() {
   }
 
   return (
-    <section className="checkout" aria-labelledby="buy-title">
-      <h2 id="buy-title" className="panel__title">
+    <section className="min-w-0" aria-labelledby="buy-title">
+      <h2 id="buy-title" className="text-xl font-bold tracking-tight">
         Have the buying agent shop for this
       </h2>
-      <p className="panel__lede">
+      <p className="mt-1 max-w-[65ch] text-mute">
         It compares prices across the stores, puts one pack of each ingredient
         in a cart, and asks for one payment at the end.
       </p>
 
-      {ownRecipes.length ? (
-        <p className="alert alert--soft">
-          <strong>Not shopped for:</strong> {listOf(ownRecipes)}. The agent buys
-          from the planner&rsquo;s recipes only, so buy the ingredients for your
-          own recipes yourself.
-        </p>
-      ) : null}
+      <div className="mt-5 flex flex-col gap-5">
+        {ownRecipes.length ? (
+          <Banner variant="warning" compact>
+            <strong>Not shopped for:</strong> {listOf(ownRecipes)}. The agent buys
+            from the planner&rsquo;s recipes only, so buy the ingredients for your
+            own recipes yourself.
+          </Banner>
+        ) : null}
 
-      {meals.length ? (
-        <>
-          <fieldset className="fieldset" disabled={running}>
-            <legend className="fieldset__legend">How should it shop?</legend>
-            <div className="checkbox-grid checkbox-grid--single">
-              {SHOPPING_MODES.map((option) => {
-                const unavailable = option.value === 'auto' && !canAuto
-                return (
-                  <label key={option.value} className="checkbox items-start">
-                    <input
+        {meals.length ? (
+          <>
+            <fieldset className="min-w-0" disabled={running}>
+              <legend className="float-left mb-3 w-full text-base font-bold">How should it shop?</legend>
+              <div className="clear-both grid gap-3 sm:grid-cols-2">
+                {SHOPPING_MODES.map((option) => {
+                  const unavailable = option.value === 'auto' && !canAuto
+                  return (
+                    <Choice
+                      key={option.value}
                       type="radio"
                       name="shopping-mode"
                       value={option.value}
                       checked={mode === option.value}
                       disabled={unavailable}
                       onChange={() => setChosenMode(option.value)}
-                    />
-                    <span>
+                    >
                       <strong>{option.label}</strong>
                       <span className="block text-sm text-mute">
                         {option.detail}
@@ -150,96 +147,100 @@ export function BuyPanel() {
                           ? ' Set a grocery budget in Setup to use this.'
                           : ''}
                       </span>
-                    </span>
-                  </label>
-                )
-              })}
+                    </Choice>
+                  )
+                })}
+              </div>
+              <Hint className="mt-3 max-w-[65ch]">
+                Either way the agent asks for the payment at the end of its run,
+                for everything it picked. Approving that payment is the final
+                check.
+              </Hint>
+            </fieldset>
+
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <Button
+                variant="primary"
+                size="lg"
+                disabled={running || run.phase === 'loading'}
+                onClick={begin}
+              >
+                {running ? null : <Cart size={18} />}
+                {running
+                  ? 'Shopping…'
+                  : hasEarlierRun && sameMeals
+                    ? 'Shop for what is left'
+                    : 'Shop for these groceries'}
+              </Button>
+
+              {autoBuy ? (
+                <p className="text-sm text-mute">
+                  Runs start without asking first.{' '}
+                  <TextButton onClick={askBeforeRuns}>Ask me first</TextButton>
+                </p>
+              ) : null}
             </div>
-            <p className="field__hint">
-              Either way the agent asks for the payment at the end of its run,
-              for everything it picked. Approving that payment is the final
-              check.
-            </p>
-          </fieldset>
+          </>
+        ) : (
+          <p>
+            Every confirmed meal is one of your own recipes, so there is nothing
+            here for the agent to shop for.
+          </p>
+        )}
 
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              className="button button--primary button--large"
-              disabled={running || run.phase === 'loading'}
-              onClick={begin}
-            >
-              {running
-                ? 'Shopping…'
-                : hasEarlierRun && sameMeals
-                  ? 'Shop for what is left'
-                  : 'Shop for these groceries'}
-            </button>
+        {startError ? (
+          <Banner
+            variant="error"
+            title="The agent could not do that"
+            onDismiss={dismissStartError}
+            compact
+          >
+            {startError}
+          </Banner>
+        ) : null}
 
-            {autoBuy ? (
-              <p className="m-0 text-sm text-mute">
-                Runs start without asking first.{' '}
-                <button type="button" className="link-button" onClick={askBeforeRuns}>
-                  Ask me first
-                </button>
-              </p>
+        {hasEarlierRun && !sameMeals && !running ? (
+          <Banner variant="warning" compact>
+            The confirmed meals have changed since the agent last shopped. What
+            is below is from that earlier run; the next run shops for the meals as
+            they are now, as a new order.
+          </Banner>
+        ) : null}
+
+        {run.phase === 'loading' ? (
+          <LoadingState label="Loading your last shopping run…" />
+        ) : null}
+
+        {running ? (
+          <div className="flex flex-col gap-4 border-t border-line pt-5">
+            <LoadingState label={run.status ?? 'Shopping…'} className="py-0 font-semibold text-ink" />
+            {run.note ? (
+              <Banner variant="warning" compact>
+                {run.note}
+              </Banner>
             ) : null}
+            {run.error ? (
+              <Banner variant="error" compact>
+                {run.error}
+              </Banner>
+            ) : null}
+            {run.approval ? <ApprovalNotice approval={run.approval} /> : null}
+            <CartTable cart={run.cart} />
           </div>
-        </>
-      ) : (
-        <p className="m-0 text-ink">
-          Every confirmed meal is one of your own recipes, so there is nothing
-          here for the agent to shop for.
+        ) : null}
+
+        {finished ? (
+          <div className="border-t border-line pt-5">
+            <RunResult />
+          </div>
+        ) : null}
+
+        <p className="max-w-[65ch] text-sm text-mute">
+          The stores are FeedMe&rsquo;s demo stores and payment runs in
+          Stripe&rsquo;s sandbox. Card details never reach this app or our
+          backend.
         </p>
-      )}
-
-      {startError ? (
-        <Banner
-          variant="error"
-          title="The agent could not do that"
-          onDismiss={dismissStartError}
-        >
-          {startError}
-        </Banner>
-      ) : null}
-
-      {hasEarlierRun && !sameMeals && !running ? (
-        <p className="alert alert--soft">
-          The confirmed meals have changed since the agent last shopped. What
-          is below is from that earlier run; the next run shops for the meals as
-          they are now, as a new order.
-        </p>
-      ) : null}
-
-      {run.phase === 'loading' ? (
-        <LoadingState label="Loading your last shopping run…" />
-      ) : null}
-
-      {running ? (
-        <div className="mt-4 flex flex-col gap-3">
-          <LoadingState label={run.status ?? 'Shopping…'} />
-          {run.note ? <p className="alert alert--soft">{run.note}</p> : null}
-          {run.error ? (
-            <p className="alert" role="alert">
-              {run.error}
-            </p>
-          ) : null}
-          {run.approval ? <ApprovalNotice approval={run.approval} /> : null}
-          <CartTable cart={run.cart} />
-        </div>
-      ) : null}
-
-      {finished ? (
-        <div className="mt-4">
-          <RunResult />
-        </div>
-      ) : null}
-
-      <p className="fine-print">
-        The stores are FeedMe&rsquo;s demo stores and payment runs in
-        Stripe&rsquo;s sandbox. Card details never reach this app or our
-        backend.
-      </p>
+      </div>
 
       {asking ? (
         <ConfirmRun

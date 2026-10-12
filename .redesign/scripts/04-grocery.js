@@ -88,7 +88,7 @@ async (page) => {
     await page.getByRole('heading', { name: 'Everything this plan needs' }).waitFor({ timeout: 3000 })
     const lede = await text(page.getByText(/Built from the \d+ meals? you confirmed/))
     const rows = await page.getByRole('table').first().locator('tbody tr').count()
-    const beef = await text(page.getByRole('row', { name: /^Ground beef/ }))
+    const beef = await text(page.getByRole('row', { name: /^Ground beef Sunday/ }))
     const dash = await page.getByRole('table').first().locator('tbody td', { hasText: /^—$/ }).count()
     if (!dash) throw new Error('no item without an amount')
     await page.getByText(/Items marked “—” come from planner recipes/).waitFor()
@@ -132,13 +132,21 @@ async (page) => {
     return mode
   })
 
-  // The real server once, to record what it answers on this machine.
-  await step('run: a live run against the real server ends in its real answer', async () => {
+  // A refusal from the server, played back. The real server is not asked: with
+  // a working stack a run goes all the way to a payment request in the Link
+  // app, and that is the owner's to trigger.
+  await step('run: a run the server refuses says why, in a banner that can be dismissed', async () => {
+    await page.route('**/api/shopping-runs', (route) =>
+      route.fulfill(json({ detail: 'No recipe with id 3370, 8594, 10428' }, 404)))
     await buy().getByRole('button', { name: 'Shop for these groceries' }).click()
     await page.getByRole('dialog').getByRole('button', { name: 'Yes, shop for them' }).click()
-    await buy().getByRole('alert').first().waitFor({ timeout: 120000 })
-    const t = await text(buy().getByRole('alert'))
-    await shot('grocery-run-live')
+    const banner = buy().getByRole('alert').filter({ hasText: 'The agent could not do that' })
+    await banner.waitFor({ timeout: 10000 })
+    const t = await text(banner)
+    await shot('grocery-run-refused')
+    await banner.getByRole('button', { name: 'Dismiss' }).click()
+    if (await banner.count()) throw new Error('banner not dismissed')
+    await page.unroute('**/api/shopping-runs')
     return t
   })
 
@@ -238,7 +246,8 @@ async (page) => {
     cart = SHOP.cartAfter
     await page.reload()
     await nav('Plan').click()
-    await page.getByRole('combobox', { name: 'Breakfast on day 1', exact: true }).selectOption('')
+    await page.getByRole('button', { name: /^Breakfast on Monday/ }).click()
+    await page.locator('#slot-meal').selectOption('')
     await nav('Grocery').click()
     const t = await text(buy().getByText(/The confirmed meals have changed since the agent last shopped/))
     await buy().getByRole('button', { name: 'Shop for these groceries' }).waitFor()
