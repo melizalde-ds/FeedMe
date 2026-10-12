@@ -366,7 +366,7 @@ export function slotOptions(plan, week, day, slotIndex, preferences) {
     return {
       value: encodeSlotValue(recipe.name, false),
       label: problems.length
-        ? `${optionLabel(recipe)} — ${problems[0].message}`
+        ? `${optionLabel(recipe)}: ${problems[0].message}`
         : optionLabel(recipe),
       unsafe: problems.some((problem) => problem.kind === 'allergy'),
       problem: problems.length > 0,

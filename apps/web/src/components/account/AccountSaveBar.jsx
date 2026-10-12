@@ -1,6 +1,6 @@
 import { SAVE_UNAVAILABLE_MESSAGE } from '../../lib/accountSetup'
 import { useAccountSetup } from '../../hooks/useAccountSetup'
-import { ui } from '../ui/styles'
+import { Button } from '../ui/Button'
 
 // Saves a signed-in user's Setup to the account, and says how that went.
 // Generating a plan saves it too.
@@ -13,23 +13,18 @@ export function AccountSaveBar() {
   else if (saveStatus === 'saved') message = 'Saved to your account.'
   else if (saveStatus === 'error') message = saveError
   else if (saveStatus === 'unavailable' || unavailable) message = SAVE_UNAVAILABLE_MESSAGE
-  else if (blocked) message = 'Fix the fields marked above before saving.'
+  else if (blocked) message = 'Fix the marked fields before saving.'
 
   const isProblem = saveStatus === 'error' || (saveStatus === 'idle' && blocked)
 
   return (
-    <div className="mt-4 flex flex-wrap items-center gap-3">
-      <button
-        type="button"
-        className={ui.button}
-        disabled={saveStatus === 'saving'}
-        onClick={() => saveSetup()}
-      >
+    <div>
+      <Button className="w-full" disabled={saveStatus === 'saving'} onClick={() => saveSetup()}>
         Save to my account
-      </button>
+      </Button>
       {message ? (
         <p
-          className={`m-0 text-sm ${isProblem ? 'font-semibold text-bad' : 'text-mute'}`}
+          className={`mt-2 text-sm ${isProblem ? 'font-semibold text-danger' : 'text-mute'}`}
           role={isProblem ? 'alert' : 'status'}
         >
           {message}

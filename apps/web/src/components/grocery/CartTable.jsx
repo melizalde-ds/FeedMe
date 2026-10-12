@@ -1,4 +1,7 @@
 import { HOLD_REASONS, money, storeName } from '../../lib/shopping'
+import { Button } from '../ui/Button'
+import { Alert, Check } from '../ui/icons'
+import { captionClass, tableClass, tdClass, tfootClass, thClass } from '../ui/table'
 
 const bySlug = (totals) =>
   new Map((totals?.stores ?? []).map((store) => [store.store, store]))
@@ -15,51 +18,70 @@ export function CartTable({ cart, onRemove, busy = false }) {
   const totals = bySlug(cart.if_all_approved)
 
   return (
-    <div className="flex flex-col gap-4">
+    // The table scrolls sideways inside its own box on a phone. That box is
+    // `relative` so the visually hidden text in the table (which is absolutely
+    // positioned) is clipped by it too, and cannot widen the page.
+    <div className="flex min-w-0 flex-col gap-6">
       {stores.map((slug) => {
         const lines = items.filter((item) => item.store === slug)
         const total = totals.get(slug)
 
         return (
-          <div key={slug} className="table-wrap">
-            <table className="data-table">
-              <caption className="pb-2 text-left font-semibold text-ink">
-                {storeName(slug)}
-              </caption>
+          <div key={slug} className="relative max-w-full min-w-0 overflow-x-auto">
+            <table className={`${tableClass} min-w-[34rem]`}>
+              <caption className={captionClass}>{storeName(slug)}</caption>
               <thead>
                 <tr>
-                  <th scope="col">Product</th>
-                  <th scope="col">For</th>
-                  <th scope="col">Packs</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Status</th>
+                  <th scope="col" className={thClass}>
+                    Product
+                  </th>
+                  <th scope="col" className={thClass}>
+                    For
+                  </th>
+                  <th scope="col" className={`${thClass} text-right`}>
+                    Packs
+                  </th>
+                  <th scope="col" className={`${thClass} text-right`}>
+                    Price
+                  </th>
+                  <th scope="col" className={thClass}>
+                    Status
+                  </th>
                   {onRemove ? (
-                    <th scope="col">
-                      <span className="visually-hidden">Remove</span>
+                    <th scope="col" className={thClass}>
+                      <span className="sr-only">Remove</span>
                     </th>
                   ) : null}
                 </tr>
               </thead>
               <tbody>
                 {lines.map((item) => (
-                  <tr key={`${item.store}-${item.upc}`}>
-                    <th scope="row">
-                      {item.name}
-                      <span className="block text-sm font-normal text-mute">
-                        {[item.brand, item.size].filter(Boolean).join(' · ')}
+                  <tr key={`${item.store}-${item.upc}`} className="row-in">
+                    <th scope="row" className={tdClass}>
+                      <span className="font-semibold">{item.name}</span>
+                      <span className="block text-sm text-mute">
+                        {[item.brand, item.size].filter(Boolean).join(', ')}
                       </span>
                     </th>
-                    <td className="data-table__muted">{item.for_ingredient}</td>
-                    <td>{item.quantity}</td>
-                    <td>{money(item.unit_price_cents * item.quantity)}</td>
-                    <td>
+                    <td className={`${tdClass} text-mute`}>{item.for_ingredient}</td>
+                    <td className={`${tdClass} text-right`}>{item.quantity}</td>
+                    <td className={`${tdClass} text-right`}>
+                      {money(item.unit_price_cents * item.quantity)}
+                    </td>
+                    <td className={tdClass}>
                       {item.status === 'in_cart' ? (
-                        <span className="chip chip--good">In the cart</span>
+                        <span className="inline-flex items-center gap-1.5 text-ok">
+                          <Check size={14} />
+                          <span>In the cart</span>
+                        </span>
                       ) : (
-                        <span className="chip chip--warn">Check this</span>
+                        <span className="inline-flex items-center gap-1.5 font-bold">
+                          <Alert size={14} />
+                          <span>Check this</span>
+                        </span>
                       )}
                       {item.hold_reasons?.length ? (
-                        <span className="mt-1 block text-sm text-mute">
+                        <span className="block text-sm text-mute">
                           {item.hold_reasons
                             .map((reason) => HOLD_REASONS[reason] ?? reason)
                             .join('; ')}
@@ -67,16 +89,11 @@ export function CartTable({ cart, onRemove, busy = false }) {
                       ) : null}
                     </td>
                     {onRemove ? (
-                      <td>
-                        <button
-                          type="button"
-                          className="button button--small"
-                          disabled={busy}
-                          onClick={() => onRemove(item.store, item.upc)}
-                        >
+                      <td className={`${tdClass} text-right`}>
+                        <Button size="sm" disabled={busy} onClick={() => onRemove(item.store, item.upc)}>
                           Remove
-                          <span className="visually-hidden"> {item.name}</span>
-                        </button>
+                          <span className="sr-only"> {item.name}</span>
+                        </Button>
                       </td>
                     ) : null}
                   </tr>
@@ -85,7 +102,7 @@ export function CartTable({ cart, onRemove, busy = false }) {
               {total ? (
                 <tfoot>
                   <tr>
-                    <th scope="row" colSpan="3">
+                    <th scope="row" colSpan="3" className={tfootClass}>
                       {storeName(slug)} total
                       <span className="block text-sm font-normal text-mute">
                         {total.delivery_fee_cents
@@ -93,7 +110,8 @@ export function CartTable({ cart, onRemove, busy = false }) {
                           : 'free delivery'}
                       </span>
                     </th>
-                    <td colSpan={onRemove ? 3 : 2}>{money(total.total_cents)}</td>
+                    <td className={`${tfootClass} text-right`}>{money(total.total_cents)}</td>
+                    <td colSpan={onRemove ? 2 : 1} />
                   </tr>
                 </tfoot>
               ) : null}
@@ -102,7 +120,7 @@ export function CartTable({ cart, onRemove, busy = false }) {
         )
       })}
 
-      <p className="m-0 font-semibold text-ink">
+      <p className="text-lg font-bold tracking-tight">
         Cart total, delivery included: {money(cart.if_all_approved?.total_cents)}
       </p>
     </div>

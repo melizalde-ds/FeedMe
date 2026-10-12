@@ -1,47 +1,54 @@
 import { useEffect, useRef } from 'react'
+import { IconButton } from '../ui/Button'
+import { cx } from '../ui/cx'
+import { Close } from '../ui/icons'
 
-export function Modal({ title, onClose, children }) {
-  const panelRef = useRef(null)
+// For the few tasks that need the whole screen's attention: writing a recipe,
+// confirming a shopping run. A native <dialog>, so the browser keeps focus
+// inside it and makes the page behind it inert. Escape and a click on the
+// backdrop both close it.
+export function Modal({ title, onClose, children, size = 'wide' }) {
+  const dialog = useRef(null)
 
   useEffect(() => {
-    const onKeyDown = (event) => {
-      if (event.key === 'Escape') onClose()
-    }
-
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    document.addEventListener('keydown', onKeyDown)
-    panelRef.current?.focus()
-
+    const el = dialog.current
+    // The dialog leaves the page when it closes, so the browser can't hand
+    // focus back by itself.
+    const opener = document.activeElement
+    if (!el.open) el.showModal()
     return () => {
-      document.removeEventListener('keydown', onKeyDown)
-      document.body.style.overflow = previousOverflow
+      el.close()
+      if (opener?.isConnected) opener.focus()
     }
-  }, [onClose])
+  }, [])
 
   return (
-    <div
-      className="modal"
+    <dialog
+      ref={dialog}
+      aria-label={title}
+      className={cx(
+        'sheet m-auto max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] overflow-y-auto overscroll-contain rounded-panel border border-line bg-raise text-ink shadow-overlay',
+        size === 'narrow' ? 'max-w-lg' : 'max-w-3xl',
+      )}
+      onCancel={(event) => {
+        event.preventDefault()
+        onClose()
+      }}
       onClick={(event) => {
+        // The dialog's own box is filled by the panel below, so a click that
+        // lands on the dialog itself is a click on the backdrop.
         if (event.target === event.currentTarget) onClose()
       }}
     >
-      <div
-        className="modal__panel"
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        tabIndex={-1}
-        ref={panelRef}
-      >
-        <div className="modal__bar">
-          <h2 className="modal__title">{title}</h2>
-          <button type="button" className="button button--ghost" onClick={onClose}>
-            Close
-          </button>
+      <div className="p-5 sm:p-6">
+        <div className="mb-3 flex items-start justify-between gap-4">
+          <h2 className="text-2xl font-extrabold tracking-tight text-balance">{title}</h2>
+          <IconButton onClick={onClose} aria-label="Close">
+            <Close />
+          </IconButton>
         </div>
-        <div className="modal__body">{children}</div>
+        {children}
       </div>
-    </div>
+    </dialog>
   )
 }

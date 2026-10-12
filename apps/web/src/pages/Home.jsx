@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Navigate } from 'react-router'
-import { CURRENT_WEEK } from '../lib/constants'
 import { accountDefaults } from '../lib/accountSetup'
 import { isWeekEmpty } from '../lib/planner'
 import {
@@ -25,20 +24,21 @@ import { GroceryView } from '../components/grocery/GroceryView'
 const ACCOUNT_DEFAULTS = accountDefaults()
 
 function Shell() {
-  const { plan } = useMealPlan()
+  const { plan, canUndo } = useMealPlan()
   const [view, setView] = useState('setup')
 
   const groceryReady = plan.confirmedWeek !== null && plan.confirmedWeek !== undefined
-  const hasPlan = !isWeekEmpty(plan, CURRENT_WEEK)
+  const hasPlan = plan.weeks.some((_, week) => !isWeekEmpty(plan, week))
 
-  // The plan step is only meaningful once something has been planned.
-  const current = view === 'plan' && !hasPlan ? 'setup' : view
+  // The plan step is only meaningful once something has been planned. A week
+  // that was just cleared still counts: its Undo is on the Plan step.
+  const current = view === 'plan' && !hasPlan && !canUndo ? 'setup' : view
 
   return (
-    <div className="app">
+    <div className="min-h-dvh">
       <AppHeader view={current} onNavigate={setView} groceryReady={groceryReady} />
 
-      <main className="app__main" id="main">
+      <main className="mx-auto max-w-[1560px] px-4 pt-6 pb-24 sm:px-8 sm:pt-8" id="main">
         {current === 'setup' ? (
           <SetupView onSeePlan={() => setView('plan')} />
         ) : null}
@@ -87,7 +87,7 @@ function AccountApp({ userId }) {
 export default function Home() {
   const { user, loading } = useAuth()
 
-  if (loading) return <LoadingState label="Loading FeedMe…" />
+  if (loading) return <LoadingState label="Loading FeedMe…" className="min-h-dvh justify-center" />
   if (!user) return <Navigate to="/login" replace />
 
   // Keyed so signing in as someone else starts every provider afresh.

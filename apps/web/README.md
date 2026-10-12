@@ -3,10 +3,10 @@
 The React app for FeedMe. One signed-in screen in three steps:
 
 1. **Setup.** Allergies first, then diet, tastes, nutrition goals, budget and cooking time.
-2. **Plan.** The week grid, with alternatives for each meal, recipe details and a nutrition summary.
+2. **Plan.** The week as a wall of recipe photographs, one rail per meal. Opening a meal unfolds its recipe and its alternatives; a row above the wall sums up each day.
 3. **Grocery.** The grocery list for the plan, and the buying agent's run, cart and payment approval.
 
-Built with React 19, Vite, Tailwind CSS 4 and React Router.
+Built with React 19, Vite, Tailwind CSS 4 and React Router. The design system (colour, type, components, motion) is described in [`DESIGN.md`](DESIGN.md).
 
 ## How it talks to the backend
 
@@ -24,6 +24,8 @@ Setup is saved to the account. The plan and the user's own recipes are kept in b
 |---|---|
 | `src/pages/` | Home, sign-in and registration |
 | `src/components/` | The views, grouped by step: `setup`, `plan`, `grocery`, plus `account`, `recipes` and `common` |
+| `src/components/ui/` | The shared pieces every view is built from: buttons, fields, icons, table styles |
+| `src/styles/` | The design tokens and Tailwind theme (`app.css`), and the photo wall's own styles (`wall.css`) |
 | `src/contexts/`, `src/hooks/` | State for auth, household, meal plan, own recipes and shopping runs |
 | `src/lib/` | API client, planner helpers, the allergy check and validation |
 

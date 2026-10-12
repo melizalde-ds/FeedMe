@@ -1,4 +1,3 @@
-import { SLOT_LABELS, MEAL_SLOTS } from '../../lib/constants'
 import {
   decodeSlotValue,
   encodeSlotValue,
@@ -6,8 +5,11 @@ import {
 } from '../../lib/planner'
 import { useHousehold } from '../../hooks/useHousehold'
 import { useMealPlan } from '../../hooks/useMealPlan'
+import { Hint, Label, inputClass } from '../ui/Field'
 
-export function SlotPicker({ week, day, slotIndex, onOpenRecipe }) {
+// The two controls that change one meal: which recipe it is, and how many
+// people it is cooked for. They sit in the recipe shelf, one meal at a time.
+export function SlotPicker({ week, day, slotIndex }) {
   const { plan, setSlot, setSlotServings } = useMealPlan()
   const { preferences } = useHousehold()
 
@@ -26,61 +28,64 @@ export function SlotPicker({ week, day, slotIndex, onOpenRecipe }) {
         }
       : null
 
-  const label = `${SLOT_LABELS[MEAL_SLOTS[slotIndex]]} on day ${day + 1}`
-
   return (
-    <div className="slot">
-      <select
-        className={`slot__select${slot.recipe ? '' : ' is-empty'}`}
-        aria-label={label}
-        value={value}
-        onChange={(event) =>
-          setSlot(week, day, slotIndex, decodeSlotValue(event.target.value))
-        }
-      >
-        <option value="">Choose a meal</option>
-        {orphan ? <option value={orphan.value}>{orphan.label}</option> : null}
-        <optgroup label="Recipes">
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </optgroup>
-        {leftovers.length ? (
-          <optgroup label="Leftovers">
-            {leftovers.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </optgroup>
-        ) : null}
-      </select>
+    <div>
+      <div className="grid max-w-xl grid-cols-[minmax(0,1fr)_6rem] gap-3">
+        <div>
+          <Label htmlFor="slot-meal" className="mb-1.5">
+            {slot.recipe ? 'Change this meal' : 'Meal'}
+          </Label>
+          <select
+            id="slot-meal"
+            className={inputClass}
+            value={value}
+            onChange={(event) =>
+              setSlot(week, day, slotIndex, decodeSlotValue(event.target.value))
+            }
+          >
+            <option value="">Choose a meal</option>
+            {orphan ? <option value={orphan.value}>{orphan.label}</option> : null}
+            <optgroup label="Recipes">
+              {options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </optgroup>
+            {leftovers.length ? (
+              <optgroup label="Leftovers">
+                {leftovers.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </optgroup>
+            ) : null}
+          </select>
+        </div>
 
-      <input
-        className="slot__servings"
-        type="number"
-        min="1"
-        inputMode="numeric"
-        placeholder={preferences.householdSize}
-        title="People for this meal. Leave blank to use your household size."
-        aria-label={`People for ${label}`}
-        value={slot.servings ?? ''}
-        onChange={(event) =>
-          setSlotServings(week, day, slotIndex, event.target.value)
-        }
-      />
-
-      {slot.recipe ? (
-        <button
-          type="button"
-          className="button button--ghost button--small"
-          onClick={() => onOpenRecipe({ week, day, slotIndex })}
-        >
-          Recipe
-        </button>
-      ) : null}
+        <div>
+          <Label htmlFor="slot-people" className="mb-1.5">
+            People
+          </Label>
+          <input
+            id="slot-people"
+            className={inputClass}
+            type="number"
+            min="1"
+            inputMode="numeric"
+            placeholder={preferences.householdSize}
+            aria-describedby="slot-people-hint"
+            value={slot.servings ?? ''}
+            onChange={(event) =>
+              setSlotServings(week, day, slotIndex, event.target.value)
+            }
+          />
+        </div>
+      </div>
+      <Hint id="slot-people-hint">
+        Leave People blank to cook for your household of {preferences.householdSize}.
+      </Hint>
     </div>
   )
 }

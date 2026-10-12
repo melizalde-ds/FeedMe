@@ -7,7 +7,9 @@ import {
   passwordProblem,
 } from '../../lib/authErrors'
 import { useAuth } from '../../hooks/useAuth'
-import { ui } from '../ui/styles'
+import { Banner } from '../common/Banner'
+import { Button, linkClass } from '../ui/Button'
+import { FieldError, Hint, Label, inputClass } from '../ui/Field'
 
 // The sign-in and register forms share everything but their words.
 // `onSubmit` resolves to { error } or anything else on success.
@@ -50,38 +52,36 @@ export function AuthForm({ mode, onSubmit, notice }) {
   const title = registering ? 'Create your account' : 'Sign in'
 
   return (
-    <section className={`${ui.card} w-full max-w-md`} aria-labelledby="auth-title">
-      <h1 id="auth-title" className="m-0 mb-2 font-prose text-3xl text-ink">
+    <section className="w-full" aria-labelledby="auth-title">
+      <h1 id="auth-title" className="text-3xl font-extrabold tracking-tight">
         {title}
       </h1>
-      <p className="m-0 mb-6 text-mute">
+      <p className="mt-2 text-mute">
         {registering
           ? 'FeedMe plans meals around your household’s allergies, diet and budget. Create an account to start.'
           : 'Sign in to plan your household’s meals.'}
       </p>
 
       {notice ? (
-        <p className={`${ui.notice} mb-4`} role="status">
+        <Banner compact className="mt-5">
           {notice}
-        </p>
+        </Banner>
       ) : null}
 
       {!configured ? (
-        <p className={`${ui.alert} mb-4`} role="alert">
+        <Banner variant="error" compact className="mt-5">
           {AUTH_NOT_CONFIGURED}
-        </p>
+        </Banner>
       ) : null}
 
-      <form noValidate onSubmit={submit} className="flex flex-col gap-4">
+      <form noValidate onSubmit={submit} className="mt-6 flex flex-col gap-5">
         <div>
-          <label className={ui.label} htmlFor="auth-email">
-            Email
-          </label>
+          <Label htmlFor="auth-email">Email</Label>
           <input
             id="auth-email"
             type="email"
             autoComplete="email"
-            className={ui.input}
+            className={`${inputClass} mt-1.5`}
             value={values.email}
             onChange={change('email')}
             onBlur={blur('email')}
@@ -89,22 +89,16 @@ export function AuthForm({ mode, onSubmit, notice }) {
             aria-describedby={shown('email') ? 'auth-email-error' : undefined}
             disabled={!configured || pending}
           />
-          {shown('email') ? (
-            <p id="auth-email-error" className={ui.error}>
-              {shown('email')}
-            </p>
-          ) : null}
+          {shown('email') ? <FieldError id="auth-email-error">{shown('email')}</FieldError> : null}
         </div>
 
         <div>
-          <label className={ui.label} htmlFor="auth-password">
-            Password
-          </label>
+          <Label htmlFor="auth-password">Password</Label>
           <input
             id="auth-password"
             type="password"
             autoComplete={registering ? 'new-password' : 'current-password'}
-            className={ui.input}
+            className={`${inputClass} mt-1.5`}
             value={values.password}
             onChange={change('password')}
             onBlur={blur('password')}
@@ -119,23 +113,19 @@ export function AuthForm({ mode, onSubmit, notice }) {
             disabled={!configured || pending}
           />
           {shown('password') ? (
-            <p id="auth-password-error" className={ui.error}>
-              {shown('password')}
-            </p>
+            <FieldError id="auth-password-error">{shown('password')}</FieldError>
           ) : registering ? (
-            <p id="auth-password-hint" className={ui.hint}>
-              At least {MIN_PASSWORD_LENGTH} characters.
-            </p>
+            <Hint id="auth-password-hint">At least {MIN_PASSWORD_LENGTH} characters.</Hint>
           ) : null}
         </div>
 
         {error ? (
-          <p className={ui.alert} role="alert">
+          <Banner variant="error" compact>
             {error}
-          </p>
+          </Banner>
         ) : null}
 
-        <button type="submit" className={ui.buttonPrimary} disabled={!configured || pending}>
+        <Button type="submit" variant="primary" size="lg" disabled={!configured || pending}>
           {pending
             ? registering
               ? 'Creating your account…'
@@ -143,12 +133,12 @@ export function AuthForm({ mode, onSubmit, notice }) {
             : registering
               ? 'Create account'
               : 'Sign in'}
-        </button>
+        </Button>
       </form>
 
-      <p className="m-0 mt-6 text-ink">
+      <p className="mt-6">
         {registering ? 'Already have an account? ' : 'New to FeedMe? '}
-        <Link to={registering ? '/login' : '/register'} className={ui.link}>
+        <Link to={registering ? '/login' : '/register'} className={linkClass}>
           {registering ? 'Sign in' : 'Create an account'}
         </Link>
       </p>

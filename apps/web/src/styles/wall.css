@@ -1,0 +1,421 @@
+/* The parts of the Wall that utilities can't express: the photo tile and its
+   reading shade, the wall stepping back from the tile in hand, the ruled
+   block for a recipe with no photograph, and the keyframes. */
+@layer components {
+  /* --- the photo tile ---------------------------------------------------- */
+
+  .tile {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--radius-tile);
+    background: var(--none);
+    color: #ffffff;
+    text-align: left;
+    transition:
+      transform 200ms var(--ease-out),
+      scale 160ms var(--ease-out),
+      opacity 200ms var(--ease-out),
+      box-shadow 200ms var(--ease-out);
+  }
+
+  /* Pressed: it gives a little, like every other button. */
+  .tile:active {
+    scale: 0.98;
+  }
+
+  /* A photograph arrives with a short fade: when the wall first fills in,
+     column by column, and when a meal changes, so the tile never blinks from
+     one dish to another. The column's delay is set on the image itself. */
+  .tile__photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      opacity 200ms var(--ease-out),
+      filter 200ms var(--ease-out);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  /* No photograph to show: a ruled block, so it never reads as a broken image. */
+  .ruled {
+    background-color: var(--none);
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0 11px,
+      rgb(255 255 255 / 0.07) 11px 12px
+    );
+  }
+
+  /* The reading shade under the title. */
+  .tile::after {
+    content: '';
+    position: absolute;
+    inset: 30% 0 0;
+    background: linear-gradient(
+      to top,
+      rgb(var(--shade) / 0.95) 0%,
+      rgb(var(--shade) / 0.74) 44%,
+      rgb(var(--shade) / 0) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* The title sits at the foot of the tile with its details tucked below
+     the edge; pointing at the tile slides both up into view. */
+  .tile__body {
+    --tuck: 2.25rem;
+    position: absolute;
+    inset: auto 10px 10px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(var(--tuck));
+    transition: transform 200ms var(--ease-out);
+  }
+
+  .tile__body:not(:has(.tile__more)) {
+    transform: none;
+  }
+
+  .tile__name {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: var(--text-base);
+    font-weight: 700;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  /* What the tile tells you when you point at it. */
+  .tile__more {
+    height: 2rem;
+    margin-top: 0.25rem;
+    overflow: hidden;
+    opacity: 0;
+    font-size: var(--text-xs);
+    line-height: 1.35;
+    color: var(--on-photo-soft);
+    transition: opacity 200ms var(--ease-out);
+  }
+
+  /* In hand: by keyboard, or because its recipe is open. */
+  .tile:is(:focus-visible, [data-on]) {
+    z-index: 2;
+    transform: scale(1.05);
+    box-shadow:
+      0 0 0 3px var(--lime),
+      var(--pop);
+  }
+
+  .tile:is(:focus-visible, [data-on]) .tile__body {
+    transform: none;
+  }
+
+  .tile:is(:focus-visible, [data-on]) .tile__more {
+    opacity: 1;
+  }
+
+  /* The lime ring is the focus indicator here. */
+  .tile:focus-visible {
+    outline: none;
+  }
+
+  .tile[data-bad] {
+    box-shadow: 0 0 0 3px var(--danger-fill);
+  }
+
+  .tile[data-bad]:is(:focus-visible, [data-on]) {
+    box-shadow:
+      0 0 0 3px var(--danger-fill),
+      0 0 0 6px var(--lime),
+      var(--pop);
+  }
+
+  .tile[data-leftover] .tile__photo {
+    filter: saturate(0.3);
+  }
+
+  .tile[data-rejected] .tile__photo {
+    filter: grayscale(1) brightness(0.6);
+  }
+
+  .tile--empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: none;
+    color: var(--mute);
+    box-shadow: inset 0 0 0 1.5px var(--line-strong);
+  }
+
+  .tile--empty::after {
+    display: none;
+  }
+
+  .tile--empty:is(:focus-visible, [data-on]) {
+    transform: none;
+    color: var(--ink);
+    box-shadow: inset 0 0 0 3px var(--accent);
+  }
+
+  /* The signature: the rest of the wall steps back from the tile in hand. */
+  .wall:has(.tile:focus-visible) .tile:not(:focus-visible, [data-on]) {
+    opacity: 0.55;
+  }
+
+  /* The same by mouse. Only where there is a real pointer: a tap on a touch
+     screen leaves :hover stuck on the tile. */
+  @media (hover: hover) and (pointer: fine) {
+    .tile:hover {
+      z-index: 2;
+      transform: scale(1.05);
+      box-shadow:
+        0 0 0 3px var(--lime),
+        var(--pop);
+    }
+
+    .tile:hover .tile__body {
+      transform: none;
+    }
+
+    .tile:hover .tile__more {
+      opacity: 1;
+    }
+
+    .tile[data-bad]:hover {
+      box-shadow:
+        0 0 0 3px var(--danger-fill),
+        0 0 0 6px var(--lime),
+        var(--pop);
+    }
+
+    .tile--empty:hover {
+      transform: none;
+      color: var(--ink);
+      box-shadow: inset 0 0 0 3px var(--accent);
+    }
+
+    .wall:has(.tile:hover) .tile:not(:hover, :focus-visible, [data-on]) {
+      opacity: 0.55;
+    }
+  }
+
+  /* What there is to say about a meal, on the line under its photograph. It
+     eases in, because it was not there a moment ago. */
+  .tile-note {
+    transition:
+      opacity 160ms var(--ease-out),
+      scale 160ms var(--ease-out);
+
+    @starting-style {
+      opacity: 0;
+      scale: 0.9;
+    }
+  }
+
+  /* --- rails ------------------------------------------------------------- */
+
+  .rail {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .rail__tiles {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  /* On a phone each rail scrolls sideways through the week. */
+  @media (width < 64rem) {
+    .rail {
+      display: block;
+    }
+
+    .rail__tiles {
+      position: relative;
+      display: flex;
+      margin-inline: -1rem;
+      padding: 6px 1rem 10px;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      scroll-padding-inline: 1rem;
+      scrollbar-width: thin;
+    }
+
+    .rail__tiles > li {
+      flex: 0 0 150px;
+      scroll-snap-align: start;
+    }
+
+    .tile__body {
+      transform: none;
+    }
+
+    .tile__more {
+      height: auto;
+      opacity: 1;
+    }
+
+    .tile:is(:hover, :focus-visible, [data-on]) {
+      transform: none;
+    }
+  }
+
+  /* --- motion ------------------------------------------------------------ */
+
+  /* The recipe shelf unfolding under its rail. */
+  .unfold {
+    animation: unfold 280ms var(--ease-out) both;
+  }
+
+  @keyframes unfold {
+    from {
+      opacity: 0;
+      clip-path: inset(0 0 100% 0);
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      clip-path: inset(0 0 0 0);
+      transform: none;
+    }
+  }
+
+  /* Something still on its way: the loading dot and the waiting tiles. */
+  .pulse {
+    animation: pulse 1.4s var(--ease-in-out) infinite both;
+  }
+
+  @keyframes pulse {
+    50% {
+      background-color: var(--line);
+    }
+  }
+
+  dialog.sheet[open] {
+    animation: sheet-in 220ms var(--ease-out) both;
+  }
+
+  dialog.sheet::backdrop {
+    background: rgb(var(--shade) / 0.62);
+    animation: fade-in 220ms var(--ease-out) both;
+  }
+
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.985);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  /* A notice arriving: it was not there a moment ago, so it eases in. */
+  .notice {
+    transition:
+      opacity 200ms var(--ease-out),
+      translate 200ms var(--ease-out);
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 -4px;
+    }
+  }
+
+  /* A row the buying agent has just added to the cart. */
+  .row-in {
+    transition: opacity 240ms var(--ease-out);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  /* The one celebration: a week confirmed. Its tick draws itself, and the
+     way on to the grocery list steps forward. */
+  .draw path {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    animation: draw 400ms var(--ease-out) 120ms forwards;
+  }
+
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .arrive {
+    transition:
+      opacity 240ms var(--ease-out),
+      scale 240ms var(--ease-out);
+
+    @starting-style {
+      opacity: 0;
+      scale: 0.96;
+    }
+  }
+
+  /* Reduced motion: keep the fades that explain a change, drop everything
+     that moves or grows. */
+  @media (prefers-reduced-motion: reduce) {
+    .tile:is(:hover, :focus-visible, [data-on]) {
+      transform: none;
+    }
+
+    .tile__body {
+      transform: none;
+      transition: none;
+    }
+
+    .tile__more {
+      opacity: 1;
+    }
+
+    /* No waiting for the wall to fill in column by column. */
+    .tile__photo {
+      transition-delay: 0s !important;
+    }
+
+    .unfold,
+    dialog.sheet[open] {
+      animation-name: fade-in;
+    }
+
+    .notice,
+    .tile-note,
+    .arrive {
+      @starting-style {
+        translate: none;
+        scale: none;
+      }
+    }
+
+    .draw path {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+
+    .pulse {
+      animation-duration: 2.8s;
+    }
+  }
+}

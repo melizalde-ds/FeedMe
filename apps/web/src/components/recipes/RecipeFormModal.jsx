@@ -17,23 +17,37 @@ import {
 import { useCustomRecipes } from '../../hooks/useCustomRecipes'
 import { useHousehold } from '../../hooks/useHousehold'
 import { useMealPlan } from '../../hooks/useMealPlan'
+import { Banner } from '../common/Banner'
 import { Modal } from '../common/Modal'
+import { Button, IconButton } from '../ui/Button'
+import { Choice, FieldError, Hint, Label, inputClass } from '../ui/Field'
+import { Alert, Plus, Trash } from '../ui/icons'
 
-function Field({ id, label, hint, error, children }) {
+function Field({ id, label, hint, error, children, className }) {
   return (
-    <div className="field">
-      <label className="field__label" htmlFor={id}>
+    <div className={className}>
+      <Label htmlFor={id} className="mb-1.5">
         {label}
-      </label>
+      </Label>
       {children}
-      {error ? (
-        <p className="field__error" role="alert">
-          {error}
-        </p>
-      ) : hint ? (
-        <p className="field__hint">{hint}</p>
-      ) : null}
+      {error ? <FieldError role="alert">{error}</FieldError> : hint ? <Hint>{hint}</Hint> : null}
     </div>
+  )
+}
+
+// The label each ingredient box shows on a phone.
+const ROW_LABEL = 'mb-1 block text-xs font-semibold text-mute sm:hidden'
+
+// One part of the form: a heading and its fields, under a hairline.
+function Part({ legend, lede, children }) {
+  return (
+    <fieldset className="min-w-0 border-t border-line pt-5">
+      <legend className="float-left mb-1 flex w-full items-center gap-2 text-lg font-bold tracking-tight">
+        {legend}
+      </legend>
+      {lede ? <p className="clear-both max-w-[56ch] text-sm text-mute">{lede}</p> : null}
+      <div className="clear-both pt-3">{children}</div>
+    </fieldset>
   )
 }
 
@@ -150,112 +164,99 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
       title={previousName ? `Edit ${previousName}` : 'Add your own recipe'}
       onClose={onClose}
     >
-      <p className="modal__context">
+      <p className="max-w-[56ch] text-mute">
         Enter the amounts and macros for the whole recipe. We divide them by the
         servings it makes, so a meal can be cooked for any number of people.
       </p>
 
-      <form onSubmit={submit} noValidate>
-        <fieldset className="fieldset">
-          <legend className="fieldset__legend">The basics</legend>
+      <form onSubmit={submit} noValidate className="mt-6 flex flex-col gap-8">
+        <Part legend="The basics">
+          <div className="grid gap-x-4 gap-y-5 sm:grid-cols-4">
+            <Field id="recipe-name" label="Recipe name" error={show('name')} className="sm:col-span-4">
+              <input
+                id="recipe-name"
+                type="text"
+                className={inputClass}
+                value={draft.name}
+                maxLength={80}
+                placeholder="e.g. Grandma's Sunday Chili"
+                aria-invalid={Boolean(show('name'))}
+                onChange={(event) => setField('name', event.target.value)}
+              />
+            </Field>
 
-          <Field id="recipe-name" label="Recipe name" error={show('name')}>
-            <input
-              id="recipe-name"
-              type="text"
-              className="input"
-              value={draft.name}
-              maxLength={80}
-              placeholder="e.g. Grandma's Sunday Chili"
-              onChange={(event) => setField('name', event.target.value)}
-            />
-          </Field>
-
-          <div className="field">
-            <span className="field__label">Meals it can fill</span>
-            <div className="checkbox-grid">
-              {MEAL_SLOTS.map((slot) => (
-                <label key={slot} className="checkbox">
-                  <input
+            <div className="sm:col-span-2">
+              <span className="mb-1.5 block text-ui font-semibold">Meals it can fill</span>
+              <div className="flex min-h-10.5 flex-wrap items-center gap-x-5 gap-y-2">
+                {MEAL_SLOTS.map((slot) => (
+                  <Choice
+                    key={slot}
                     type="checkbox"
                     checked={draft.slots.includes(slot)}
                     onChange={() => toggleInList('slots', slot)}
-                  />
-                  <span>{SLOT_LABELS[slot]}</span>
-                </label>
-              ))}
+                  >
+                    {SLOT_LABELS[slot]}
+                  </Choice>
+                ))}
+              </div>
+              {show('slots') ? (
+                <FieldError role="alert">{errors.slots}</FieldError>
+              ) : (
+                <Hint>
+                  Pick every meal this would do for. The planner only offers it
+                  for these.
+                </Hint>
+              )}
             </div>
-            {show('slots') ? (
-              <p className="field__error" role="alert">
-                {errors.slots}
-              </p>
-            ) : (
-              <p className="field__hint">
-                Pick every meal this would do for. The planner only offers it
-                for these.
-              </p>
-            )}
-          </div>
 
-          <div className="number-grid">
-            <Field
-              id="recipe-servings"
-              label="Servings it makes"
-              error={show('makesServings')}
-            >
+            <Field id="recipe-servings" label="Servings it makes" error={show('makesServings')}>
               <input
                 id="recipe-servings"
                 type="number"
-                className="input"
+                className={inputClass}
                 min="1"
                 max="50"
                 step="1"
                 value={draft.makesServings}
+                aria-invalid={Boolean(show('makesServings'))}
                 onChange={(event) =>
                   setField('makesServings', event.target.value)
                 }
               />
             </Field>
 
-            <Field
-              id="recipe-time"
-              label="Cooking time (min)"
-              error={show('cookTimeMinutes')}
-            >
+            <Field id="recipe-time" label="Cooking time (min)" error={show('cookTimeMinutes')}>
               <input
                 id="recipe-time"
                 type="number"
-                className="input"
+                className={inputClass}
                 min="0"
                 max="600"
                 step="5"
                 value={draft.cookTimeMinutes}
+                aria-invalid={Boolean(show('cookTimeMinutes'))}
                 onChange={(event) =>
                   setField('cookTimeMinutes', event.target.value)
                 }
               />
             </Field>
           </div>
-        </fieldset>
+        </Part>
 
-        <fieldset className="fieldset">
-          <legend className="fieldset__legend">
-            Macros for the whole recipe
-          </legend>
-          <p className="fieldset__lede">
-            Your numbers, not ours. We show them per serving and label them as
-            yours wherever they appear.
-          </p>
-
-          <div className="number-grid">
+        <Part
+          legend="Macros for the whole recipe"
+          lede="Your numbers, not ours. We show them per serving and label them as yours wherever they appear."
+        >
+          <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
             <Field id="recipe-calories" label="Calories" error={show('calories')}>
               <input
                 id="recipe-calories"
                 type="number"
-                className="input"
+                className={inputClass}
                 min="0"
                 step="10"
                 value={draft.calories}
+                aria-invalid={Boolean(show('calories'))}
                 onChange={(event) => setField('calories', event.target.value)}
               />
             </Field>
@@ -264,10 +265,11 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
               <input
                 id="recipe-protein"
                 type="number"
-                className="input"
+                className={inputClass}
                 min="0"
                 step="1"
                 value={draft.protein}
+                aria-invalid={Boolean(show('protein'))}
                 onChange={(event) => setField('protein', event.target.value)}
               />
             </Field>
@@ -276,10 +278,11 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
               <input
                 id="recipe-carbs"
                 type="number"
-                className="input"
+                className={inputClass}
                 min="0"
                 step="1"
                 value={draft.carbs}
+                aria-invalid={Boolean(show('carbs'))}
                 onChange={(event) => setField('carbs', event.target.value)}
               />
             </Field>
@@ -288,22 +291,23 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
               <input
                 id="recipe-fat"
                 type="number"
-                className="input"
+                className={inputClass}
                 min="0"
                 step="1"
                 value={draft.fat}
+                aria-invalid={Boolean(show('fat'))}
                 onChange={(event) => setField('fat', event.target.value)}
               />
             </Field>
           </div>
 
           {validated ? (
-            <p className="fieldset__summary" role="status">
+            <p className="mt-3 font-semibold" role="status">
               Per serving, across {servings}{' '}
               {servings === 1 ? 'serving' : 'servings'}: about{' '}
-              {validated.nutritionPerServing.calories} kcal ·{' '}
-              {validated.nutritionPerServing.protein} g protein ·{' '}
-              {validated.nutritionPerServing.carbs} g carbs ·{' '}
+              {validated.nutritionPerServing.calories} kcal,{' '}
+              {validated.nutritionPerServing.protein} g protein,{' '}
+              {validated.nutritionPerServing.carbs} g carbs,{' '}
               {validated.nutritionPerServing.fat} g fat.
             </p>
           ) : null}
@@ -312,11 +316,12 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
             id="recipe-nutrition-source"
             label="Where the numbers come from (optional)"
             hint="Shown next to the macros, so nobody mistakes an estimate for a verified value."
+            className="mt-5"
           >
             <input
               id="recipe-nutrition-source"
               type="text"
-              className="input"
+              className={inputClass}
               value={draft.nutritionSource}
               placeholder="e.g. Added up from the package labels"
               onChange={(event) =>
@@ -324,17 +329,18 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
               }
             />
           </Field>
-        </fieldset>
+        </Part>
 
-        <fieldset className="fieldset">
-          <legend className="fieldset__legend">Ingredients</legend>
-          <p className="fieldset__lede">
-            Amounts and prices for the whole recipe. Prices keep your budget and
-            grocery list honest.
-          </p>
-
-          <ul className="ingredient-rows">
-            <li className="ingredient-row ingredient-row--head" aria-hidden="true">
+        <Part
+          legend="Ingredients"
+          lede="Amounts and prices for the whole recipe. Prices keep your budget and grocery list honest."
+        >
+          {/* name, amount, unit, cost, remove; on a phone the name takes a line */}
+          <ul className="grid gap-2">
+            <li
+              className="grid grid-cols-[minmax(0,2.4fr)_minmax(0,0.8fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_2.25rem] gap-2 text-sm font-semibold text-mute max-sm:hidden"
+              aria-hidden="true"
+            >
               <span>Ingredient</span>
               <span>Amount</span>
               <span>Unit</span>
@@ -342,135 +348,135 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
               <span />
             </li>
             {draft.ingredients.map((row, index) => (
-              <li className="ingredient-row" key={index}>
-                <input
-                  type="text"
-                  className="input"
-                  value={row.name}
-                  placeholder="Ground beef"
-                  aria-label={`Ingredient ${index + 1} name`}
-                  onChange={(event) =>
-                    setIngredient(index, 'name', event.target.value)
-                  }
-                />
-                <input
-                  type="number"
-                  className="input"
-                  min="0"
-                  step="any"
-                  value={row.quantity}
-                  placeholder="1"
-                  aria-label={`Ingredient ${index + 1} amount`}
-                  onChange={(event) =>
-                    setIngredient(index, 'quantity', event.target.value)
-                  }
-                />
-                <input
-                  type="text"
-                  className="input"
-                  value={row.unit}
-                  placeholder="lb"
-                  aria-label={`Ingredient ${index + 1} unit`}
-                  onChange={(event) =>
-                    setIngredient(index, 'unit', event.target.value)
-                  }
-                />
-                <input
-                  type="number"
-                  className="input"
-                  min="0"
-                  step="0.01"
-                  value={row.cost}
-                  placeholder="0.00"
-                  aria-label={`Ingredient ${index + 1} cost in dollars`}
-                  onChange={(event) =>
-                    setIngredient(index, 'cost', event.target.value)
-                  }
-                />
-                <button
-                  type="button"
-                  className="button button--ghost button--small"
+              <li
+                className="grid grid-cols-[minmax(0,2.4fr)_minmax(0,0.8fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_2.25rem] items-end gap-2 max-sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_2.75rem] max-sm:border-b max-sm:border-line max-sm:pb-3"
+                key={index}
+              >
+                {/* On a phone the column heads are gone, so each box carries
+                    its own. A placeholder is an example, never the label. */}
+                <label className="max-sm:col-span-4">
+                  <span className={ROW_LABEL}>Ingredient</span>
+                  <input
+                    type="text"
+                    className={inputClass}
+                    value={row.name}
+                    placeholder="Ground beef"
+                    aria-label={`Ingredient ${index + 1} name`}
+                    onChange={(event) =>
+                      setIngredient(index, 'name', event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  <span className={ROW_LABEL}>Amount</span>
+                  <input
+                    type="number"
+                    className={inputClass}
+                    min="0"
+                    step="any"
+                    value={row.quantity}
+                    placeholder="1"
+                    aria-label={`Ingredient ${index + 1} amount`}
+                    onChange={(event) =>
+                      setIngredient(index, 'quantity', event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  <span className={ROW_LABEL}>Unit</span>
+                  <input
+                    type="text"
+                    className={inputClass}
+                    value={row.unit}
+                    placeholder="lb"
+                    aria-label={`Ingredient ${index + 1} unit`}
+                    onChange={(event) =>
+                      setIngredient(index, 'unit', event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  <span className={ROW_LABEL}>Cost $</span>
+                  <input
+                    type="number"
+                    className={inputClass}
+                    min="0"
+                    step="0.01"
+                    value={row.cost}
+                    placeholder="0.00"
+                    aria-label={`Ingredient ${index + 1} cost in dollars`}
+                    onChange={(event) =>
+                      setIngredient(index, 'cost', event.target.value)
+                    }
+                  />
+                </label>
+                <IconButton
+                  aria-label={`Remove ingredient ${index + 1}`}
+                  title={`Remove ingredient ${index + 1}`}
                   onClick={() => removeIngredient(index)}
                 >
-                  Remove
-                  <span className="visually-hidden">
-                    {' '}
-                    ingredient {index + 1}
-                  </span>
-                </button>
+                  <Trash />
+                </IconButton>
               </li>
             ))}
           </ul>
 
           {show('ingredients') ? (
-            <p className="field__error" role="alert">
-              {errors.ingredients}
-            </p>
+            <FieldError role="alert">{errors.ingredients}</FieldError>
           ) : null}
 
-          <p className="panel__actions panel__actions--tight">
-            <button type="button" className="button" onClick={addIngredient}>
-              Add another ingredient
-            </button>
-          </p>
-        </fieldset>
+          <Button size="sm" className="mt-3" onClick={addIngredient}>
+            <Plus size={14} /> Add another ingredient
+          </Button>
+        </Part>
 
-        <fieldset className="fieldset fieldset--allergy">
-          <legend className="fieldset__legend">
-            Allergens and diets
-            <span className="pill">Safety first</span>
-          </legend>
-          <p className="fieldset__lede">
-            Tick anything this contains. We also read the ingredient names and
-            add what we find, so a missed tick cannot make the recipe look safe.
-          </p>
-
-          <div className="checkbox-grid">
+        <Part
+          legend={
+            <>
+              <Alert size={18} />
+              Allergens and diets
+            </>
+          }
+          lede="Tick anything this contains. We also read the ingredient names and add what we find, so a missed tick cannot make the recipe look safe."
+        >
+          <div className="grid grid-cols-2 gap-x-6 gap-y-2.5 sm:grid-cols-3">
             {COMMON_ALLERGENS.map((allergen) => {
               const found = detected.includes(allergen)
               return (
-                <label key={allergen} className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={found || draft.allergens.includes(allergen)}
-                    disabled={found}
-                    onChange={() => toggleInList('allergens', allergen)}
-                  />
-                  <span>
-                    {allergen}
-                    {found ? (
-                      <span className="checkbox__note"> found in ingredients</span>
-                    ) : null}
-                  </span>
-                </label>
+                <Choice
+                  key={allergen}
+                  type="checkbox"
+                  checked={found || draft.allergens.includes(allergen)}
+                  disabled={found}
+                  onChange={() => toggleInList('allergens', allergen)}
+                >
+                  {allergen}
+                  {found ? <span className="block text-sm">found in ingredients</span> : null}
+                </Choice>
               )
             })}
           </div>
 
-          <div className="field">
-            <span className="field__label">Diets this recipe fits</span>
-            <div className="checkbox-grid">
-              {DIETARY_RESTRICTIONS.map((restriction) => (
-                <label key={restriction} className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={draft.tags.includes(restriction)}
-                    onChange={() => toggleInList('tags', restriction)}
-                  />
-                  <span>{restriction}</span>
-                </label>
-              ))}
-            </div>
-            <p className="field__hint">
-              Your plan only uses a recipe when it is ticked for every diet you
-              set in Setup.
-            </p>
+          <span className="mt-6 mb-1.5 block text-ui font-semibold">Diets this recipe fits</span>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-2.5 sm:grid-cols-4">
+            {DIETARY_RESTRICTIONS.map((restriction) => (
+              <Choice
+                key={restriction}
+                type="checkbox"
+                checked={draft.tags.includes(restriction)}
+                onChange={() => toggleInList('tags', restriction)}
+              >
+                {restriction}
+              </Choice>
+            ))}
           </div>
-        </fieldset>
+          <Hint>
+            Your plan only uses a recipe when it is ticked for every diet you
+            set in Setup.
+          </Hint>
+        </Part>
 
-        <fieldset className="fieldset">
-          <legend className="fieldset__legend">How to cook it</legend>
-
+        <Part legend="How to cook it">
           <Field
             id="recipe-instructions"
             label="Steps, one per line"
@@ -479,46 +485,48 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
           >
             <textarea
               id="recipe-instructions"
-              className="input input--textarea"
+              className={`${inputClass} min-h-28 resize-y`}
               rows="6"
               value={draft.instructions}
               placeholder={'Brown the beef with the onion.\nAdd the tomatoes and simmer for 30 minutes.'}
+              aria-invalid={Boolean(show('instructions'))}
               onChange={(event) => setField('instructions', event.target.value)}
             />
           </Field>
-        </fieldset>
+        </Part>
 
         {warnings.length ? (
-          <div className="alert alert--soft" role="status">
-            <strong>Worth checking:</strong>
-            <ul className="alert__list">
+          <Banner variant="warning" title="Worth checking" compact>
+            <ul className="mt-1 list-disc space-y-1 pl-5">
               {warnings.map((warning) => (
                 <li key={warning}>{warning}</li>
               ))}
             </ul>
+          </Banner>
+        ) : null}
+
+        <div>
+          {submitted && Object.keys(errors).length ? (
+            <p className="mb-3 font-semibold text-danger" role="alert">
+              Fix the marked fields, then save.
+            </p>
+          ) : null}
+
+          <div className="flex flex-wrap gap-2">
+            <Button type="submit" variant="primary" size="lg">
+              {previousName ? 'Save changes' : 'Save recipe'}
+            </Button>
+            <Button size="lg" onClick={onClose}>
+              Cancel
+            </Button>
           </div>
-        ) : null}
 
-        {submitted && Object.keys(errors).length ? (
-          <p className="fine-print fine-print--alert" role="alert">
-            Fix the fields marked above, then save.
+          <p className="mt-4 max-w-[56ch] text-sm text-mute">
+            Your macros and prices are stored as you entered them and shown as
+            yours and unverified. Allergy filtering still runs over the ingredient
+            names, but it is not a guarantee, so read the labels before you cook.
           </p>
-        ) : null}
-
-        <div className="modal__actions">
-          <button type="submit" className="button button--primary button--large">
-            {previousName ? 'Save changes' : 'Save recipe'}
-          </button>
-          <button type="button" className="button button--large" onClick={onClose}>
-            Cancel
-          </button>
         </div>
-
-        <p className="fine-print">
-          Your macros and prices are stored as you entered them and shown as
-          yours and unverified. Allergy filtering still runs over the ingredient
-          names, but it is not a guarantee — read the labels before you cook.
-        </p>
       </form>
     </Modal>
   )

@@ -7,8 +7,12 @@ import { useCustomRecipes } from '../../hooks/useCustomRecipes'
 import { useHousehold } from '../../hooks/useHousehold'
 import { Modal } from '../common/Modal'
 import { RecipeDetail } from '../plan/RecipeDetail'
+import { Button } from '../ui/Button'
+import { Alert, Check, Plus } from '../ui/icons'
 import { RecipeFormModal } from './RecipeFormModal'
 
+// One recipe as a row: what it is, whether the plan can use it, and what you
+// can do with it.
 function RecipeCard({ recipe, onView, onEdit, onDelete }) {
   const { preferences } = useHousehold()
   const [confirming, setConfirming] = useState(false)
@@ -18,85 +22,72 @@ function RecipeCard({ recipe, onView, onEdit, onDelete }) {
   const nutrition = recipe.nutritionPerServing
 
   return (
-    <article className="plan-card">
-      <h3 className="plan-card__title">{recipe.name}</h3>
+    <article className="grid gap-x-8 gap-y-3 border-b border-line py-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
+      <div className="min-w-0">
+        <h3 className="text-lg font-bold tracking-tight">{recipe.name}</h3>
 
-      <p className="plan-card__by">
-        {recipe.slots.map((slot) => SLOT_LABELS[slot]).join(' · ')} ·{' '}
-        {recipe.cookTimeMinutes} min · makes {recipe.enteredFor}
-      </p>
+        <p className="mt-0.5 text-sm text-mute">
+          {recipe.slots.map((slot) => SLOT_LABELS[slot]).join(', ')},{' '}
+          {recipe.cookTimeMinutes} min, makes {recipe.enteredFor}
+        </p>
 
-      <p className="plan-card__cost">
-        Per serving: about {nutrition.calories} kcal · {nutrition.protein} g
-        protein · ${recipeCostPerServing(recipe).toFixed(2)} (your numbers)
-      </p>
+        <p className="text-sm text-mute">
+          Per serving: about {nutrition.calories} kcal, {nutrition.protein} g
+          protein, ${recipeCostPerServing(recipe).toFixed(2)} (your numbers)
+        </p>
 
-      {recipe.allergens.length || recipe.tags.length ? (
-        <p className="chip-row">
-          {recipe.allergens.map((allergen) => (
-            <span
-              key={allergen}
-              className={`chip ${
-                conflicts.includes(allergen) ? 'chip--alert' : 'chip--warn'
-              }`}
-            >
-              {allergen}
+        {recipe.allergens.length ? (
+          <p className={conflicts.length ? 'mt-2 font-bold text-danger' : 'mt-2 font-semibold'}>
+            Contains {recipe.allergens.join(', ')}
+          </p>
+        ) : null}
+        {recipe.tags.length ? (
+          <p className="mt-1 text-sm text-mute">Fits: {recipe.tags.join(', ')}</p>
+        ) : null}
+
+        {problems.length ? (
+          <p className="mt-2 flex gap-2 text-sm font-semibold text-danger">
+            <Alert size={14} className="mt-0.75 shrink-0" />
+            <span>Your plan will not use this: {problems.map((p) => p.message).join('. ')}.</span>
+          </p>
+        ) : (
+          <p className="mt-2 flex gap-2 text-sm text-mute">
+            <Check size={14} className="mt-0.75 shrink-0 text-ok" />
+            <span>
+              Ready to use. Pick it for any meal, or remake a week to let the
+              planner choose it.
             </span>
-          ))}
-          {recipe.tags.map((tag) => (
-            <span key={tag} className="chip chip--good">
-              {tag}
-            </span>
-          ))}
-        </p>
-      ) : null}
+          </p>
+        )}
+      </div>
 
-      {problems.length ? (
-        <p className="fine-print fine-print--alert">
-          Your plan will not use this: {problems.map((p) => p.message).join('. ')}.
-        </p>
-      ) : (
-        <p className="fine-print">
-          Ready to use. Pick it for any meal, or remake a week to let the
-          planner choose it.
-        </p>
-      )}
-
-      <div className="plan-card__actions">
-        <button type="button" className="button button--small" onClick={onView}>
+      <div className="flex flex-wrap gap-2">
+        <Button size="sm" onClick={onView}>
           View
-        </button>
-        <button type="button" className="button button--small" onClick={onEdit}>
+        </Button>
+        <Button size="sm" onClick={onEdit}>
           Edit
-        </button>
+        </Button>
         {confirming ? (
           <>
-            <button
-              type="button"
-              className="button button--small button--accent"
+            <Button
+              size="sm"
+              variant="danger"
               onClick={() => {
                 setConfirming(false)
                 onDelete()
               }}
             >
               Yes, delete
-            </button>
-            <button
-              type="button"
-              className="button button--small"
-              onClick={() => setConfirming(false)}
-            >
+            </Button>
+            <Button size="sm" onClick={() => setConfirming(false)}>
               Keep it
-            </button>
+            </Button>
           </>
         ) : (
-          <button
-            type="button"
-            className="button button--ghost button--small"
-            onClick={() => setConfirming(true)}
-          >
+          <Button size="sm" variant="quiet" onClick={() => setConfirming(true)}>
             Delete
-          </button>
+          </Button>
         )}
       </div>
     </article>
@@ -118,11 +109,11 @@ export function MyRecipesSection() {
   const viewingRecipe = customRecipes.find((recipe) => recipe.name === viewing)
 
   return (
-    <section className="panel" aria-labelledby="my-recipes-title">
-      <h2 className="panel__title" id="my-recipes-title">
+    <section className="mt-14 border-t border-line pt-8" aria-labelledby="my-recipes-title">
+      <h2 className="text-2xl font-extrabold tracking-tight" id="my-recipes-title">
         Your recipes
       </h2>
-      <p className="panel__lede">
+      <p className="mt-2 max-w-[58ch] text-mute">
         Add the meals you already cook, with your own ingredients, prices and
         macros. You can put them in any meal slot they fit, and their
         ingredients are added to your grocery list. The buying agent shops for
@@ -130,13 +121,14 @@ export function MyRecipesSection() {
       </p>
 
       {status ? (
-        <p className="fieldset__summary" role="status">
-          {status}
+        <p className="mt-4 flex max-w-[58ch] gap-2 font-semibold" role="status">
+          <Check className="mt-1 shrink-0 text-ok" />
+          <span>{status}</span>
         </p>
       ) : null}
 
       {customRecipes.length ? (
-        <div className="card-grid">
+        <div className="mt-5 border-t border-line">
           {customRecipes.map((recipe) => (
             <RecipeCard
               key={recipe.name}
@@ -153,21 +145,17 @@ export function MyRecipesSection() {
           ))}
         </div>
       ) : (
-        <p className="fine-print">
+        <p className="mt-4 max-w-[58ch] text-mute">
           Nothing here yet. A recipe needs its ingredients, their amounts and
-          prices, and the calories and protein for the whole dish — we divide
+          prices, and the calories and protein for the whole dish. We divide
           those by the servings it makes.
         </p>
       )}
 
-      <div className="panel__actions">
-        <button
-          type="button"
-          className="button button--primary button--large"
-          onClick={() => setEditing({ recipe: null })}
-        >
-          Add a recipe
-        </button>
+      <div className="mt-5">
+        <Button onClick={() => setEditing({ recipe: null })}>
+          <Plus size={14} /> Add a recipe
+        </Button>
       </div>
 
       {editing ? (
@@ -186,7 +174,7 @@ export function MyRecipesSection() {
 
       {viewingRecipe ? (
         <Modal title={viewingRecipe.name} onClose={() => setViewing(null)}>
-          <p className="modal__context">
+          <p className="mb-3">
             Your recipe, scaled to {servings}{' '}
             {servings === 1 ? 'serving' : 'servings'}.
           </p>

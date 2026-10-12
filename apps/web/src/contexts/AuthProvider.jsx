@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { authConfigured } from '../lib/config'
 import { AUTH_NOT_CONFIGURED, authErrorMessage } from '../lib/authErrors'
@@ -32,11 +32,25 @@ export function AuthProvider({ children }) {
   }, [])
 
   // A 401 from the API means the token is no longer accepted: drop the
-  // session in this browser and send the user to sign in again.
+  // session in this browser and send the user to sign in again. Several
+  // requests can fail at once, so only the first one acts. The session is
+  // gone before the redirect, or the sign-in page would see a signed-in user
+  // and send them straight back. The message is also kept here, because the
+  // app's own redirect to /login can win the race and carries no message.
+  const [sessionNotice, setSessionNotice] = useState(null)
+  const ending = useRef(false)
+
   useEffect(() => {
-    setUnauthorizedHandler((message) => {
-      supabase?.auth.signOut({ scope: 'local' })
-      navigate('/login', { replace: true, state: { message } })
+    setUnauthorizedHandler(async (message) => {
+      if (ending.current) return
+      ending.current = true
+      setSessionNotice(message)
+      try {
+        await supabase?.auth.signOut({ scope: 'local' })
+      } finally {
+        navigate('/login', { replace: true, state: { message } })
+        ending.current = false
+      }
     })
     return () => setUnauthorizedHandler(null)
   }, [navigate])
@@ -48,7 +62,9 @@ export function AuthProvider({ children }) {
         email: email.trim(),
         password,
       })
-      return error ? { error: authErrorMessage(error) } : {}
+      if (error) return { error: authErrorMessage(error) }
+      setSessionNotice(null)
+      return {}
     } catch (error) {
       return { error: authErrorMessage(error) }
     }
@@ -91,11 +107,13 @@ export function AuthProvider({ children }) {
       loading: session === undefined,
       session: session ?? null,
       user: session?.user ?? null,
+      // Why the last session ended, until the user signs in again.
+      sessionNotice,
       signIn,
       signUp,
       signOut,
     }),
-    [session, signIn, signUp, signOut],
+    [session, sessionNotice, signIn, signUp, signOut],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
