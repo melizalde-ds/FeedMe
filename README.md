@@ -1,23 +1,26 @@
 <p align="center">
-  <img src="apps/web/src/assets/text-logo.png" alt="FeedMe" width="360">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/wordmark-on-dark.png">
+    <img src="docs/wordmark-on-light.png" alt="FeedMe" width="320">
+  </picture>
 </p>
 
 <p align="center">
-  A weekly meal planner for households with allergies, with an AI agent that buys the groceries.
+  An AI agent that plans the week's meals and buys the groceries, for households with allergies.
 </p>
 
 ---
 
 FeedMe turns a household's allergies, diet, tastes, nutrition goals and budget into a week of breakfasts, lunches and dinners. Every recipe is a real one, retrieved from a dataset of 124,000 recipes and checked three times against the household's allergies before it is shown. An AI agent then compares prices across stores, fills a cart and pays for it with a single approved payment.
 
-Built by a team at the **Ensign Build 2026** hackathon.
+Built at the **Ensign Build 2026** hackathon.
 
 <!-- TODO: add a screenshot or a short demo GIF here. -->
 
 ## How it works
 
 1. **Setup.** The household enters its allergies first, then diet, likes and dislikes, nutrition goals, budget and cooking time.
-2. **Plan.** The planner returns a week of meals with alternatives for each slot. Meals can be swapped, and users can add their own recipes.
+2. **Plan.** The planner returns a week of meals with alternatives for each slot, shown as a wall of recipe photographs. Meals can be swapped, and users can add their own recipes.
 3. **Grocery.** The plan becomes a grocery list. The buying agent shops for it across six mock stores and pays in Stripe's sandbox after one approval.
 
 ## What is interesting in it
@@ -43,11 +46,15 @@ The buying agent is a tool loop over a model on Amazon Bedrock. The model only n
 
 ### One payment for several stores
 
-Checkout uses the Machine Payments Protocol (through [pympp](https://github.com/tempoxyz/pympp)): the store answers `402` with a quote from every store, and the agent pays the total once through Stripe Link. The user approves one payment in the Link app, each store still gets its own order, and no card number reaches the code or the model. Only Stripe sandbox keys are accepted; the app refuses to start with a live key.
+Checkout uses the Machine Payments Protocol (through [pympp](https://github.com/tempoxyz/pympp)): the store answers `402` with a quote from every store, and the agent pays the total once through Stripe Link. The user approves one payment in the Link app, each store still gets its own order, and no card number reaches the code or the model. Only Stripe sandbox keys are accepted: the stores refuse to start with a live one.
 
 ### The database enforces the safety rules too
 
 Row level security is on every table. Allergies are add-only, a meal option marked unsafe can't be inserted, and the cart and orders are read-only for users, all at the Postgres level.
+
+### The week is a wall of photographs
+
+A week of meals is twenty-one decisions, and the quickest way to take them in is to look at the food. The Plan step is one rail per meal and one photograph per day. The meal you point at grows while the rest step back, and opening it unfolds the recipe under its own rail. The design system, in light and dark, is written down in [apps/web/DESIGN.md](apps/web/DESIGN.md).
 
 ## Architecture
 
@@ -96,6 +103,8 @@ apps/
 docs/           Backend guide
 scripts/        Secret generation, recipe ingestion, an end-to-end run from the command line
 supabase/       Database schema and migrations
+PRODUCT.md      Who it is for, what it promises and what it will not do
+requirements.md The product requirements the hackathon build worked from
 ```
 
 Each app has its own README: [api](apps/api/README.md), [storefront](apps/storefront/README.md), [web](apps/web/README.md).
@@ -120,11 +129,13 @@ LLM_PROVIDER=scripted uv run --package api python -m api.agent \
   apps/api/tests/sample_list.json --mode auto --budget 150 --no-pay --pretty
 ```
 
-The agent searches the six stores, works out the cheapest basket and saves a cart, paying nothing.
+The agent searches the six stores, works out the cheapest basket and fills a cart, paying nothing. The cart is kept in memory and is gone when the command exits.
 
 ### Run the whole app
 
-The planner needs outside services, so add these to `.env` after generating it:
+The planner needs outside services and the recipe dataset, which is not in the repository. The ingest script expects the dataset at `data/recipes_clean.parquet`.
+
+Add these to `.env` after generating it:
 
 | Variable | For |
 |---|---|
@@ -140,9 +151,7 @@ uv run scripts/ingest_recipes.py --limit 200     # embed recipes into Qdrant
 pnpm dev                                         # web, API and stores together
 ```
 
-The web app is at http://localhost:5173, the API at http://localhost:8000 (docs at `/docs`) and the stores at http://localhost:8100.
-
-The recipe dataset is not in the repository. The ingest script expects it at `data/recipes_clean.parquet`.
+The web app is at http://localhost:5173, the API at http://localhost:8000 (docs at `/docs`) and the stores at http://localhost:8100. Create an account on the sign-in page to start: the local stack confirms it at once, with no email.
 
 The full guide, with every route, setting and troubleshooting step, is in [docs/backend.md](docs/backend.md).
 
@@ -153,11 +162,11 @@ uv run --package api pytest apps/api
 uv run --package storefront pytest apps/storefront
 ```
 
-Both suites use stand-ins for Supabase, the stores, Stripe, Link and the models, so they need nothing running. Further tests against a live Supabase and the Stripe sandbox are opt-in; see [docs/backend.md](docs/backend.md#command-line).
+Both suites use stand-ins for Supabase, the stores, Stripe, Link and the models, so they need nothing running. The web app has no tests of its own; `pnpm lint` and `pnpm build` check it. Further tests against a live Supabase and the Stripe sandbox are opt-in; see [docs/backend.md](docs/backend.md#command-line).
 
 ## Status
 
-This is a hackathon project, and it is honest about what it does not do yet:
+This is a hackathon project. What it does not do yet:
 
 - **A plan takes 25 to 35 seconds**, most of it waiting on the embedding quota.
 - **There is no reranker yet.** The interface exists with a stand-in, so side dishes can rank high.
