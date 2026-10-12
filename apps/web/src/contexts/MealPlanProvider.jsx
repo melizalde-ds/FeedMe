@@ -6,6 +6,7 @@ import {
   withoutCustomRecipes,
 } from '../lib/customRecipes'
 import { planFromMealOptions } from '../lib/mealOptions'
+import { slotKey } from '../lib/slotKey'
 import {
   closestAlternative,
   createEmptyPlan,
@@ -34,6 +35,22 @@ const SETUP_NOT_SAVED =
 
 const cloneWeeks = (weeks) =>
   weeks.map((week) => week.map((day) => day.map((slot) => ({ ...slot }))))
+
+// The meals that differ between two versions of the plan.
+function changedSlots(before, after) {
+  const keys = []
+  after.forEach((week, w) =>
+    week.forEach((day, d) =>
+      day.forEach((slot, s) => {
+        const was = before[w][d][s]
+        if (was.recipe !== slot.recipe || was.leftover !== slot.leftover) {
+          keys.push(slotKey(w, d, s))
+        }
+      }),
+    ),
+  )
+  return keys
+}
 
 // Only these inputs can make an existing meal unsafe or non-compliant, so only
 // these trigger an automatic re-check of the plan. Editing or deleting one of
@@ -137,6 +154,8 @@ export function MealPlanProvider({ children, storageKey }) {
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState(null)
   const [note, setNote] = useState('')
+  // The meals the last change touched, as slotKey()s, so the Plan view can
+  // keep them marked until the note about that change is dismissed.
   const [highlight, setHighlight] = useState(null)
   const [undoSnapshot, setUndoSnapshot] = useState(null)
   // Alternatives are chosen from the plan's own catalog, so no slot waits.
@@ -164,7 +183,7 @@ export function MealPlanProvider({ children, storageKey }) {
     if (result.changes.length) {
       setPlan(result.plan)
       setNote(describeResync(result.changes))
-      setHighlight(null)
+      setHighlight(changedSlots(plan.weeks, result.plan.weeks))
       setUndoSnapshot(null)
     }
   }
@@ -390,6 +409,7 @@ export function MealPlanProvider({ children, storageKey }) {
         return { ...state, weeks }
       })
       setNote(`Swapped ${slot.recipe} for ${alternative.name}.`)
+      setHighlight([slotKey(week, day, slotIndex)])
     },
     [plan, preferences, setPlan],
   )
@@ -435,7 +455,10 @@ export function MealPlanProvider({ children, storageKey }) {
   }, [setPlan, undoSnapshot])
 
   const dismissError = useCallback(() => setError(null), [])
-  const dismissNote = useCallback(() => setNote(''), [])
+  const dismissNote = useCallback(() => {
+    setNote('')
+    setHighlight(null)
+  }, [])
 
   // The buying agent's last run for this plan: its order, its grocery list
   // and the meals it shopped for. Kept on the plan so a new plan starts clean.

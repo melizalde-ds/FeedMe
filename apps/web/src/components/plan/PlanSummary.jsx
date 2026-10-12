@@ -1,11 +1,13 @@
 import { usePlanSummary } from '../../hooks/usePlanSummary'
 
-function Stat({ label, value, detail, variant }) {
+function Stat({ label, value, detail, alert = false }) {
   return (
-    <div className={`stat${variant ? ` stat--${variant}` : ''}`}>
-      <dt className="stat__label">{label}</dt>
-      <dd className="stat__value">{value}</dd>
-      {detail ? <p className="stat__detail">{detail}</p> : null}
+    <div className={alert ? 'text-danger' : undefined}>
+      <dt className="text-xs text-mute">{label}</dt>
+      <dd className={alert ? undefined : 'text-mute'}>
+        <strong className={`text-lg font-bold tracking-tight ${alert ? '' : 'text-ink'}`}>{value}</strong>{' '}
+        {detail}
+      </dd>
     </div>
   )
 }
@@ -15,18 +17,19 @@ const describeGoal = (actual, goal, unit) => {
   const delta = actual - goal
   if (Math.abs(delta) <= goal * 0.05) return 'On target'
   return delta > 0
-    ? `${delta}${unit} over your goal`
-    : `${Math.abs(delta)}${unit} under your goal`
+    ? `${delta.toLocaleString()}${unit} over your goal`
+    : `${Math.abs(delta).toLocaleString()}${unit} under your goal`
 }
 
 // Requirement 5.3: aggregated nutrition for the week against the user's goals.
-// There is no cost here: the planner's recipes come without prices, and real
-// ones first appear in the buying agent's cart.
+// One line of figures under a hairline, not a row of cards. There is no cost
+// here: the planner's recipes come without prices, and real ones first appear
+// in the buying agent's cart.
 export function PlanSummary({ week }) {
   const summary = usePlanSummary(week)
 
   return (
-    <dl className="stat-grid">
+    <dl className="flex flex-wrap gap-x-9 gap-y-3 border-y border-line py-3.5">
       <Stat
         label="Calories per person/day"
         value={summary.plannedDays ? summary.calories.toLocaleString() : '—'}
@@ -55,7 +58,7 @@ export function PlanSummary({ week }) {
             ? summary.problemDays.join(', ')
             : 'Every planned day checks out'
         }
-        variant={summary.problemDays.length ? 'alert' : undefined}
+        alert={Boolean(summary.problemDays.length)}
       />
     </dl>
   )
