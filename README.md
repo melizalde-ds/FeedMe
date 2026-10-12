@@ -15,7 +15,9 @@ FeedMe turns a household's allergies, diet, tastes, nutrition goals and budget i
 
 Built at the **Ensign Build 2026** hackathon.
 
-<!-- TODO: add a screenshot or a short demo GIF here. -->
+
+https://github.com/user-attachments/assets/6ba0ba70-7d90-4616-9ed6-07d4f6d76f16
+
 
 ## How it works
 
