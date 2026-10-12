@@ -27,13 +27,13 @@ function RecipeCard({ recipe, onView, onEdit, onDelete }) {
         <h3 className="text-lg font-bold tracking-tight">{recipe.name}</h3>
 
         <p className="mt-0.5 text-sm text-mute">
-          {recipe.slots.map((slot) => SLOT_LABELS[slot]).join(' · ')} ·{' '}
-          {recipe.cookTimeMinutes} min · makes {recipe.enteredFor}
+          {recipe.slots.map((slot) => SLOT_LABELS[slot]).join(', ')},{' '}
+          {recipe.cookTimeMinutes} min, makes {recipe.enteredFor}
         </p>
 
         <p className="text-sm text-mute">
-          Per serving: about {nutrition.calories} kcal · {nutrition.protein} g
-          protein · ${recipeCostPerServing(recipe).toFixed(2)} (your numbers)
+          Per serving: about {nutrition.calories} kcal, {nutrition.protein} g
+          protein, ${recipeCostPerServing(recipe).toFixed(2)} (your numbers)
         </p>
 
         {recipe.allergens.length ? (

@@ -32,17 +32,17 @@ export function PlanSummary({ week }) {
     <dl className="flex flex-wrap gap-x-9 gap-y-3 border-y border-line py-3.5">
       <Stat
         label="Calories per person/day"
-        value={summary.plannedDays ? summary.calories.toLocaleString() : '—'}
+        value={summary.plannedDays ? summary.calories.toLocaleString() : '-'}
         detail={describeGoal(summary.calories, summary.calorieGoal, ' kcal')}
       />
       <Stat
         label="Protein per person/day"
-        value={summary.plannedDays ? `${summary.protein}g` : '—'}
+        value={summary.plannedDays ? `${summary.protein}g` : '-'}
         detail={describeGoal(summary.protein, summary.proteinGoal, 'g')}
       />
       <Stat
         label="Carbs / fat per person/day"
-        value={summary.plannedDays ? `${summary.carbs}g / ${summary.fat}g` : '—'}
+        value={summary.plannedDays ? `${summary.carbs}g / ${summary.fat}g` : '-'}
         detail="Estimated from recipe macros"
       />
       <Stat

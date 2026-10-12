@@ -4,11 +4,11 @@ import { useHousehold } from '../../hooks/useHousehold'
 import { Button } from '../ui/Button'
 import { FieldError, Hint, Label, inputClass } from '../ui/Field'
 
-// The gram fields step by 1. A step of 5 made the browser refuse the whole
-// form, silently, for any value that was not a multiple of 5: one the user
-// typed, or one "Recalculate" wrote.
+// Every field steps by 1. A larger step made the browser refuse the whole
+// form, silently, for any value off that step: 2010 kcal, 103 g of protein,
+// or whatever "Recalculate" wrote for carbs.
 const FIELDS = [
-  { key: 'calories', id: 'calorie-goal', label: 'Daily calories per person', unit: 'kcal', step: 50 },
+  { key: 'calories', id: 'calorie-goal', label: 'Daily calories per person', unit: 'kcal', step: 1 },
   { key: 'protein', id: 'protein-goal', label: 'Daily protein per person', unit: 'g', step: 1 },
   { key: 'carbs', id: 'carbs-goal', label: 'Daily carbs per person', unit: 'g', step: 1 },
   { key: 'fat', id: 'fat-goal', label: 'Daily fat per person', unit: 'g', step: 1 },

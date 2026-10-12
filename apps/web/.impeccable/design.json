@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-12T08:33:44.962Z",
+  "generatedAt": "2026-10-12T16:27:30.527822+00:00",
   "title": "Design System: FeedMe",
   "extensions": {
     "colorMeta": {
@@ -214,9 +214,9 @@
         "displayName": "Note",
         "purpose": "Hints and metadata, in Muted Ink."
       },
-      "flag": {
-        "displayName": "Flag",
-        "purpose": "Words on a photograph, column heads, day verdicts."
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "The note under a meal, column heads, day verdicts."
       }
     },
     "shadows": [
@@ -319,17 +319,9 @@
       "name": "Photo Tile",
       "kind": "custom",
       "refersTo": "tile",
-      "description": "One meal. Shown here with no photograph, as the ruled block, and flagged as one of the user\u2019s own recipes.",
-      "html": "<button class=\"ds-tile\"><span class=\"ds-tile-ruled\"></span><span class=\"ds-tile-top\"><span class=\"ds-flag\">Yours</span></span><span class=\"ds-tile-body\"><span class=\"ds-tile-name\">Sunday Beef Chili</span><span class=\"ds-tile-more\">30 min \u00b7 550 kcal \u00b7 35 g protein</span></span></button>",
-      "css": ".ds-tile { position: relative; display: block; width: 168px; aspect-ratio: 4 / 5; padding: 0; overflow: hidden; border: 0; border-radius: 12px; background: var(--none); color: #fff; font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; text-align: left; cursor: pointer; transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile-ruled { position: absolute; inset: 0; background: repeating-linear-gradient(135deg, transparent 0 11px, rgb(255 255 255 / 0.07) 11px 12px) var(--none); } .ds-tile::after { content: ''; position: absolute; inset: 30% 0 0; background: linear-gradient(to top, rgb(8 7 12 / 0.95), rgb(8 7 12 / 0.74) 44%, rgb(8 7 12 / 0)); } .ds-tile-top { position: absolute; inset: 8px 8px auto; z-index: 1; display: flex; gap: 4px; } .ds-flag { padding: 2px 8px; border-radius: 6px; background: rgb(8 7 12 / 0.82); font-size: 0.75rem; font-weight: 700; line-height: 1.5; } .ds-tile-body { position: absolute; inset: auto 10px 10px; z-index: 1; display: flex; flex-direction: column; transform: translateY(2.25rem); transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile-name { font-size: 0.9375rem; font-weight: 700; line-height: 1.2; } .ds-tile-more { height: 2rem; margin-top: 0.25rem; opacity: 0; font-size: 0.75rem; line-height: 1.35; color: #e3dfee; transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile:hover, .ds-tile:focus-visible { outline: none; transform: scale(1.05); box-shadow: 0 0 0 3px var(--lime), var(--pop); } .ds-tile:hover .ds-tile-body, .ds-tile:focus-visible .ds-tile-body { transform: none; } .ds-tile:hover .ds-tile-more, .ds-tile:focus-visible .ds-tile-more { opacity: 1; }"
-    },
-    {
-      "name": "Flags",
-      "kind": "chip",
-      "refersTo": "flag",
-      "description": "One word about a meal, set on its photograph.",
-      "html": "<span class=\"ds-flags\"><span class=\"ds-flag2\">Leftovers</span><span class=\"ds-flag2 ds-flag2-ok\">Accepted</span><span class=\"ds-flag2 ds-flag2-new\">Changed</span><span class=\"ds-flag2 ds-flag2-bad\">Contains Tree nuts</span></span>",
-      "css": ".ds-flags { display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 12px; border-radius: 12px; background: var(--none); font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; } .ds-flag2 { padding: 2px 8px; border-radius: 6px; background: rgb(8 7 12 / 0.82); color: #fff; font-size: 0.75rem; font-weight: 700; line-height: 1.5; } .ds-flag2-ok { background: var(--lime); color: var(--on-lime); } .ds-flag2-new { background: #fff; color: #16141d; } .ds-flag2-bad { background: var(--danger-fill); }"
+      "description": "One meal. Shown here with no photograph, as the ruled block. What there is to say about it sits on the line underneath.",
+      "html": "<div class=\"ds-meal\"><button class=\"ds-tile\"><span class=\"ds-tile-ruled\"></span><span class=\"ds-tile-body\"><span class=\"ds-tile-name\">Sunday Beef Chili</span><span class=\"ds-tile-more\">30 min, 550 kcal, 35 g protein</span></span></button><p class=\"ds-tile-note\">Yours</p></div>",
+      "css": ".ds-tile { position: relative; display: block; width: 168px; aspect-ratio: 4 / 5; padding: 0; overflow: hidden; border: 0; border-radius: 12px; background: var(--none); color: #fff; font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; text-align: left; cursor: pointer; transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile-ruled { position: absolute; inset: 0; background: repeating-linear-gradient(135deg, transparent 0 11px, rgb(255 255 255 / 0.07) 11px 12px) var(--none); } .ds-tile::after { content: ''; position: absolute; inset: 30% 0 0; background: linear-gradient(to top, rgb(8 7 12 / 0.95), rgb(8 7 12 / 0.74) 44%, rgb(8 7 12 / 0)); } .ds-tile-body { position: absolute; inset: auto 10px 10px; z-index: 1; display: flex; flex-direction: column; transform: translateY(2.25rem); transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile-name { font-size: 0.9375rem; font-weight: 700; line-height: 1.2; } .ds-tile-more { height: 2rem; margin-top: 0.25rem; opacity: 0; font-size: 0.75rem; line-height: 1.35; color: #e3dfee; transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile:hover, .ds-tile:focus-visible { outline: none; transform: scale(1.05); box-shadow: 0 0 0 3px var(--lime), var(--pop); } .ds-tile:hover .ds-tile-body, .ds-tile:focus-visible .ds-tile-body { transform: none; } .ds-tile:hover .ds-tile-more, .ds-tile:focus-visible .ds-tile-more { opacity: 1; } .ds-meal { width: 168px; font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; } .ds-tile-note { margin: 6px 2px 0; min-height: 16px; font-size: 0.75rem; line-height: 16px; color: var(--mute); }"
     },
     {
       "name": "Week Tabs",
@@ -342,10 +334,10 @@
   ],
   "narrative": {
     "northStar": "The Wall",
-    "overview": "**Creative North Star: \"The Wall\"**\n\nA week of meals is twenty-one decisions, and the quickest way to take them in is to look at the food. FeedMe lays the week out the way a streaming catalogue lays out its titles: one rail per meal, one tile per day, each tile a photograph of the dish with its name on it. The meal you point at grows and tells you what it is while the rest of the wall steps back. Opening it unfolds the recipe under its own rail, so you never leave the week to read about one meal in it.\n\nEverything that is not the wall stays out of its way. The ground is a deep aubergine-black, or a cool off-white in the light theme. Type is one grotesque. There is one accent, a lime, and it means \"here\" or \"go\": the keyboard focus ring, the step you are on, the action that moves you forward. Setup and Grocery have no photographs to show, so they are plain working screens built from the same type, hairlines and controls.\n\nThe product's promises shape the details. Allergies are a safety input, so they get the one heavy outline in the app and every unsafe meal is flagged in words. Numbers are the recipes' own or the user's own, so a missing figure is a dash and a recipe with no photograph is a ruled block, never a stand-in picture.\n\nThis system rejects the look it replaced: a cream page, a green header, an orange accent, script headings and handwriting notes, cards inside cards, and a plan made of sixty-three form controls.",
+    "overview": "**Creative North Star: \"The Wall\"**\n\nA week of meals is twenty-one decisions, and the quickest way to take them in is to look at the food. FeedMe lays the week out the way a streaming catalogue lays out its titles: one rail per meal, one tile per day, each tile a photograph of the dish with its name on it. The meal you point at grows and tells you what it is while the rest of the wall steps back. Opening it unfolds the recipe under its own rail, so you never leave the week to read about one meal in it.\n\nEverything that is not the wall stays out of its way. The ground is a deep aubergine-black, or a cool off-white in the light theme. Type is one grotesque. There is one accent, a lime, and it means \"here\" or \"go\": the keyboard focus ring, the step you are on, the action that moves you forward. Setup and Grocery have no photographs to show, so they are plain working screens built from the same type, hairlines and controls.\n\nThe product's promises shape the details. Allergies are a safety input, so they get the one heavy outline in the app and every unsafe meal is flagged in words. Numbers are the recipes' own or the user's own, so a missing figure is a hyphen and a recipe with no photograph is a ruled block, never a stand-in picture.\n\nThis system rejects the look it replaced: a cream page, a green header, an orange accent, script headings and handwriting notes, cards inside cards, and a plan made of sixty-three form controls.",
     "keyCharacteristics": [
       "Recipe photographs are the only colour that is not a state or the accent.",
-      "One family, Schibsted Grotesk, from 12px flags to the 38px page title.",
+      "One family, Schibsted Grotesk, from 12px captions to the 38px page title.",
       "Hairlines and space group things. There is one raised surface, never a card in a card.",
       "Every state is said in words with an icon. Colour only reinforces it.",
       "Light and dark are equals: every colour token carries both values.",
@@ -369,7 +361,7 @@
       },
       {
         "name": "The Say It In Words Rule",
-        "body": "A state is an icon and words first. \"Contains Tree nuts\" on a red flag reads the same in greyscale.",
+        "body": "A state is an icon and words first. \"Contains Tree nuts\" under a meal, with its warning mark, reads the same in greyscale.",
         "section": "colors"
       },
       {
@@ -407,9 +399,12 @@
       "Do let photographs carry the colour, and leave a screen without them neutral.",
       "Do declare every colour as a light and dark pair.",
       "Do say a state in words with an icon, and use colour to reinforce it.",
+      "Do write what there is to say about a meal under its photograph.",
+      "Do take icons from Phosphor at its bold weight. The one drawn mark is the tick that draws itself when a week is confirmed.",
+      "Do separate a run of facts with commas, and write a missing figure as a hyphen.",
       "Do keep the 2px Ink outline for the Allergies block alone.",
       "Do group with hairlines and space, and use Raised once per view.",
-      "Do show a missing figure as a dash and a missing photograph as the ruled block.",
+      "Do show a missing photograph as the ruled block.",
       "Do keep prose to 56 to 60ch.",
       "Do gate hover motion to real pointers, and keep the fades when motion is reduced."
     ],
@@ -420,6 +415,8 @@
       "Don't use lime for text on the light ground.",
       "Don't use `tabular-nums` with this face.",
       "Don't put a stock or placeholder photograph where a recipe has none.",
+      "Don't put a label, a tag or a day on a photograph. The meal's name and details are the only words on it.",
+      "Don't use an em-dash, or a middle dot as a separator.",
       "Don't open a dialog for something that can unfold in place.",
       "Don't animate navigation, form input, or the plan's figures.",
       "Don't animate width, height, margin or `max-height`."

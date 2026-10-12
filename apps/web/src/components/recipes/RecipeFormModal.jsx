@@ -305,9 +305,9 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
             <p className="mt-3 font-semibold" role="status">
               Per serving, across {servings}{' '}
               {servings === 1 ? 'serving' : 'servings'}: about{' '}
-              {validated.nutritionPerServing.calories} kcal ·{' '}
-              {validated.nutritionPerServing.protein} g protein ·{' '}
-              {validated.nutritionPerServing.carbs} g carbs ·{' '}
+              {validated.nutritionPerServing.calories} kcal,{' '}
+              {validated.nutritionPerServing.protein} g protein,{' '}
+              {validated.nutritionPerServing.carbs} g carbs,{' '}
               {validated.nutritionPerServing.fat} g fat.
             </p>
           ) : null}
@@ -335,7 +335,7 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
           legend="Ingredients"
           lede="Amounts and prices for the whole recipe. Prices keep your budget and grocery list honest."
         >
-          {/* name · amount · unit · cost · remove; on a phone, two per line */}
+          {/* name, amount, unit, cost, remove; on a phone the name takes a line */}
           <ul className="grid gap-2">
             <li
               className="grid grid-cols-[minmax(0,2.4fr)_minmax(0,0.8fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_2.25rem] gap-2 text-sm font-semibold text-mute max-sm:hidden"

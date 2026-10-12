@@ -45,7 +45,7 @@ export function GroceryList() {
                 <span className="block text-sm text-mute">{item.usedIn.join(', ')}</span>
               </th>
               <td className={`${tdClass} py-2 text-right whitespace-nowrap ${item.quantity === null ? 'text-mute' : 'font-semibold'}`}>
-                {item.quantity === null ? '—' : `${item.quantity} ${item.unit}`}
+                {item.quantity === null ? '-' : `${item.quantity} ${item.unit}`}
               </td>
             </tr>
           ))}
@@ -54,7 +54,7 @@ export function GroceryList() {
 
       {noAmounts ? (
         <p className="mt-3 text-sm text-mute">
-          Items marked &ldquo;—&rdquo; come from planner recipes, which list
+          Items marked &ldquo;-&rdquo; come from planner recipes, which list
           their ingredients without amounts. Prices come from the stores, when
           the buying agent shops.
         </p>

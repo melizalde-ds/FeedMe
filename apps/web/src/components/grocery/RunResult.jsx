@@ -24,7 +24,7 @@ function PaidOrders({ summary }) {
           <table className={`${tableClass} min-w-[24rem]`}>
             <caption className={captionClass}>
               {storeName(order.store)}
-              <span className="font-normal text-mute"> · order {order.order_id}</span>
+              <span className="font-normal text-mute">, order {order.order_id}</span>
             </caption>
             <thead>
               <tr>

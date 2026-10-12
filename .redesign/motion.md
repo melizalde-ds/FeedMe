@@ -11,8 +11,8 @@ reduced motion off and on.
 | # | Where | What happens | Why | How often | Ingredients |
 |---|---|---|---|---|---|
 | 1 | A meal on the wall (`wall.css`, `.tile`) | Grows 5%, gets a lime ring, slides its details up, and the other meals drop to 55% | State: which meal is in hand. This is the direction's signature | Tens a day | `transform` and `opacity`, 200ms, `--ease-out`. Mouse hover only where there is a real pointer |
-| 2 | A meal that changes (`.tile__photo`) | The new photograph fades in | Stops the tile blinking from one dish to another | Occasional | `opacity` from 0 with `@starting-style`, 200ms |
-| 3 | A flag on a meal (`.flag`) | "Changed", "Accepted" and the rest ease in from 90% | State: something about this meal is now different | Occasional | `opacity` and `scale`, 160ms |
+| 2 | A photograph arriving (`.tile__photo`) | Fades in. When the Plan opens the wall fills in from Monday to Sunday, 30ms a column | Stops a tile blinking from one dish to another, and lets the wall arrive in order | Occasional | `opacity` from 0 with `@starting-style`, 200ms, delayed 30ms per column |
+| 3 | The note under a meal (`.tile-note`) | "Changed", "Accepted" and the rest ease in from 90% | State: something about this meal is now different | Occasional | `opacity` and `scale`, 160ms |
 | 4 | A notice (`.notice`) | Eases in with a 4px drop | It was not there a moment ago | Occasional | `opacity` and `translate`, 200ms |
 | 5 | The recipe shelf (`.unfold`) | Unfolds downward from its rail | Shows where the recipe came from | Occasional | `clip-path`, `opacity`, `transform`, 280ms |
 | 6 | A dialog (`dialog.sheet`) | Rises 12px and fades in; the backdrop fades | A change of context | Occasional | 220ms |
@@ -57,6 +57,10 @@ Two things are deliberate exceptions. A new photograph and a new cart row
 enter with a fade and no transform: moving either would shift the content the
 user is reading. The tick takes 400ms, over the 300ms budget, because it is
 the app's one celebration and is seen once a week.
+
+The column-by-column arrival was the owner's choice, made knowing its cost:
+a meal swapped later in the week waits for its column's delay before its new
+photograph fades in, up to 180ms on Sunday. Reduced motion removes the delay.
 
 One thing can only be judged by eye: whether 5% growth and 55% dimming feel
 right when the mouse crosses the whole wall quickly. Both values are in

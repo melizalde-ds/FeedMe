@@ -57,7 +57,7 @@ export function CartTable({ cart, onRemove, busy = false }) {
                     <th scope="row" className={tdClass}>
                       <span className="font-semibold">{item.name}</span>
                       <span className="block text-sm text-mute">
-                        {[item.brand, item.size].filter(Boolean).join(' · ')}
+                        {[item.brand, item.size].filter(Boolean).join(', ')}
                       </span>
                     </th>
                     <td className={`${tdClass} text-mute`}>{item.for_ingredient}</td>

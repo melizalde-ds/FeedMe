@@ -26,8 +26,9 @@
     scale: 0.98;
   }
 
-  /* A meal that changes brings its photograph in with a short fade, so the
-     tile never blinks from one dish to another. */
+  /* A photograph arrives with a short fade: when the wall first fills in,
+     column by column, and when a meal changes, so the tile never blinks from
+     one dish to another. The column's delay is set on the image itself. */
   .tile__photo {
     position: absolute;
     inset: 0;
@@ -65,15 +66,6 @@
       rgb(var(--shade) / 0) 100%
     );
     pointer-events: none;
-  }
-
-  .tile__top {
-    position: absolute;
-    inset: 8px 8px auto;
-    z-index: 1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
   }
 
   /* The title sits at the foot of the tile with its details tucked below
@@ -220,18 +212,9 @@
     }
   }
 
-  /* A word on a photograph: the day, "Leftovers", "Yours", "Accepted". */
-  .flag {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
-    border-radius: var(--radius-flag);
-    background: rgb(var(--shade) / 0.82);
-    color: #ffffff;
-    font-size: var(--text-xs);
-    font-weight: 700;
-    line-height: 1.5;
+  /* What there is to say about a meal, on the line under its photograph. It
+     eases in, because it was not there a moment ago. */
+  .tile-note {
     transition:
       opacity 160ms var(--ease-out),
       scale 160ms var(--ease-out);
@@ -240,24 +223,6 @@
       opacity: 0;
       scale: 0.9;
     }
-  }
-
-  .flag[data-kind='bad'] {
-    background: var(--danger-fill);
-  }
-
-  .flag[data-kind='ok'] {
-    background: var(--lime);
-    color: var(--on-lime);
-  }
-
-  .flag[data-kind='new'] {
-    background: #ffffff;
-    color: #16141d;
-  }
-
-  .flag[data-kind='quiet'] {
-    color: var(--on-photo-soft);
   }
 
   /* --- rails ------------------------------------------------------------- */
@@ -424,13 +389,18 @@
       opacity: 1;
     }
 
+    /* No waiting for the wall to fill in column by column. */
+    .tile__photo {
+      transition-delay: 0s !important;
+    }
+
     .unfold,
     dialog.sheet[open] {
       animation-name: fade-in;
     }
 
     .notice,
-    .flag,
+    .tile-note,
     .arrive {
       @starting-style {
         translate: none;

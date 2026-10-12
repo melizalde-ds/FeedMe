@@ -340,7 +340,7 @@ stack (Supabase, Qdrant with the recipe collection, and a working Bedrock key).
 | `04-grocery.js` | 17 of 17 | 17 of 17 |
 | `05-session.js` | 2 of 2 | 2 of 2 |
 | `06-states.js` | 6 of 6 | 6 of 6 |
-| `07-motion.js` (new) | 13 of 13 | not run: it sets its own media |
+| `07-motion.js` (new) | 14 of 14 | not run: it sets its own media |
 | `08-audit.js` (new) | 1 of 1, covering both themes | |
 | `09-long-content.js` (new) | 9 of 9 | not run |
 
@@ -357,6 +357,22 @@ Kowalski skills. It saves a recipe with an 80-character name that has no
 spaces, adds a 40-character allergen, and checks that nothing pushes the page
 sideways at 1440px or 390px. It failed on first run (the page scrolled
 sideways by up to 707px) and passes now that long words break.
+
+A third pass applied seven choices the owner made from the Taste rules and
+the open items. All of it is in commit history after `70bc132`:
+
+| Choice | What changed | In the scripts |
+|---|---|---|
+| Middle dots to commas | "3 people, 5 days, $120 to spend, **avoiding Tree nuts**, under 30 min", and every other run of facts | `03-plan.js` matches the comma forms |
+| Icons from Phosphor | The 13 icons come from `@phosphor-icons/react` at bold weight. The tick that draws itself on confirming a week is still drawn by hand, because it has to be a stroke | none |
+| No flags on photos | "Accepted", "Changed", "Leftovers", "Yours", "Saved" and "Contains …" sit on a line under each photograph. On a phone that line starts with the day | `03-plan.js` reads the note under the tile, and fails if one is on the photograph |
+| Calories step | The calories field takes any whole number | none |
+| Dropdown label dash | "Almond Oat Bowl (yours): Contains Tree nuts" (`lib/planner.js`) | `03-plan.js` spots a flagged option by its colon |
+| Missing-figure dash | A missing amount or figure is "-", and the note under the grocery list says so | `04-grocery.js` counts hyphens |
+| Staggered photos | The wall fills in from Monday to Sunday, 30ms a column | `07-motion.js` checks each photograph's delay, and that reduced motion removes it |
+
+After it: 112 of 112 in light mode. The JS chunk is 633 kB (was 600 kB); the
+difference is Phosphor.
 
 ### What was live this time
 

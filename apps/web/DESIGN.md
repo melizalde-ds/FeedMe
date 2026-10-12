@@ -73,14 +73,14 @@ typography:
     fontWeight: 400
     lineHeight: 1.4
     letterSpacing: "normal"
-  flag:
+  caption:
     fontFamily: "'Schibsted Grotesk Variable', 'Segoe UI', system-ui, sans-serif"
     fontSize: "0.75rem"
     fontWeight: 700
-    lineHeight: 1.5
+    lineHeight: 1.35
     letterSpacing: "normal"
 rounded:
-  flag: "6px"
+  chip: "6px"
   control: "10px"
   tile: "12px"
   panel: "16px"
@@ -139,7 +139,7 @@ components:
     backgroundColor: "{colors.raise}"
     textColor: "{colors.ink}"
     typography: "{typography.control}"
-    rounded: "{rounded.flag}"
+    rounded: "{rounded.chip}"
     padding: "0 10px"
     height: "28px"
   notice:
@@ -162,22 +162,6 @@ components:
     textColor: "#ffffff"
     typography: "{typography.body}"
     rounded: "{rounded.tile}"
-  flag:
-    backgroundColor: "rgb(8 7 12 / 0.82)"
-    textColor: "#ffffff"
-    typography: "{typography.flag}"
-    rounded: "{rounded.flag}"
-    padding: "2px 8px"
-  flag-accepted:
-    backgroundColor: "{colors.lime}"
-    textColor: "{colors.on-lime}"
-    rounded: "{rounded.flag}"
-    padding: "2px 8px"
-  flag-unsafe:
-    backgroundColor: "{colors.danger-fill}"
-    textColor: "#ffffff"
-    rounded: "{rounded.flag}"
-    padding: "2px 8px"
   shelf:
     backgroundColor: "{colors.raise}"
     textColor: "{colors.ink}"
@@ -200,14 +184,14 @@ A week of meals is twenty-one decisions, and the quickest way to take them in is
 
 Everything that is not the wall stays out of its way. The ground is a deep aubergine-black, or a cool off-white in the light theme. Type is one grotesque. There is one accent, a lime, and it means "here" or "go": the keyboard focus ring, the step you are on, the action that moves you forward. Setup and Grocery have no photographs to show, so they are plain working screens built from the same type, hairlines and controls.
 
-The product's promises shape the details. Allergies are a safety input, so they get the one heavy outline in the app and every unsafe meal is flagged in words. Numbers are the recipes' own or the user's own, so a missing figure is a dash and a recipe with no photograph is a ruled block, never a stand-in picture.
+The product's promises shape the details. Allergies are a safety input, so they get the one heavy outline in the app and every unsafe meal is flagged in words. Numbers are the recipes' own or the user's own, so a missing figure is a hyphen and a recipe with no photograph is a ruled block, never a stand-in picture.
 
 This system rejects the look it replaced: a cream page, a green header, an orange accent, script headings and handwriting notes, cards inside cards, and a plan made of sixty-three form controls.
 
 **Key Characteristics:**
 
 - Recipe photographs are the only colour that is not a state or the accent.
-- One family, Schibsted Grotesk, from 12px flags to the 38px page title.
+- One family, Schibsted Grotesk, from 12px captions to the 38px page title.
 - Hairlines and space group things. There is one raised surface, never a card in a card.
 - Every state is said in words with an icon. Colour only reinforces it.
 - Light and dark are equals: every colour token carries both values.
@@ -223,7 +207,7 @@ A near-neutral ground with a faint aubergine cast, one lime accent, and three st
 
 ### Secondary
 
-- **Tomato** (`danger`, `danger-light` for text; `danger-fill` behind white text; `danger-tint` behind a notice): conflicts and failures. An unsafe meal's flag and ring, a destructive confirmation, an error notice, a field error.
+- **Tomato** (`danger`, `danger-light` for text; `danger-fill` behind white text; `danger-tint` behind a notice): conflicts and failures. An unsafe meal's note and ring, a destructive confirmation, an error notice, a field error.
 - **Leaf** (`ok`, `ok-light`): the small tick beside "OK", "In the cart" and a note about a change that went through. Text and icons only, never a fill.
 - **Lime Wash** (`warn-tint`, `warn-tint-light`): the background of a "Heads up" notice. A caution, quieter than Tomato.
 
@@ -236,7 +220,7 @@ A near-neutral ground with a faint aubergine cast, one lime accent, and three st
 - **Strong Hairline** (`line-strong`, `line-strong-light`): the edge of anything you type or tick into. It passes 3:1 against the field in both themes.
 - **Ink** (`ink`, `ink-light`) and **Muted Ink** (`mute`, `mute-light`): text. Muted ink is for metadata and hints and passes 4.5:1 on the ground and on Raised.
 - **No Photo** (`none`): the base of the ruled block. It stays dark in both themes, because it stands where a photograph would.
-- **Photo Text** (white, and `on-photo-soft` for a meal's details and a quiet flag): text on a photograph sits on the photo's own shade, so it is the same in both themes.
+- **Photo Text** (white, and `on-photo-soft` for a meal's details): the only text on a photograph is the meal's name and its details. It sits on the photo's own shade, so it is the same in both themes.
 
 ### Named Rules
 
@@ -246,7 +230,7 @@ A near-neutral ground with a faint aubergine cast, one lime accent, and three st
 
 **The Paired Token Rule.** Every colour is declared once as `light-dark(light, dark)`. A value is never set for one theme alone, which is how the old system's two dark themes drifted apart.
 
-**The Say It In Words Rule.** A state is an icon and words first. "Contains Tree nuts" on a red flag reads the same in greyscale.
+**The Say It In Words Rule.** A state is an icon and words first. "Contains Tree nuts" under a meal, with its warning mark, reads the same in greyscale.
 
 ## Typography
 
@@ -263,7 +247,7 @@ A near-neutral ground with a faint aubergine cast, one lime accent, and three st
 - **Body** (400, 0.9375rem, 1.5): everything read as a sentence, and a meal's name on its tile at 700. Prose is held to 56 to 60ch.
 - **Control** (600, 0.875rem, 1.4): field labels, small buttons, chips.
 - **Note** (400, 0.8125rem, 1.4): hints and metadata, in Muted Ink.
-- **Flag** (700, 0.75rem, 1.5): words on a photograph, column heads, day verdicts.
+- **Caption** (700, 0.75rem, 1.35): the note under a meal, column heads, day verdicts.
 
 The wordmark is "FeedMe" at 900 and 1.625rem with -0.05em tracking. It is type, not an image.
 
@@ -303,7 +287,7 @@ Flat. Depth is a change of surface from the ground to Raised, with a hairline ar
 
 ## Shapes
 
-Softly squared. Four radii, each tied to a size of thing: flags and chips (6px), controls (10px), tiles and notices (12px), the shelf and dialogs (16px). Tiles are always 4:5, portrait, like a poster. Nothing is a pill and nothing is a circle except the loading dot.
+Softly squared. Four radii, each tied to a size of thing: chips (6px), controls (10px), tiles and notices (12px), the shelf and dialogs (16px). Tiles are always 4:5, portrait, like a poster. Nothing is a pill and nothing is a circle except the loading dot.
 
 **The Heavy Outline Rule.** The Allergies block in Setup has a 2px Ink outline. Nothing else in the app does. It is the safety input, and it must not look like the fields around it.
 
@@ -342,7 +326,8 @@ The signature. A 4:5 button filled by the recipe's photograph, with a shade risi
 
 - **At rest:** the name only. Time, calories and protein are tucked below the edge.
 - **In hand** (hover with a real pointer, keyboard focus, or its recipe open): grows 5%, takes a 3px lime ring and the Pop shadow, and slides its details into view, over 200ms. The other tiles drop to 55%.
-- **Flags:** at most one word about the meal, top left: "Contains Tree nuts" (Tomato, with a matching ring on the tile), "Changed" (white), "Rejected", "Leftovers", "Yours", "Accepted" (lime). A meal with nothing to say has none.
+- **The note:** what there is to say about the meal goes on a line under the photograph, never on it: "Contains Tree nuts" (Tomato, with a warning mark and a matching ring on the tile), "Changed" (Ink, bold), "Accepted" (Leaf, with a tick), "Rejected", "Leftovers", "Yours" and "Saved" (Muted Ink). A meal with nothing to say has an empty line, so the rails stay level. On a phone the line starts with the day.
+- **Arriving:** photographs fade in from Monday to Sunday, 30ms a column.
 - **No photograph:** the ruled block, diagonal hairlines on No Photo.
 - **Empty:** a Strong Hairline outline with a plus and "Choose a meal".
 - **Pressed:** gives to 98%.
@@ -367,9 +352,12 @@ Hairlines only. Column heads in Note size at 600 over a Strong Hairline, rows ov
 - **Do** let photographs carry the colour, and leave a screen without them neutral.
 - **Do** declare every colour as a light and dark pair.
 - **Do** say a state in words with an icon, and use colour to reinforce it.
+- **Do** write what there is to say about a meal under its photograph.
+- **Do** take icons from Phosphor at its bold weight. The one drawn mark is the tick that draws itself when a week is confirmed.
+- **Do** separate a run of facts with commas, and write a missing figure as a hyphen.
 - **Do** keep the 2px Ink outline for the Allergies block alone.
 - **Do** group with hairlines and space, and use Raised once per view.
-- **Do** show a missing figure as a dash and a missing photograph as the ruled block.
+- **Do** show a missing photograph as the ruled block.
 - **Do** keep prose to 56 to 60ch.
 - **Do** gate hover motion to real pointers, and keep the fades when motion is reduced.
 
@@ -381,6 +369,8 @@ Hairlines only. Column heads in Note size at 600 over a Strong Hairline, rows ov
 - **Don't** use lime for text on the light ground.
 - **Don't** use `tabular-nums` with this face.
 - **Don't** put a stock or placeholder photograph where a recipe has none.
+- **Don't** put a label, a tag or a day on a photograph. The meal's name and details are the only words on it.
+- **Don't** use an em-dash, or a middle dot as a separator.
 - **Don't** open a dialog for something that can unfold in place.
 - **Don't** animate navigation, form input, or the plan's figures.
 - **Don't** animate width, height, margin or `max-height`.

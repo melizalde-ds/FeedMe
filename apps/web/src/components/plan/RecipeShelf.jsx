@@ -22,7 +22,7 @@ function namesOnlyMeta(recipe) {
     nutrition?.protein == null ? null : `${nutrition.protein} g protein`,
   ].filter(Boolean)
   if (!parts.length) return 'No time or nutrition given'
-  return `${parts.join(' · ')}${nutrition ? ' per serving' : ''}`
+  return `${parts.join(', ')}${nutrition ? ' per serving' : ''}`
 }
 
 // One meal, unfolded under the rail it belongs to: its recipe, what you can
@@ -106,9 +106,9 @@ export function RecipeShelf({ week, day, slotIndex, onClose, onEditRecipe }) {
         <div className="min-w-0">
           <div className="flex items-start justify-between gap-3">
             <p className="pt-1.5 text-ui text-mute">
-              {SLOT_LABELS[slotName]} · {WEEK_DAYS[day]} of Week {week + 1}
-              {recipe ? ` · ${servings} ${servings === 1 ? 'serving' : 'servings'}` : ''}
-              {slot.leftover ? ' · reheated from an earlier meal' : ''}
+              {SLOT_LABELS[slotName]}, {WEEK_DAYS[day]} of Week {week + 1}
+              {recipe ? `, ${servings} ${servings === 1 ? 'serving' : 'servings'}` : ''}
+              {slot.leftover ? ', reheated from an earlier meal' : ''}
             </p>
             <IconButton onClick={onClose} aria-label="Close recipe">
               <Close />
@@ -182,17 +182,17 @@ export function RecipeShelf({ week, day, slotIndex, onClose, onEditRecipe }) {
                         src={option.imageUrl}
                         alt=""
                         loading="lazy"
-                        className="aspect-[4/5] w-full rounded-flag object-cover"
+                        className="aspect-[4/5] w-full rounded-chip object-cover"
                       />
                     ) : (
-                      <span className="ruled block aspect-[4/5] w-full rounded-flag" aria-hidden="true" />
+                      <span className="ruled block aspect-[4/5] w-full rounded-chip" aria-hidden="true" />
                     )}
                     <div className="min-w-0">
                       <p className="leading-tight font-bold">{option.name}</p>
                       <p className="mt-1 mb-2 text-sm text-mute">
                         {isNamesOnly(option)
                           ? namesOnlyMeta(option)
-                          : `${option.cookTimeMinutes} min · ${option.nutritionPerServing.calories} kcal · ${option.nutritionPerServing.protein} g protein per serving`}
+                          : `${option.cookTimeMinutes} min, ${option.nutritionPerServing.calories} kcal, ${option.nutritionPerServing.protein} g protein per serving`}
                       </p>
                       <Button
                         size="sm"

@@ -9,7 +9,7 @@ import { PlanBuildingState } from '../common/LoadingState'
 import { SafetyDisclaimer } from '../common/SafetyDisclaimer'
 import { RecipeFormModal } from '../recipes/RecipeFormModal'
 import { Button, TextButton } from '../ui/Button'
-import { Alert, Arrow, Check, Plus, Undo } from '../ui/icons'
+import { Alert, Arrow, DrawnTick, Plus, Undo } from '../ui/icons'
 import { PlanSummary } from './PlanSummary'
 import { RecipeShelf } from './RecipeShelf'
 import { Wall } from './Wall'
@@ -51,8 +51,8 @@ export function PlanView({ onEditSetup, onGoToGrocery }) {
   const selected = openRecipe?.week === currentWeek ? openRecipe : null
 
   const avoiding = preferences.allergies.length
-    ? `Avoiding ${preferences.allergies.join(', ')}`
-    : 'No allergies'
+    ? `avoiding ${preferences.allergies.join(', ')}`
+    : 'no allergies'
 
   return (
     <>
@@ -61,16 +61,16 @@ export function PlanView({ onEditSetup, onGoToGrocery }) {
           <h1 className="text-4xl font-extrabold tracking-tight max-sm:text-3xl">Your meal plan</h1>
           <p className="mt-2 text-mute">
             {preferences.householdSize}{' '}
-            {preferences.householdSize === 1 ? 'person' : 'people'} ·{' '}
-            {preferences.planningPeriod} days ·{' '}
+            {preferences.householdSize === 1 ? 'person' : 'people'},{' '}
+            {preferences.planningPeriod} days,{' '}
             {Number(preferences.budget) > 0
               ? `$${preferences.budget} to spend`
-              : 'no spending limit'}{' '}
-            · <strong className="font-bold text-ink">{avoiding}</strong>
+              : 'no spending limit'}
+            , <strong className="font-bold text-ink">{avoiding}</strong>
             {preferences.dietaryRestrictions.length
-              ? ` · ${preferences.dietaryRestrictions.join(', ')}`
-              : ''}{' '}
-            · {cookingTimeLabel(preferences.cookingTime)}
+              ? `, ${preferences.dietaryRestrictions.join(', ').toLowerCase()}`
+              : ''}
+            , {cookingTimeLabel(preferences.cookingTime).toLowerCase()}
             <TextButton className="ml-3" onClick={onEditSetup}>
               Edit setup
             </TextButton>
@@ -163,7 +163,7 @@ export function PlanView({ onEditSetup, onGoToGrocery }) {
             <div className="mt-8 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-y border-line py-5">
               <div className="min-w-0 flex-[1_1_22rem]">
                 <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight">
-                  {confirmed ? <Check size={20} className="draw shrink-0 text-ok" /> : null}
+                  {confirmed ? <DrawnTick className="draw shrink-0 text-ok" /> : null}
                   {confirmed ? 'This week is confirmed' : 'Happy with this week?'}
                 </h2>
                 <p className="mt-1 text-mute">
@@ -202,7 +202,7 @@ export function PlanView({ onEditSetup, onGoToGrocery }) {
       </div>
 
       <details className="mt-7">
-        <summary className="w-fit rounded-flag py-1 font-semibold">How this page works</summary>
+        <summary className="w-fit rounded-chip py-1 font-semibold">How this page works</summary>
         <ul className="mt-3 max-w-[58ch] list-disc space-y-1.5 pl-5 text-mute">
           <li>
             Open a meal to read its recipe, accept or reject it, or change it.

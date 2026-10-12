@@ -47,6 +47,8 @@ async (page) => {
   const options = (group) => page.locator(`#slot-meal optgroup[label="${group}"] option`).allTextContents()
   const day = (name) => page.getByRole('listitem').filter({ has: page.locator('strong', { hasText: new RegExp(`^${name}$`) }) })
   const note = () => page.getByRole('status').filter({ hasText: 'What changed' })
+  // What is written under a meal's photograph: "Accepted", "Changed", "Yours".
+  const under = (label) => tile(label).locator('xpath=following-sibling::p[1]').locator('.tile-note')
 
   await page.unrouteAll()
   await page.route('**/api/meal-options', async (route) => {
@@ -59,7 +61,7 @@ async (page) => {
   await step('plan survives a reload, and the Plan tab opens it', async () => {
     await nav().getByRole('button', { name: 'Plan' }).click()
     await page.getByRole('heading', { name: 'Your meal plan' }).waitFor({ timeout: 3000 })
-    return text(page.getByText(/people · \d+ days/))
+    return text(page.getByText(/people, \d+ days/))
   })
   await step('plan: the browser allergy check leaves out the pecan recipe and says so', async () =>
     text(page.getByRole('status').filter({ hasText: 'Heads up' })))
@@ -95,7 +97,7 @@ async (page) => {
   await step('plan: change a meal from its dropdown', async () => {
     const before = await mealOn('Breakfast on Monday')
     await open('Breakfast on Monday')
-    const next = (await options('Recipes')).find((o) => o !== before && !o.includes('—'))
+    const next = (await options('Recipes')).find((o) => o !== before && !o.includes(': '))
     await page.locator('#slot-meal').selectOption({ label: next })
     const after = await mealOn('Breakfast on Monday')
     if (after !== next) throw new Error(`still ${after}`)
@@ -105,7 +107,7 @@ async (page) => {
     await choose('Lunch on Tuesday', '')
     const current = await mealOn('Dinner on Monday')
     await open('Dinner on Monday')
-    const next = (await options('Recipes')).find((o) => o !== current && !o.includes('—') && !o.includes('(yours)'))
+    const next = (await options('Recipes')).find((o) => o !== current && !o.includes(': ') && !o.includes('(yours)'))
     await page.locator('#slot-meal').selectOption({ label: next })
     const lunch = await mealOn('Lunch on Tuesday')
     if (lunch !== `leftovers of ${next}`) throw new Error(`lunch is ${lunch}`)
@@ -114,7 +116,7 @@ async (page) => {
   await step('plan: the People box overrides the household size', async () => {
     await open('Dinner on Monday')
     await page.locator('#slot-people').fill('5')
-    const where = await text(shelf().getByText(/Dinner · Monday of Week 1/))
+    const where = await text(shelf().getByText(/Dinner, Monday of Week 1/))
     if (!where.includes('5 servings')) throw new Error(where)
     return where
   })
@@ -129,10 +131,11 @@ async (page) => {
     await shot('recipe-shelf', { full: false })
     return `${await shelf().locator('ol li').count()} steps`
   })
-  await step('recipe: Accept, Reject and Save toggle their states, and the meal is flagged', async () => {
+  await step('recipe: Accept, Reject and Save toggle their states, and the meal is noted under its photograph', async () => {
     await shelf().getByRole('button', { name: 'Accept this meal' }).click()
     if (!(await shelf().getByRole('button', { name: 'Accepted' }).isDisabled())) throw new Error('accept')
-    const flag = await text(tile('Dinner on Monday').locator('.flag').last())
+    const flag = await text(under('Dinner on Monday'))
+    if (await tile('Dinner on Monday').locator('.tile-note').count()) throw new Error('the note is on the photograph')
     await shelf().getByRole('button', { name: 'Reject' }).click()
     if (!(await shelf().getByRole('button', { name: 'Rejected' }).isDisabled())) throw new Error('reject')
     await shelf().getByRole('button', { name: 'Accept this meal' }).click()
@@ -163,12 +166,12 @@ async (page) => {
     await close()
     const said = await text(note())
     if (!said.includes(`Swapped ${before}`)) throw new Error(said)
-    const flag = await text(tile('Breakfast on Wednesday').locator('.flag').last())
-    if (flag !== 'Changed') throw new Error(`flag is "${flag}"`)
+    const flag = await text(under('Breakfast on Wednesday'))
+    if (flag !== 'Changed') throw new Error(`note is "${flag}"`)
     await shot('plan-changed')
     await note().getByRole('button', { name: 'Dismiss' }).click()
     if (await note().count()) throw new Error('note still there')
-    if (await tile('Breakfast on Wednesday').getByText('Changed').count()) throw new Error('mark still there')
+    if (await under('Breakfast on Wednesday').filter({ hasText: 'Changed' }).count()) throw new Error('mark still there')
     return said
   })
 
@@ -178,8 +181,8 @@ async (page) => {
     const mine = (await options('Recipes')).find((o) => o.includes('(yours)'))
     if (!mine) throw new Error('not offered')
     await page.locator('#slot-meal').selectOption({ label: mine })
-    const flag = await text(tile('Dinner on Friday').locator('.flag').last())
-    return `${mine}, flagged "${flag}"`
+    const flag = await text(under('Dinner on Friday'))
+    return `${mine}, noted "${flag}" under its photograph`
   })
   await step('own recipe: its recipe has amounts and costs, and "Edit this recipe" opens the form', async () => {
     await shelf().getByRole('columnheader', { name: 'Est. cost' }).waitFor({ timeout: 2000 })
@@ -324,7 +327,7 @@ async (page) => {
     await page.waitForTimeout(400)
     const info = await page.evaluate(() => {
       const el = document.activeElement
-      return `${el.getAttribute('aria-label').split(':')[0]} · ring ${getComputedStyle(el).boxShadow.slice(0, 44)}`
+      return `${el.getAttribute('aria-label').split(':')[0]}, ring ${getComputedStyle(el).boxShadow.slice(0, 44)}`
     })
     if (!info.startsWith('Breakfast on Tuesday') || !info.includes('198, 242, 74')) throw new Error(info)
     await page.keyboard.press('Enter')
@@ -332,7 +335,7 @@ async (page) => {
     const inside = await page.evaluate(() => Boolean(document.activeElement?.closest('section.unfold')))
     await close()
     if (!inside) throw new Error('Enter opened the recipe but focus stayed outside it')
-    return `${info} · Enter opens the recipe and moves focus into it`
+    return `${info}. Enter opens the recipe and moves focus into it`
   })
   await step('confirm: "Go to grocery list" opens the Grocery step', async () => {
     await page.getByRole('button', { name: 'Go to grocery list' }).click()

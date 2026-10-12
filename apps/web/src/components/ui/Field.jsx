@@ -34,7 +34,7 @@ export function Choice({ className, children, ...input }) {
 // that removes it.
 export function Chip({ children, onRemove, removeLabel, className }) {
   const base =
-    'inline-flex min-h-7 max-w-full items-center gap-1.5 rounded-flag border border-line bg-raise px-2.5 text-ui wrap-anywhere text-ink pointer-coarse:min-h-10'
+    'inline-flex min-h-7 max-w-full items-center gap-1.5 rounded-chip border border-line bg-raise px-2.5 text-ui wrap-anywhere text-ink pointer-coarse:min-h-10'
 
   if (!onRemove) return <span className={cx(base, className)}>{children}</span>
 

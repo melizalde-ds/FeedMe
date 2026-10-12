@@ -90,6 +90,28 @@ async (page) => {
     })
   }
 
+  await step('full motion: the wall fills in from Monday to Sunday, 30ms a column', async () => {
+    // Every photograph's delay against the column it sits in.
+    const wrong = () => page.locator('.wall .rail__tiles').evaluateAll((lists, calm) =>
+      lists.flatMap((list) => [...list.children].map((li, column) => {
+        const img = li.querySelector('img.tile__photo')
+        if (!img) return null
+        const delay = Math.round(parseFloat(getComputedStyle(img).transitionDelay) * 1000)
+        return delay === (calm ? 0 : column * 30) ? null : `column ${column}: ${delay}ms`
+      }).filter(Boolean)), false)
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
+    await page.setViewportSize({ width: 1440, height: 900 })
+    await openPlan()
+    const photos = await page.locator('.wall img.tile__photo').count()
+    const off = await wrong()
+    if (!photos || off.length) throw new Error(`${photos} photographs; ${off.join(', ')}`)
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await openPlan()
+    const waiting = await page.locator('.wall img.tile__photo').evaluateAll((els) => els.filter((el) => parseFloat(getComputedStyle(el).transitionDelay) > 0).length)
+    if (waiting) throw new Error(`${waiting} photographs still wait with reduced motion`)
+    return `${photos} photographs, each delayed by 30ms per column; none with reduced motion`
+  })
+
   await step('phone: nothing is tucked or scaled, and a tap leaves no stuck hover', async () => {
     await page.emulateMedia({ reducedMotion: 'no-preference' })
     await page.setViewportSize({ width: 390, height: 844 })

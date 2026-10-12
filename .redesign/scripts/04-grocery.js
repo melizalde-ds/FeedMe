@@ -89,9 +89,9 @@ async (page) => {
     const lede = await text(page.getByText(/Built from the \d+ meals? you confirmed/))
     const rows = await page.getByRole('table').first().locator('tbody tr').count()
     const beef = await text(page.getByRole('row', { name: /^Ground beef Sunday/ }))
-    const dash = await page.getByRole('table').first().locator('tbody td', { hasText: /^—$/ }).count()
+    const dash = await page.getByRole('table').first().locator('tbody td', { hasText: /^-$/ }).count()
     if (!dash) throw new Error('no item without an amount')
-    await page.getByText(/Items marked “—” come from planner recipes/).waitFor()
+    await page.getByText(/Items marked “-” come from planner recipes/).waitFor()
     return `${lede} | ${rows} items | own recipe row: ${beef} | ${dash} planner items with no amount`
   })
   await step('buy panel: names the own recipes it will not shop for, offers both modes', async () => {

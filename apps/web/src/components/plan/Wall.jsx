@@ -15,17 +15,47 @@ const grams = (value) => Math.round(value * 10) / 10
 const mealLabel = (day, slotIndex) =>
   `${SLOT_LABELS[MEAL_SLOTS[slotIndex]]} on ${WEEK_DAYS[day]}`
 
-// The one thing most worth saying about a meal, in words on its photograph.
-// A meal with nothing to say gets no flag.
-function flagFor({ slot, recipe, problems, changed }) {
-  if (!recipe) return { kind: 'bad', text: 'No longer in the recipe list', icon: <Alert size={13} /> }
-  if (problems.length) return { kind: 'bad', text: problems[0].message, icon: <Alert size={13} /> }
-  if (changed) return { kind: 'new', text: 'Changed' }
-  if (slot.status === MEAL_STATUS.REJECTED) return { kind: 'quiet', text: 'Rejected' }
-  if (slot.leftover) return { kind: 'plain', text: 'Leftovers' }
-  if (isCustomRecipe(recipe)) return { kind: 'plain', text: 'Yours' }
-  if (slot.status === MEAL_STATUS.ACCEPTED) return { kind: 'ok', text: 'Accepted', icon: <Check size={13} /> }
+// The one thing most worth saying about a meal. It is written under the
+// photograph, never on it. A meal with nothing to say has an empty line, so
+// the rails stay level.
+function noteFor({ slot, recipe, problems, changed }) {
+  if (!recipe) return { tone: 'bad', text: 'No longer in the recipe list', Icon: Alert }
+  if (problems.length) return { tone: 'bad', text: problems[0].message, Icon: Alert }
+  if (changed) return { tone: 'strong', text: 'Changed' }
+  if (slot.status === MEAL_STATUS.REJECTED) return { tone: 'quiet', text: 'Rejected' }
+  if (slot.leftover) return { tone: 'quiet', text: 'Leftovers' }
+  if (isCustomRecipe(recipe)) return { tone: 'quiet', text: 'Yours' }
+  if (slot.status === MEAL_STATUS.ACCEPTED) return { tone: 'ok', text: 'Accepted', Icon: Check }
   return null
+}
+
+const NOTE_TONES = {
+  bad: 'font-bold text-danger',
+  strong: 'font-bold text-ink',
+  ok: 'font-semibold text-ok',
+  quiet: 'text-mute',
+}
+
+// The line under a tile: the day (on a phone, where the rails scroll and the
+// day row is out of sight), then what there is to say about the meal.
+function TileNote({ dayName, note, saved }) {
+  return (
+    <p className="mt-1.5 flex min-h-4 flex-wrap items-center gap-x-1.5 px-0.5 text-xs leading-4">
+      <span className="font-bold text-ink lg:hidden">{dayName}</span>
+      {note ? (
+        <span className={`tile-note inline-flex items-center gap-1 ${NOTE_TONES[note.tone]}`}>
+          {note.Icon ? <note.Icon size={13} /> : null}
+          {note.text}
+        </span>
+      ) : null}
+      {saved ? (
+        <span className="tile-note inline-flex items-center gap-1 text-mute">
+          <Star size={13} />
+          Saved
+        </span>
+      ) : null}
+    </p>
+  )
 }
 
 function Tile({ week, day, slotIndex, selected, onSelect }) {
@@ -38,26 +68,28 @@ function Tile({ week, day, slotIndex, selected, onSelect }) {
 
   if (!slot.recipe) {
     return (
-      <button
-        type="button"
-        className="tile tile--empty"
-        aria-label={`Choose a meal for ${label}`}
-        aria-expanded={selected}
-        data-on={selected ? '' : undefined}
-        onClick={onSelect}
-      >
-        <span className="flag lg:hidden">{dayName}</span>
-        <Plus size={16} />
-        <span className="text-sm font-semibold">Choose a meal</span>
-      </button>
+      <>
+        <button
+          type="button"
+          className="tile tile--empty"
+          aria-label={`Choose a meal for ${label}`}
+          aria-expanded={selected}
+          data-on={selected ? '' : undefined}
+          onClick={onSelect}
+        >
+          <Plus size={16} />
+          <span className="text-sm font-semibold">Choose a meal</span>
+        </button>
+        <TileNote dayName={dayName} />
+      </>
     )
   }
 
   const recipe = findRecipe(plan, slot.recipe)
   const problems = recipe ? recipeProblems(recipe, preferences) : []
   const changed = Boolean(highlight?.includes(slotKey(week, day, slotIndex)))
-  const flag = flagFor({ slot, recipe, problems, changed })
-  const bad = flag?.kind === 'bad'
+  const note = noteFor({ slot, recipe, problems, changed })
+  const bad = note?.tone === 'bad'
   const nutrition = recipe?.nutritionPerServing
   const more = [
     recipe?.cookTimeMinutes == null ? null : `${recipe.cookTimeMinutes} min`,
@@ -67,44 +99,40 @@ function Tile({ week, day, slotIndex, selected, onSelect }) {
   ].filter(Boolean)
 
   return (
-    <button
-      type="button"
-      className="tile"
-      data-on={selected ? '' : undefined}
-      data-bad={bad ? '' : undefined}
-      data-leftover={slot.leftover ? '' : undefined}
-      data-rejected={slot.status === MEAL_STATUS.REJECTED ? '' : undefined}
-      aria-expanded={selected}
-      aria-label={`${label}: ${slot.leftover ? 'leftovers of ' : ''}${slot.recipe}${
-        bad ? `. ${flag.text}` : ''
-      }`}
-      onClick={onSelect}
-    >
-      {recipe?.imageUrl ? (
-        <img key={recipe.imageUrl} className="tile__photo" src={recipe.imageUrl} alt="" loading="lazy" />
-      ) : (
-        <span className="tile__photo ruled" aria-hidden="true" />
-      )}
-      <span className="tile__top">
-        <span className="flag lg:hidden">{dayName}</span>
-        {flag ? (
-          <span className="flag" data-kind={flag.kind}>
-            {flag.icon}
-            {flag.text}
-          </span>
-        ) : null}
-        {slot.saved ? (
-          <span className="flag" title="Saved">
-            <Star size={13} />
-            <span className="sr-only">Saved</span>
-          </span>
-        ) : null}
-      </span>
-      <span className="tile__body">
-        <span className="tile__name">{slot.recipe}</span>
-        {more.length ? <span className="tile__more">{more.join(' · ')}</span> : null}
-      </span>
-    </button>
+    <>
+      <button
+        type="button"
+        className="tile"
+        data-on={selected ? '' : undefined}
+        data-bad={bad ? '' : undefined}
+        data-leftover={slot.leftover ? '' : undefined}
+        data-rejected={slot.status === MEAL_STATUS.REJECTED ? '' : undefined}
+        aria-expanded={selected}
+        aria-label={`${label}: ${slot.leftover ? 'leftovers of ' : ''}${slot.recipe}${
+          bad ? `. ${note.text}` : ''
+        }`}
+        onClick={onSelect}
+      >
+        {recipe?.imageUrl ? (
+          <img
+            key={recipe.imageUrl}
+            className="tile__photo"
+            src={recipe.imageUrl}
+            alt=""
+            loading="lazy"
+            // The wall fills in from Monday to Sunday, 30ms a column.
+            style={{ transitionDelay: `${day * 30}ms` }}
+          />
+        ) : (
+          <span className="tile__photo ruled" aria-hidden="true" />
+        )}
+        <span className="tile__body">
+          <span className="tile__name">{slot.recipe}</span>
+          {more.length ? <span className="tile__more">{more.join(', ')}</span> : null}
+        </span>
+      </button>
+      <TileNote dayName={dayName} note={note} saved={slot.saved} />
+    </>
   )
 }
 
@@ -149,7 +177,7 @@ function DaySummary({ week, day }) {
       )}
       {nutrition.filled ? (
         <span>
-          {kcal(nutrition.calories)} kcal · {grams(nutrition.protein)} g protein per person
+          {kcal(nutrition.calories)} kcal, {grams(nutrition.protein)} g protein per person
           {notes.length ? <span className="block">{notes.join(', ')}</span> : null}
         </span>
       ) : null}

@@ -3,7 +3,7 @@ import { isNamesOnly } from '../../lib/mealOptions'
 import { Alert } from '../ui/icons'
 import { tableClass, tdClass, tfootClass, thClass } from '../ui/table'
 
-const money = (value) => (value == null ? '—' : `$${Number(value).toFixed(2)}`)
+const money = (value) => (value == null ? '-' : `$${Number(value).toFixed(2)}`)
 const round = (value) => Math.round(value * 100) / 100
 
 // Requirement 6: the reader has to be able to tell whose numbers these are.
@@ -19,7 +19,7 @@ const NAMES_ONLY_NOTE =
   'Chosen by the FeedMe planner and checked against your allergies and diet. Nutrition is per serving as the recipe gives it, an estimate that is not verified. The recipe has no amounts or prices.'
 
 // A figure the recipe doesn't give stays blank: nothing is filled in.
-const figure = (value, unit = '') => (value == null ? '—' : `${value}${unit}`)
+const figure = (value, unit = '') => (value == null ? '-' : `${value}${unit}`)
 
 const headingClass = 'mt-6 mb-2 text-base font-bold'
 const fineClass = 'text-sm text-mute'
@@ -59,13 +59,13 @@ function NamesOnlyRecipe({ recipe, conflicts, Heading }) {
   return (
     <div>
       <p className={fineClass}>
-        Per serving · {nutrition ? `about ${figure(nutrition.calories)} kcal` : 'no calories given'}
-        {nutrition ? ` · ${figure(nutrition.protein, ' g')} protein` : ''}
-        {' · '}
+        {nutrition
+          ? `Per serving: about ${figure(nutrition.calories)} kcal, ${figure(nutrition.protein, ' g')} protein.`
+          : 'No calories given.'}{' '}
         {recipe.cookTimeMinutes == null
-          ? 'cooking time not given'
-          : `${recipe.cookTimeMinutes} min`}
-        {recipe.recipeServings ? ` · the recipe makes ${recipe.recipeServings}` : ''}
+          ? 'Cooking time not given.'
+          : `Takes ${recipe.cookTimeMinutes} min.`}
+        {recipe.recipeServings ? ` The recipe makes ${recipe.recipeServings}.` : ''}
       </p>
 
       {conflicts.length ? (
@@ -82,7 +82,7 @@ function NamesOnlyRecipe({ recipe, conflicts, Heading }) {
           {recipe.ingredients.map((ingredient, index) => (
             <li
               key={`${ingredient.name}-${index}`}
-              className="rounded-flag border border-line bg-ground px-2.5 py-0.5 text-ui"
+              className="rounded-chip border border-line bg-ground px-2.5 py-0.5 text-ui"
             >
               {ingredient.name}
             </li>
@@ -97,7 +97,7 @@ function NamesOnlyRecipe({ recipe, conflicts, Heading }) {
 
       <Heading className={headingClass}>
         Directions
-        {recipe.cookTimeMinutes == null ? '' : ` · about ${recipe.cookTimeMinutes} min`}
+        {recipe.cookTimeMinutes == null ? '' : `, about ${recipe.cookTimeMinutes} min`}
       </Heading>
       {recipe.instructions.length ? (
         <ol className="max-w-[58ch] list-decimal space-y-1.5 pl-6 marker:font-bold marker:text-mute">
@@ -134,9 +134,9 @@ export function RecipeDetail({ recipe, servings, conflicts = [], heading: Headin
   return (
     <div>
       <p className={fineClass}>
-        Per serving · about {nutrition.calories} kcal · {nutrition.protein} g
-        protein · {recipe.cookTimeMinutes} min · about{' '}
-        {money(perServingCost)} (estimates)
+        Per serving: about {nutrition.calories} kcal, {nutrition.protein} g
+        protein, about {money(perServingCost)} (estimates). Takes{' '}
+        {recipe.cookTimeMinutes} min.
       </p>
 
       {recipe.allergens.length ? (
@@ -199,7 +199,7 @@ export function RecipeDetail({ recipe, servings, conflicts = [], heading: Headin
         </tfoot>
       </table>
 
-      <Heading className={headingClass}>Directions · about {recipe.cookTimeMinutes} min</Heading>
+      <Heading className={headingClass}>Directions, about {recipe.cookTimeMinutes} min</Heading>
       <ol className="max-w-[58ch] list-decimal space-y-1.5 pl-6 marker:font-bold marker:text-mute">
         {recipe.instructions.map((step) => (
           <li key={step}>{step}</li>
