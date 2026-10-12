@@ -382,7 +382,7 @@ reaches its target had to change, because the control did:
 
 | Defect | Now |
 |---|---|
-| 1. "Recalculate" could make the form impossible to submit | Fixed. The carbs field takes whole grams (`NutritionGoalsFields.jsx`). `02-setup.js` reports "all fields valid" after recalculating |
+| 1. "Recalculate" could make the form impossible to submit | Fixed. The carbs and protein fields take whole grams (`NutritionGoalsFields.jsx`), so neither a recalculated value nor a typed one such as 103 g blocks the form. `02-setup.js` reports "all fields valid" after recalculating |
 | 2. The "session ended" notice was sometimes lost | Fixed. The session is dropped before the redirect, only the first of several `401`s acts, and the message is kept in the auth provider as well as in the route (`AuthProvider.jsx`, `LoginPage.jsx`). Shown in 4 of 4 tries, in both runs |
 | 3. Clearing Week 1 stranded its Undo | Fixed. The Plan step stays reachable while a cleared week can be undone (`Home.jsx`) |
 | 4. Unrounded protein in the day totals | Rounded where it is shown (`Wall.jsx`). `planner.js` still returns the unrounded sum |
