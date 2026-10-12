@@ -202,8 +202,8 @@ export function PlanView({ onEditSetup, onGoToGrocery }) {
       </div>
 
       <details className="mt-7">
-        <summary className="w-fit rounded-flag font-semibold">How this page works</summary>
-        <ul className="mt-3 max-w-[72ch] list-disc space-y-1.5 pl-5 text-mute">
+        <summary className="w-fit rounded-flag py-1 font-semibold">How this page works</summary>
+        <ul className="mt-3 max-w-[58ch] list-disc space-y-1.5 pl-5 text-mute">
           <li>
             Open a meal to read its recipe, accept or reject it, or change it.
             Leftovers come from a meal cooked earlier in the plan.

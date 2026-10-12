@@ -10,7 +10,14 @@ export function GroceryList() {
   const noAmounts = items.some((item) => item.quantity === null)
 
   return (
-    <section className="min-w-0 max-lg:order-2" aria-labelledby="grocery-list-title">
+    // Beside the agent the list is a reference, so on a wide screen it keeps
+    // to the height of the window and scrolls inside it: the agent never
+    // leaves view. It can take focus, so the keyboard can scroll it too.
+    <section
+      className="min-w-0 max-lg:order-2 lg:sticky lg:top-6 lg:max-h-[calc(100dvh-3rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-4 lg:[scrollbar-width:thin]"
+      aria-labelledby="grocery-list-title"
+      tabIndex={0}
+    >
       <h2 className="text-xl font-bold tracking-tight" id="grocery-list-title">
         Everything this plan needs
       </h2>
@@ -19,7 +26,7 @@ export function GroceryList() {
       </p>
 
       <table className={`${tableClass} mt-3`}>
-        <thead>
+        <thead className="lg:sticky lg:top-0 lg:bg-ground">
           <tr>
             <th scope="col" className={thClass}>
               Item <span className="font-normal">and the meals it is used in</span>

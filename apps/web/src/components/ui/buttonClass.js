@@ -14,8 +14,8 @@ const VARIANTS = {
 }
 
 const SIZES = {
-  sm: 'min-h-8 px-3 text-ui',
-  md: 'min-h-10 px-4 text-base',
+  sm: 'min-h-8 px-3 text-ui pointer-coarse:min-h-10',
+  md: 'min-h-10 px-4 text-base pointer-coarse:min-h-11',
   lg: 'min-h-12 px-6 text-lg',
 }
 

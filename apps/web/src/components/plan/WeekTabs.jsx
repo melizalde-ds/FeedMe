@@ -26,7 +26,7 @@ export function WeekTabs() {
           role="tab"
           aria-selected={week === currentWeek}
           aria-controls={WEEK_PANEL_ID}
-          className="flex min-h-8.5 items-baseline gap-1.5 rounded-[9px] px-3.5 py-1 text-base font-semibold text-mute transition-colors hover:text-ink aria-selected:bg-ink aria-selected:text-ground"
+          className="flex min-h-8.5 items-baseline gap-1.5 rounded-[9px] px-3.5 py-1 pointer-coarse:min-h-10 pointer-coarse:items-center text-base font-semibold text-mute transition-colors hover:text-ink aria-selected:bg-ink aria-selected:text-ground"
           onClick={() => goToWeek(week)}
         >
           Week {week + 1}

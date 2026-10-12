@@ -42,7 +42,7 @@ function Part({ legend, lede, children }) {
       <legend className="float-left mb-1 flex w-full items-center gap-2 text-lg font-bold tracking-tight">
         {legend}
       </legend>
-      {lede ? <p className="clear-both max-w-[65ch] text-sm text-mute">{lede}</p> : null}
+      {lede ? <p className="clear-both max-w-[56ch] text-sm text-mute">{lede}</p> : null}
       <div className="clear-both pt-3">{children}</div>
     </fieldset>
   )
@@ -161,7 +161,7 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
       title={previousName ? `Edit ${previousName}` : 'Add your own recipe'}
       onClose={onClose}
     >
-      <p className="max-w-[65ch] text-mute">
+      <p className="max-w-[56ch] text-mute">
         Enter the amounts and macros for the whole recipe. We divide them by the
         servings it makes, so a meal can be cooked for any number of people.
       </p>
@@ -504,7 +504,7 @@ export function RecipeFormModal({ recipe = null, onClose, onSaved }) {
             </Button>
           </div>
 
-          <p className="mt-4 max-w-[65ch] text-sm text-mute">
+          <p className="mt-4 max-w-[56ch] text-sm text-mute">
             Your macros and prices are stored as you entered them and shown as
             yours and unverified. Allergy filtering still runs over the ingredient
             names, but it is not a guarantee — read the labels before you cook.

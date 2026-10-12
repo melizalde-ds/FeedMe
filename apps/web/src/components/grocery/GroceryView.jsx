@@ -22,7 +22,7 @@ export function GroceryView({ onBackToPlan }) {
 
       {confirmed && items.length ? (
         <>
-          <p className="mt-2 max-w-[72ch] text-mute">
+          <p className="mt-2 max-w-[58ch] text-mute">
             Built from the {mealCount} {mealCount === 1 ? 'meal' : 'meals'} you
             confirmed in Week {week + 1}, for your household of{' '}
             {preferences.householdSize}. Leftover slots buy nothing extra.

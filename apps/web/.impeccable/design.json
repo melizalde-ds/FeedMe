@@ -1,0 +1,423 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-12T08:33:44.962Z",
+  "title": "Design System: FeedMe",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Aubergine Black",
+        "canonical": "oklch(16.8% 0.013 292.6)",
+        "tonalRamp": [
+          "oklch(15% 0.013 292.6)",
+          "oklch(26% 0.013 292.6)",
+          "oklch(38% 0.013 292.6)",
+          "oklch(50% 0.013 292.6)",
+          "oklch(62% 0.013 292.6)",
+          "oklch(74% 0.013 292.6)",
+          "oklch(85% 0.013 292.6)",
+          "oklch(95% 0.013 292.6)"
+        ]
+      },
+      "ground-light": {
+        "role": "neutral",
+        "displayName": "Cool Paper",
+        "canonical": "oklch(96.8% 0.004 286.3)",
+        "tonalRamp": [
+          "oklch(15% 0.004 286.3)",
+          "oklch(26% 0.004 286.3)",
+          "oklch(38% 0.004 286.3)",
+          "oklch(50% 0.004 286.3)",
+          "oklch(62% 0.004 286.3)",
+          "oklch(74% 0.004 286.3)",
+          "oklch(85% 0.004 286.3)",
+          "oklch(95% 0.004 286.3)"
+        ]
+      },
+      "raise": {
+        "role": "neutral",
+        "displayName": "Raised",
+        "canonical": "oklch(21.6% 0.020 293.9)",
+        "tonalRamp": [
+          "oklch(15% 0.020 293.9)",
+          "oklch(26% 0.020 293.9)",
+          "oklch(38% 0.020 293.9)",
+          "oklch(50% 0.020 293.9)",
+          "oklch(62% 0.020 293.9)",
+          "oklch(74% 0.020 293.9)",
+          "oklch(85% 0.020 293.9)",
+          "oklch(95% 0.020 293.9)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(96.1% 0.011 89.7)",
+        "tonalRamp": [
+          "oklch(15% 0.011 89.7)",
+          "oklch(26% 0.011 89.7)",
+          "oklch(38% 0.011 89.7)",
+          "oklch(50% 0.011 89.7)",
+          "oklch(62% 0.011 89.7)",
+          "oklch(74% 0.011 89.7)",
+          "oklch(85% 0.011 89.7)",
+          "oklch(95% 0.011 89.7)"
+        ]
+      },
+      "mute": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "oklch(73.2% 0.029 297.1)",
+        "tonalRamp": [
+          "oklch(15% 0.029 297.1)",
+          "oklch(26% 0.029 297.1)",
+          "oklch(38% 0.029 297.1)",
+          "oklch(50% 0.029 297.1)",
+          "oklch(62% 0.029 297.1)",
+          "oklch(74% 0.029 297.1)",
+          "oklch(85% 0.029 297.1)",
+          "oklch(95% 0.029 297.1)"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Strong Hairline",
+        "canonical": "oklch(55.5% 0.039 294.3)",
+        "tonalRamp": [
+          "oklch(15% 0.039 294.3)",
+          "oklch(26% 0.039 294.3)",
+          "oklch(38% 0.039 294.3)",
+          "oklch(50% 0.039 294.3)",
+          "oklch(62% 0.039 294.3)",
+          "oklch(74% 0.039 294.3)",
+          "oklch(85% 0.039 294.3)",
+          "oklch(95% 0.039 294.3)"
+        ]
+      },
+      "lime": {
+        "role": "primary",
+        "displayName": "Ripe Lime",
+        "canonical": "oklch(90.0% 0.194 123.2)",
+        "tonalRamp": [
+          "oklch(15% 0.194 123.2)",
+          "oklch(26% 0.194 123.2)",
+          "oklch(38% 0.194 123.2)",
+          "oklch(50% 0.194 123.2)",
+          "oklch(62% 0.194 123.2)",
+          "oklch(74% 0.194 123.2)",
+          "oklch(85% 0.194 123.2)",
+          "oklch(95% 0.194 123.2)"
+        ]
+      },
+      "mark-light": {
+        "role": "primary",
+        "displayName": "Deep Lime",
+        "canonical": "oklch(52.4% 0.131 124.4)",
+        "tonalRamp": [
+          "oklch(15% 0.131 124.4)",
+          "oklch(26% 0.131 124.4)",
+          "oklch(38% 0.131 124.4)",
+          "oklch(50% 0.131 124.4)",
+          "oklch(62% 0.131 124.4)",
+          "oklch(74% 0.131 124.4)",
+          "oklch(85% 0.131 124.4)",
+          "oklch(95% 0.131 124.4)"
+        ]
+      },
+      "danger-fill": {
+        "role": "secondary",
+        "displayName": "Tomato",
+        "canonical": "oklch(54.4% 0.197 30.7)",
+        "tonalRamp": [
+          "oklch(15% 0.197 30.7)",
+          "oklch(26% 0.197 30.7)",
+          "oklch(38% 0.197 30.7)",
+          "oklch(50% 0.197 30.7)",
+          "oklch(62% 0.197 30.7)",
+          "oklch(74% 0.197 30.7)",
+          "oklch(85% 0.197 30.7)",
+          "oklch(95% 0.197 30.7)"
+        ]
+      },
+      "ok": {
+        "role": "secondary",
+        "displayName": "Leaf",
+        "canonical": "oklch(84.2% 0.136 145.6)",
+        "tonalRamp": [
+          "oklch(15% 0.136 145.6)",
+          "oklch(26% 0.136 145.6)",
+          "oklch(38% 0.136 145.6)",
+          "oklch(50% 0.136 145.6)",
+          "oklch(62% 0.136 145.6)",
+          "oklch(74% 0.136 145.6)",
+          "oklch(85% 0.136 145.6)",
+          "oklch(95% 0.136 145.6)"
+        ]
+      },
+      "warn-tint": {
+        "role": "secondary",
+        "displayName": "Lime Wash",
+        "canonical": "oklch(27.8% 0.038 101.9)",
+        "tonalRamp": [
+          "oklch(15% 0.038 101.9)",
+          "oklch(26% 0.038 101.9)",
+          "oklch(38% 0.038 101.9)",
+          "oklch(50% 0.038 101.9)",
+          "oklch(62% 0.038 101.9)",
+          "oklch(74% 0.038 101.9)",
+          "oklch(85% 0.038 101.9)",
+          "oklch(95% 0.038 101.9)"
+        ]
+      },
+      "none": {
+        "role": "neutral",
+        "displayName": "No Photo",
+        "canonical": "oklch(28.9% 0.035 291.3)",
+        "tonalRamp": [
+          "oklch(15% 0.035 291.3)",
+          "oklch(26% 0.035 291.3)",
+          "oklch(38% 0.035 291.3)",
+          "oklch(50% 0.035 291.3)",
+          "oklch(62% 0.035 291.3)",
+          "oklch(74% 0.035 291.3)",
+          "oklch(85% 0.035 291.3)",
+          "oklch(95% 0.035 291.3)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The one title of a page."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "The recipe name in the shelf, the sign-in heading."
+      },
+      "heading": {
+        "displayName": "Heading",
+        "purpose": "A part of a page or a form."
+      },
+      "subheading": {
+        "displayName": "Subheading",
+        "purpose": "A rail name, a recipe in the recipe book, a large button."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Sentences, and a meal name on its tile at 700."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Field labels, small buttons, chips."
+      },
+      "note": {
+        "displayName": "Note",
+        "purpose": "Hints and metadata, in Muted Ink."
+      },
+      "flag": {
+        "displayName": "Flag",
+        "purpose": "Words on a photograph, column heads, day verdicts."
+      }
+    },
+    "shadows": [
+      {
+        "name": "pop",
+        "value": "0 18px 30px -12px rgb(0 0 0 / 0.8)",
+        "purpose": "Under the meal in hand, with its 3px lime ring."
+      },
+      {
+        "name": "overlay",
+        "value": "0 24px 60px -20px rgb(0 0 0 / 0.55), 0 2px 8px rgb(0 0 0 / 0.2)",
+        "purpose": "Under a dialog."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Anything arriving or responding."
+      },
+      {
+        "name": "ease-in-out",
+        "value": "cubic-bezier(0.77, 0, 0.175, 1)",
+        "purpose": "The waiting pulse, the one thing that loops."
+      },
+      {
+        "name": "press",
+        "value": "160ms",
+        "purpose": "A button pressing to 97%, a colour or edge changing."
+      },
+      {
+        "name": "tile",
+        "value": "200ms",
+        "purpose": "A meal coming into hand, a photograph or a notice arriving."
+      },
+      {
+        "name": "dialog",
+        "value": "220ms",
+        "purpose": "A dialog rising in."
+      },
+      {
+        "name": "shelf",
+        "value": "280ms",
+        "purpose": "The recipe shelf unfolding."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one action that moves you forward. Lime on dark; ink with lime lettering on light.",
+      "html": "<button class=\"ds-btn-primary\">Confirm this week</button>",
+      "css": ".ds-btn-primary { min-height: 48px; padding: 0 24px; border: 1px solid var(--accent); border-radius: 10px; background: var(--accent); color: var(--on-accent); font: 600 1.125rem/1.3 'Schibsted Grotesk Variable', system-ui, sans-serif; cursor: pointer; transition: border-color 160ms cubic-bezier(0.23, 1, 0.32, 1), scale 160ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-btn-primary:hover { border-color: var(--ink); } .ds-btn-primary:active { scale: 0.97; } .ds-btn-primary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }"
+    },
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Everything else you can do. Raised, with a hairline that turns ink on hover.",
+      "html": "<button class=\"ds-btn\">Remake the plan</button>",
+      "css": ".ds-btn { min-height: 40px; padding: 0 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--raise); color: var(--ink); font: 600 0.9375rem/1.5 'Schibsted Grotesk Variable', system-ui, sans-serif; cursor: pointer; transition: border-color 160ms cubic-bezier(0.23, 1, 0.32, 1), scale 160ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-btn:hover { border-color: var(--ink); } .ds-btn:active { scale: 0.97; } .ds-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "A label above, a 42px control with a strong hairline, a hint below.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Foods you like</span><input class=\"ds-input\" placeholder=\"e.g. chicken\"><span class=\"ds-field-hint\">The plan leans towards these.</span></label>",
+      "css": ".ds-field { display: grid; gap: 6px; max-width: 320px; font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; } .ds-field-label { font-size: 0.875rem; font-weight: 600; color: var(--ink); } .ds-input { min-height: 42px; padding: 6px 12px; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--field); color: var(--ink); font: inherit; font-size: 0.9375rem; transition: border-color 160ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-input::placeholder { color: var(--mute); } .ds-input:hover { border-color: var(--ink); } .ds-input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; } .ds-field-hint { font-size: 0.8125rem; color: var(--mute); }"
+    },
+    {
+      "name": "Warning Notice",
+      "kind": "custom",
+      "refersTo": "notice-warning",
+      "description": "A caution the user should read. An icon, a bold title ending in a full stop, then the message.",
+      "html": "<div class=\"ds-notice\" role=\"status\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.3\"/></svg><div><strong>Heads up. </strong>We left out Honey Pecan Chicken Cutlets because the ingredients mention Tree nuts, which your household avoids.</div></div>",
+      "css": ".ds-notice { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border-radius: 12px; background: var(--warn-tint); color: var(--ink); font: 400 0.9375rem/1.5 'Schibsted Grotesk Variable', system-ui, sans-serif; } .ds-notice svg { flex: none; margin-top: 4px; }"
+    },
+    {
+      "name": "Photo Tile",
+      "kind": "custom",
+      "refersTo": "tile",
+      "description": "One meal. Shown here with no photograph, as the ruled block, and flagged as one of the user’s own recipes.",
+      "html": "<button class=\"ds-tile\"><span class=\"ds-tile-ruled\"></span><span class=\"ds-tile-top\"><span class=\"ds-flag\">Yours</span></span><span class=\"ds-tile-body\"><span class=\"ds-tile-name\">Sunday Beef Chili</span><span class=\"ds-tile-more\">30 min · 550 kcal · 35 g protein</span></span></button>",
+      "css": ".ds-tile { position: relative; display: block; width: 168px; aspect-ratio: 4 / 5; padding: 0; overflow: hidden; border: 0; border-radius: 12px; background: var(--none); color: #fff; font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; text-align: left; cursor: pointer; transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile-ruled { position: absolute; inset: 0; background: repeating-linear-gradient(135deg, transparent 0 11px, rgb(255 255 255 / 0.07) 11px 12px) var(--none); } .ds-tile::after { content: ''; position: absolute; inset: 30% 0 0; background: linear-gradient(to top, rgb(8 7 12 / 0.95), rgb(8 7 12 / 0.74) 44%, rgb(8 7 12 / 0)); } .ds-tile-top { position: absolute; inset: 8px 8px auto; z-index: 1; display: flex; gap: 4px; } .ds-flag { padding: 2px 8px; border-radius: 6px; background: rgb(8 7 12 / 0.82); font-size: 0.75rem; font-weight: 700; line-height: 1.5; } .ds-tile-body { position: absolute; inset: auto 10px 10px; z-index: 1; display: flex; flex-direction: column; transform: translateY(2.25rem); transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile-name { font-size: 0.9375rem; font-weight: 700; line-height: 1.2; } .ds-tile-more { height: 2rem; margin-top: 0.25rem; opacity: 0; font-size: 0.75rem; line-height: 1.35; color: #e3dfee; transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile:hover, .ds-tile:focus-visible { outline: none; transform: scale(1.05); box-shadow: 0 0 0 3px var(--lime), 0 18px 30px -12px rgb(0 0 0 / 0.8); } .ds-tile:hover .ds-tile-body, .ds-tile:focus-visible .ds-tile-body { transform: none; } .ds-tile:hover .ds-tile-more, .ds-tile:focus-visible .ds-tile-more { opacity: 1; }"
+    },
+    {
+      "name": "Flags",
+      "kind": "chip",
+      "refersTo": "flag",
+      "description": "One word about a meal, set on its photograph.",
+      "html": "<span class=\"ds-flags\"><span class=\"ds-flag2\">Leftovers</span><span class=\"ds-flag2 ds-flag2-ok\">Accepted</span><span class=\"ds-flag2 ds-flag2-new\">Changed</span><span class=\"ds-flag2 ds-flag2-bad\">Contains Tree nuts</span></span>",
+      "css": ".ds-flags { display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 12px; border-radius: 12px; background: var(--none); font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; } .ds-flag2 { padding: 2px 8px; border-radius: 6px; background: rgb(8 7 12 / 0.82); color: #fff; font-size: 0.75rem; font-weight: 700; line-height: 1.5; } .ds-flag2-ok { background: var(--lime); color: var(--on-lime); } .ds-flag2-new { background: #fff; color: #16141d; } .ds-flag2-bad { background: var(--danger-fill); }"
+    },
+    {
+      "name": "Week Tabs",
+      "kind": "nav",
+      "refersTo": "button-small",
+      "description": "Switches the week on screen. The chosen one inverts to ink.",
+      "html": "<div class=\"ds-weeks\" role=\"tablist\"><button class=\"ds-week\" role=\"tab\" aria-selected=\"true\">Week 1 <span>this week</span></button><button class=\"ds-week\" role=\"tab\" aria-selected=\"false\">Week 2 <span>not planned</span></button></div>",
+      "css": ".ds-weeks { display: inline-flex; padding: 3px; border-radius: 12px; background: var(--raise); box-shadow: inset 0 0 0 1px var(--line); font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; } .ds-week { display: flex; align-items: baseline; gap: 6px; min-height: 34px; padding: 4px 14px; border: 0; border-radius: 9px; background: none; color: var(--mute); font: inherit; font-size: 0.9375rem; font-weight: 600; cursor: pointer; transition: color 160ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-week span { font-size: 0.75rem; font-weight: 400; } .ds-week:hover { color: var(--ink); } .ds-week[aria-selected='true'] { background: var(--ink); color: var(--ground); } .ds-week:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Wall",
+    "overview": "**Creative North Star: \"The Wall\"**\n\nA week of meals is twenty-one decisions, and the quickest way to take them in is to look at the food. FeedMe lays the week out the way a streaming catalogue lays out its titles: one rail per meal, one tile per day, each tile a photograph of the dish with its name on it. The meal you point at grows and tells you what it is while the rest of the wall steps back. Opening it unfolds the recipe under its own rail, so you never leave the week to read about one meal in it.\n\nEverything that is not the wall stays out of its way. The ground is a deep aubergine-black, or a cool off-white in the light theme. Type is one grotesque. There is one accent, a lime, and it means \"here\" or \"go\": the keyboard focus ring, the step you are on, the action that moves you forward. Setup and Grocery have no photographs to show, so they are plain working screens built from the same type, hairlines and controls.\n\nThe product's promises shape the details. Allergies are a safety input, so they get the one heavy outline in the app and every unsafe meal is flagged in words. Numbers are the recipes' own or the user's own, so a missing figure is a dash and a recipe with no photograph is a ruled block, never a stand-in picture.\n\nThis system rejects the look it replaced: a cream page, a green header, an orange accent, script headings and handwriting notes, cards inside cards, and a plan made of sixty-three form controls.",
+    "keyCharacteristics": [
+      "Recipe photographs are the only colour that is not a state or the accent.",
+      "One family, Schibsted Grotesk, from 12px flags to the 38px page title.",
+      "Hairlines and space group things. There is one raised surface, never a card in a card.",
+      "Every state is said in words with an icon. Colour only reinforces it.",
+      "Light and dark are equals: every colour token carries both values.",
+      "Motion is rare and short, and it is always a transform or a fade."
+    ],
+    "rules": [
+      {
+        "name": "The Photographs Are The Colour Rule",
+        "body": "No surface, heading or icon is coloured for decoration. If a screen has no photographs, it is neutral, and that is correct.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Accent Rule",
+        "body": "Lime means \"here\" or \"go\". It is never used for emphasis in text, for a second kind of button, or for a chart.",
+        "section": "colors"
+      },
+      {
+        "name": "The Paired Token Rule",
+        "body": "Every colour is declared once as `light-dark(light, dark)`. A value is never set for one theme alone, which is how the old system's two dark themes drifted apart.",
+        "section": "colors"
+      },
+      {
+        "name": "The Say It In Words Rule",
+        "body": "A state is an icon and words first. \"Contains Tree nuts\" on a red flag reads the same in greyscale.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Family Rule",
+        "body": "No second typeface, no italics for voice, no monospace for figures. Hierarchy comes from weight and from the eight sizes above.",
+        "section": "typography"
+      },
+      {
+        "name": "The Proportional Figures Rule",
+        "body": "`tabular-nums` is not used. In this face it widens full stops and commas as well as digits, so \"$21.17\" breaks apart. Figures are right-aligned in their columns.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lg Is The Wall's Breakpoint Rule",
+        "body": "1024px is the one width where layout changes shape. Smaller adjustments (a title one size down, buttons stacking) happen at 640px and 768px.",
+        "section": "layout"
+      },
+      {
+        "name": "The One Raised Surface Rule",
+        "body": "Nothing raised sits on something raised. A notice inside the shelf uses a tint, not another panel.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Heavy Outline Rule",
+        "body": "The Allergies block in Setup has a 2px Ink outline. Nothing else in the app does. It is the safety input, and it must not look like the fields around it.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do let photographs carry the colour, and leave a screen without them neutral.",
+      "Do declare every colour as a light and dark pair.",
+      "Do say a state in words with an icon, and use colour to reinforce it.",
+      "Do keep the 2px Ink outline for the Allergies block alone.",
+      "Do group with hairlines and space, and use Raised once per view.",
+      "Do show a missing figure as a dash and a missing photograph as the ruled block.",
+      "Do keep prose to 56 to 60ch.",
+      "Do gate hover motion to real pointers, and keep the fades when motion is reduced."
+    ],
+    "donts": [
+      "Don't add a second accent, a second typeface, or a tinted panel for decoration.",
+      "Don't put a card inside a card, or a coloured stripe down the side of a notice.",
+      "Don't use a script or handwriting face anywhere. Safety text is the text most worth reading.",
+      "Don't use lime for text on the light ground.",
+      "Don't use `tabular-nums` with this face.",
+      "Don't put a stock or placeholder photograph where a recipe has none.",
+      "Don't open a dialog for something that can unfold in place.",
+      "Don't animate navigation, form input, or the plan's figures.",
+      "Don't animate width, height, margin or `max-height`."
+    ]
+  }
+}

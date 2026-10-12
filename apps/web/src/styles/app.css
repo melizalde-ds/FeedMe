@@ -46,7 +46,6 @@
   --danger-tint: light-dark(#fde9e5, #37140f);
   --warn-tint: light-dark(#eef4d0, #2c2912);
   --ok: light-dark(#17703a, #8fe394);
-  --ok-tint: light-dark(#e2f3e6, #14301c);
 
   /* A recipe with no photograph, and the shade text sits on over one. These
      stay dark in both themes: they are part of the picture, not the page. */
@@ -86,7 +85,6 @@
   --color-danger-tint: var(--danger-tint);
   --color-warn-tint: var(--warn-tint);
   --color-ok: var(--ok);
-  --color-ok-tint: var(--ok-tint);
   --color-none: var(--none);
   --color-white: #ffffff;
   --color-transparent: transparent;

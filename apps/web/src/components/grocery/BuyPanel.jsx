@@ -109,7 +109,7 @@ export function BuyPanel() {
       <h2 id="buy-title" className="text-xl font-bold tracking-tight">
         Have the buying agent shop for this
       </h2>
-      <p className="mt-1 max-w-[65ch] text-mute">
+      <p className="mt-1 max-w-[56ch] text-mute">
         It compares prices across the stores, puts one pack of each ingredient
         in a cart, and asks for one payment at the end.
       </p>
@@ -151,7 +151,7 @@ export function BuyPanel() {
                   )
                 })}
               </div>
-              <Hint className="mt-3 max-w-[65ch]">
+              <Hint className="mt-3 max-w-[56ch]">
                 Either way the agent asks for the payment at the end of its run,
                 for everything it picked. Approving that payment is the final
                 check.
@@ -235,7 +235,7 @@ export function BuyPanel() {
           </div>
         ) : null}
 
-        <p className="max-w-[65ch] text-sm text-mute">
+        <p className="max-w-[56ch] text-sm text-mute">
           The stores are FeedMe&rsquo;s demo stores and payment runs in
           Stripe&rsquo;s sandbox. Card details never reach this app or our
           backend.

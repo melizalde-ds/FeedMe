@@ -64,7 +64,7 @@ export function AccountAllergySelector() {
         Allergies
       </legend>
 
-      <div className="clear-both max-w-[70ch]">
+      <div className="clear-both max-w-[58ch]">
         <p>Allergies apply to everyone in the household. Every meal we plan avoids all of them.</p>
         <p className="mt-2 flex gap-2 font-semibold">
           <Lock className="mt-1 shrink-0" />

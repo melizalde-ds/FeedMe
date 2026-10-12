@@ -63,7 +63,7 @@ export function NutritionGoalsFields() {
         ))}
       </div>
 
-      <Hint role="status" className="max-w-[70ch]">
+      <Hint role="status" className="max-w-[58ch]">
         Protein, carbs and fat come to about {fromMacros.toLocaleString()} kcal. They need to be
         within {MACRO_TOLERANCE * 100}% of your calorie target, which is at least{' '}
         {MIN_CALORIES.toLocaleString()} kcal.

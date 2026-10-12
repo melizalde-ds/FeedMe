@@ -113,7 +113,7 @@ export function MyRecipesSection() {
       <h2 className="text-2xl font-extrabold tracking-tight" id="my-recipes-title">
         Your recipes
       </h2>
-      <p className="mt-2 max-w-[72ch] text-mute">
+      <p className="mt-2 max-w-[58ch] text-mute">
         Add the meals you already cook, with your own ingredients, prices and
         macros. You can put them in any meal slot they fit, and their
         ingredients are added to your grocery list. The buying agent shops for
@@ -121,7 +121,7 @@ export function MyRecipesSection() {
       </p>
 
       {status ? (
-        <p className="mt-4 flex max-w-[72ch] gap-2 font-semibold" role="status">
+        <p className="mt-4 flex max-w-[58ch] gap-2 font-semibold" role="status">
           <Check className="mt-1 shrink-0 text-ok" />
           <span>{status}</span>
         </p>
@@ -145,7 +145,7 @@ export function MyRecipesSection() {
           ))}
         </div>
       ) : (
-        <p className="mt-4 max-w-[72ch] text-mute">
+        <p className="mt-4 max-w-[58ch] text-mute">
           Nothing here yet. A recipe needs its ingredients, their amounts and
           prices, and the calories and protein for the whole dish — we divide
           those by the servings it makes.

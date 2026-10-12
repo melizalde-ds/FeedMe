@@ -13,7 +13,7 @@ export function IconButton({ className, type = 'button', ...rest }) {
     <button
       type={type}
       className={cx(
-        'inline-flex size-9 shrink-0 items-center justify-center rounded-control border border-line bg-raise text-ink transition-colors hover:border-ink',
+        'inline-flex size-9 shrink-0 items-center justify-center rounded-control border border-line bg-raise text-ink transition-colors hover:border-ink pointer-coarse:size-11',
         className,
       )}
       {...rest}

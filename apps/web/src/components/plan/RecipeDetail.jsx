@@ -100,7 +100,7 @@ function NamesOnlyRecipe({ recipe, conflicts, Heading }) {
         {recipe.cookTimeMinutes == null ? '' : ` · about ${recipe.cookTimeMinutes} min`}
       </Heading>
       {recipe.instructions.length ? (
-        <ol className="max-w-[70ch] list-decimal space-y-1.5 pl-6 marker:font-bold marker:text-mute">
+        <ol className="max-w-[58ch] list-decimal space-y-1.5 pl-6 marker:font-bold marker:text-mute">
           {recipe.instructions.map((step, index) => (
             <li key={`${index}-${step}`}>{step}</li>
           ))}
@@ -109,7 +109,7 @@ function NamesOnlyRecipe({ recipe, conflicts, Heading }) {
         <p>The recipe gives no directions.</p>
       )}
 
-      <p className={`mt-6 max-w-[70ch] ${fineClass}`}>
+      <p className={`mt-6 max-w-[58ch] ${fineClass}`}>
         {NAMES_ONLY_NOTE} Check the product labels yourself before cooking.
       </p>
     </div>
@@ -200,13 +200,13 @@ export function RecipeDetail({ recipe, servings, conflicts = [], heading: Headin
       </table>
 
       <Heading className={headingClass}>Directions · about {recipe.cookTimeMinutes} min</Heading>
-      <ol className="max-w-[70ch] list-decimal space-y-1.5 pl-6 marker:font-bold marker:text-mute">
+      <ol className="max-w-[58ch] list-decimal space-y-1.5 pl-6 marker:font-bold marker:text-mute">
         {recipe.instructions.map((step) => (
           <li key={step}>{step}</li>
         ))}
       </ol>
 
-      <p className={`mt-6 max-w-[70ch] ${fineClass}`}>
+      <p className={`mt-6 max-w-[58ch] ${fineClass}`}>
         {SOURCE_NOTES[recipe.source] ?? UNVERIFIED_NOTE} Check the product
         labels yourself before cooking.
       </p>

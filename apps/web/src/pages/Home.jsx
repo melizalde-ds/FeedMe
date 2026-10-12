@@ -87,7 +87,7 @@ function AccountApp({ userId }) {
 export default function Home() {
   const { user, loading } = useAuth()
 
-  if (loading) return <LoadingState label="Loading FeedMe…" />
+  if (loading) return <LoadingState label="Loading FeedMe…" className="min-h-screen justify-center" />
   if (!user) return <Navigate to="/login" replace />
 
   // Keyed so signing in as someone else starts every provider afresh.
